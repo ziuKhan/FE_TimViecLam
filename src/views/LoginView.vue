@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import { reactive, computed } from 'vue';
+import { reactive, computed, onMounted } from 'vue';
 import { UserOutlined, LockOutlined } from '@ant-design/icons-vue';
+import { paginateCompanyApi } from '../services/company.service';
 interface FormState {
   username: string;
   password: string;
@@ -11,6 +12,13 @@ const formState = reactive<FormState>({
   password: '',
   remember: true,
 });
+
+onMounted(() => {
+    const data = paginateCompanyApi();
+    console.log(data)
+})
+
+
 const onFinish = (values: any) => {
   console.log('Success:', values);
 };
@@ -23,9 +31,20 @@ const disabled = computed(() => {
 });
 </script>
 
+
 <template>
     <div class="container__login">
+        <div class="container__login_title">
+            Chào mừng bạn đến với <img src="../assets/image/icon/logo-itviec-black.png" alt="">
+        </div>
+
         <div class="leftSide">
+            <div class="leftSide__title">
+                Bằng việc đăng nhập, bạn đồng ý với các 
+                <a href="https://itviec.com/blog/terms-conditions-vn/" target="_blank" class="hyperlink">Điều khoản dịch vụ</a> và
+                <a href="https://itviec.com/blog/chinh-sach-bao-mat/" target="_blank" class="hyperlink">Chính sách quyền riêng tư</a> của ITviec liên quan đến thông tin riêng tư của bạn.
+
+            </div>
         <a-form
     :model="formState"
     name="normal_login"
@@ -92,13 +111,24 @@ const disabled = computed(() => {
     height: calc(100vh - 88px);
     width: 88%;
     margin: 0 auto;
+    .container__login_title{
+        display: flex;
+        align-items: center;
+        font-size: 20px;
+        font-weight: 700;
+        gap: 0 10px;
+        margin: 24px 0;
+    img{
+        width: 75px;
+    }
+    }
 }
 .leftSide{
     width: 50%;
+    padding-right:120px ;
     .login-form{
         background-color: #fff;
-        width: 80%;
-        padding: 30px 20px 0 20px;
+        width: 100%;
         border-radius: 10px;
     }
     .login_title{
