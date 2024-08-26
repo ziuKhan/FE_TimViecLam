@@ -95,6 +95,7 @@ onUnmounted(() => {
   position: sticky;
   top: 0;
   transition: height 0.3s; /* Thêm hiệu ứng chuyển tiếp */
+  z-index: 999;
 }
 
 .header.sticky {
