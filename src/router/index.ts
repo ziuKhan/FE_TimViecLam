@@ -14,6 +14,11 @@ const router = createRouter({
       path: '/category',
       name: 'category',
       component: () => import('../views/CategoryView.vue')
+    },    
+    {
+      path: '/login',
+      name: 'login',
+      component: () => import('../views/LoginView.vue')
     },
     {
       path: '/:pathMatch(.*)*',

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
 const isSticky = ref<boolean>(false);
+const collapsed= ref<boolean>(false);
 
 const handleScroll = ():void =>  {
   const header = document.querySelector('.header');
@@ -8,8 +9,11 @@ const handleScroll = ():void =>  {
     isSticky.value = window.scrollY > 0;
     if (isSticky.value) {
       header.classList.add('sticky');
+      collapsed.value = true;
     } else {
       header.classList.remove('sticky');
+      collapsed.value = false;
+
     }
   }
 };
@@ -29,7 +33,10 @@ onUnmounted(() => {
   <header class="header theme_blackred">
     <div class="header__logo">
       <RouterLink to="/">
-        <img class="logo_itviec" src="../assets/image/icon/logo-itviec.png" alt="#">
+        <img class="logo_itviec" src="../assets/image/icon/logo-itviec.png" alt="#" :style="{   
+               width: collapsed ? '80px' : '108px',
+              height: collapsed ? '30px' : '40px',
+                }">
       </RouterLink>
     </div>
     <div class="header__control">
@@ -61,7 +68,7 @@ onUnmounted(() => {
       </nav>
       <div class="header__user ">
         <RouterLink to="xa" class="header__user_link link_distance">Nhà Tuyển Dụng</RouterLink>
-        <RouterLink to="ad" class="header__user_link link_distance">Đăng Nhập/Đăng ký</RouterLink>
+        <RouterLink to="/login" class="header__user_link link_distance">Đăng Nhập/Đăng ký</RouterLink>
         <span class="link_distance">
           <RouterLink to="xa" class="header__user_link">EN</RouterLink>
           <span>|</span>
@@ -91,14 +98,12 @@ onUnmounted(() => {
 }
 
 .header.sticky {
-  height: 70px; /* Chiều cao khi sticky */
+  height: 65px; /* Chiều cao khi sticky */
 }
 
 .header__logo {
   .logo_itviec {
-    width: 108px;
-    aspect-ratio: auto 108 / 40;
-    height: 40px;
+  
     margin-right: 30px;
   }
 }
