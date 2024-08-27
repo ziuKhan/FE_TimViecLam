@@ -1,26 +1,111 @@
 <template>
-
-  <RouterLink to="/ad" class="card__employer" >
+  <RouterLink to="/ad" class="card__employer">
+    <div class="card__first">
+      <div class="first__logoBrand"><img src="../assets/image/company/viettel.png" alt="" /></div>
+    </div>
+    <div class="card__second">
+      <div class="card__name">ABBANK</div>
+      <!-- <div class="card__skills">
+        <span class="card_skill">Java</span>
+        <span class="card_skill">Ho Chi Minh</span>
+        <span class="card_skill">Ho Chi Minh</span>
+        <span class="card_skill">Ho Chi Minh</span>
+        <span class="card_skill">Ho Chi Minh</span>
+        <span class="card_skill">Ho Chi Minh</span>
+      </div> -->
+    </div>
+    <div class="card__third">
+      <div class="card__address">Ho Chi Minh - Ha Noi</div>
+      <div class="card__job">
+        22 việc làm
+        <img src="../assets/image/icon/icons8_chevron_right.svg" alt="" />
+      </div>
+    </div>
   </RouterLink>
-
-
 </template>
 
 <script setup lang="ts">
-
+import { RouterLink } from 'vue-router'
 </script>
 
 <style scoped lang="scss">
+.card__employer {
+  /* height: 436px; */
+  background-color: #fdfdfd;
+  border-radius: 8px;
+  border: 0.8px solid rgb(222, 222, 222);
+  &:hover {
+    box-shadow: 0 0 30px rgba(44, 44, 44, 0.1);
+  }
+}
+.card__first {
+  display: flex;
+  justify-content: center;
+  align-items: end;
+  background-image: url('../assets/image/icon/icon_theme_cardEmployer.svg');
+  background-repeat: repeat-x;
 
-.card__employer{
-    height: 436px;
-    background-color: #FDFDFD;
+  height: 192px;
+  .first__logoBrand {
+    width: 160px;
+    background-color: #fff;
+    height: 160px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
     border-radius: 8px;
-    border: 0.8px solid rgb(222, 222, 222);
-    &:hover{
-        box-shadow: 0 0 30px rgba(44, 44, 44, 0.1);
+    box-shadow: 0 10px 20px rgba(44, 44, 44, 0.1);
+    img {
+      width: 100%;
     }
+  }
 }
 
+.card__second {
+  margin-top: 24px;
 
+  padding: 0 16px;
+  /* min-height: 152px; */
+
+  .card__name {
+    font-size: 20px;
+    font-weight: 500;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 15px;
+  }
+
+  .card__skills {
+    padding-top: 16px;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    .card_skill {
+      padding: 5px 12px;
+      background-color: #f7f7f7;
+      border-radius: 50px;
+      margin: 5px;
+      font-size: 14px;
+    }
+  }
+}
+.card__third {
+  background-color: #f7f7f7;
+  padding: 12px 16px;
+  height: 66px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .card__address {
+    font-size: 14px;
+  }
+  .card__job {
+    display: flex;
+    align-items: center;
+    gap: 0 5px;
+  }
+}
 </style>

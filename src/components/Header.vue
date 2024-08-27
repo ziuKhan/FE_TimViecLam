@@ -1,31 +1,49 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue';
-const isSticky = ref<boolean>(false);
-const collapsed= ref<boolean>(false);
+import { ref, onMounted, onUnmounted, watchEffect } from 'vue'
+import type { IAccount } from '../types/backend'
+const isSticky = ref<boolean>(false)
+const collapsed = ref<boolean>(false)
 
-const handleScroll = ():void =>  {
-  const header = document.querySelector('.header');
+const handleScroll = (): void => {
+  const header = document.querySelector('.header')
   if (header) {
-    isSticky.value = window.scrollY > 0;
+    isSticky.value = window.scrollY > 0
     if (isSticky.value) {
-      header.classList.add('sticky');
-      collapsed.value = true;
+      header.classList.add('sticky')
+      collapsed.value = true
     } else {
-      header.classList.remove('sticky');
-      collapsed.value = false;
-
+      header.classList.remove('sticky')
+      collapsed.value = false
     }
   }
-};
+}
 
+const isUser = ref<boolean>(false)
+const inforUser = ref<IAccount['user']>()
+const user = localStorage.getItem('user')
+const role = ref<boolean>(false)
+
+watchEffect(() => {
+  if (user) {
+    debugger
+    isUser.value = true
+    inforUser.value = JSON.parse(user)
+    if (inforUser.value?.role?.name === 'SUPER_ADMIN') {
+      role.value = true
+    }
+  } else {
+    isUser.value = false
+    inforUser.value = undefined
+    role.value = false
+  }
+})
 onMounted(() => {
-  window.addEventListener('scroll', handleScroll);
-});
+  window.addEventListener('scroll', handleScroll)
+})
 
 onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll);
-});
-
+  window.removeEventListener('scroll', handleScroll)
+})
 </script>
 
 
@@ -33,10 +51,15 @@ onUnmounted(() => {
   <header class="header theme_blackred">
     <div class="header__logo">
       <RouterLink to="/">
-        <img class="logo_itviec" src="../assets/image/icon/logo-itviec.png" alt="#" :style="{   
-               width: collapsed ? '80px' : '108px',
-              height: collapsed ? '30px' : '40px',
-                }">
+        <img
+          class="logo_itviec"
+          src="../assets/image/icon/logo-itviec.png"
+          alt="#"
+          :style="{
+            width: collapsed ? '80px' : '108px',
+            height: collapsed ? '30px' : '40px'
+          }"
+        />
       </RouterLink>
     </div>
     <div class="header__control">
@@ -44,31 +67,62 @@ onUnmounted(() => {
         <RouterLink to="/category" class="header__nav_link">
           Việc Làm IT
           <div class="icon-wrapper">
-            <img class="icon-default" src="../assets/image/icon/icons8_chevron_down_1.svg" alt="">
-            <img class="icon-hover" src="../assets/image/icon/icons8_chevron_down_white.svg" alt="">
+            <img class="icon-default" src="../assets/image/icon/icons8_chevron_down_1.svg" alt="" />
+            <img
+              class="icon-hover"
+              src="../assets/image/icon/icons8_chevron_down_white.svg"
+              alt=""
+            />
           </div>
 
           <div class="header__sub">
             <RouterLink class="header__sub_list" to="ad">Việc làm IT theo kĩ năng</RouterLink>
-            <RouterLink class="header__sub_list" to="xa">Việc làm IT theo cấp bậc</RouterLink>       
-            <RouterLink class="header__sub_list" to="ada">Việc làm IT theo công ty</RouterLink>     
+            <RouterLink class="header__sub_list" to="xa">Việc làm IT theo cấp bậc</RouterLink>
+            <RouterLink class="header__sub_list" to="ada">Việc làm IT theo công ty</RouterLink>
             <RouterLink class="header__sub_list" to="ada">Việc làm IT theo thành phố</RouterLink>
           </div>
         </RouterLink>
         <RouterLink to="adax" class="header__nav_link">
           Top Công ty IT
           <div class="icon-wrapper">
-            <img class="icon-default" src="../assets/image/icon/icons8_chevron_down_1.svg" alt="">
-            <img class="icon-hover" src="../assets/image/icon/icons8_chevron_down_white.svg" alt="">
+            <img class="icon-default" src="../assets/image/icon/icons8_chevron_down_1.svg" alt="" />
+            <img
+              class="icon-hover"
+              src="../assets/image/icon/icons8_chevron_down_white.svg"
+              alt=""
+            />
           </div>
         </RouterLink>
-        <RouterLink to="adax" class="header__nav_link">
-          Blog
-        </RouterLink>
+        <RouterLink to="adax" class="header__nav_link"> Blog </RouterLink>
       </nav>
-      <div class="header__user ">
+      <div class="header__user">
         <RouterLink to="xa" class="header__user_link link_distance">Nhà Tuyển Dụng</RouterLink>
-        <RouterLink to="/login" class="header__user_link link_distance">Đăng Nhập/Đăng ký</RouterLink>
+        <RouterLink v-if="!isUser" to="/login" class="header__user_link link_distance"
+          >Đăng Nhập/Đăng ký
+        </RouterLink>
+
+        <RouterLink
+          v-else
+          to="/login"
+          class="header__user_link link_distance header__nav_link link__user_name"
+        >
+          <img src="../assets/image/icon/icons8_male_user.svg" alt="" />
+          {{ inforUser?.name }}
+          <div class="icon-wrapper">
+            <img class="icon-default" src="../assets/image/icon/icons8_chevron_down_1.svg" alt="" />
+            <img
+              class="icon-hover"
+              src="../assets/image/icon/icons8_chevron_down_white.svg"
+              alt=""
+            />
+          </div>
+          <div class="header__sub">
+            <RouterLink class="header__sub_list" to="ad">Hồ sơ</RouterLink>
+            <RouterLink v-if="role" class="header__sub_list" to="xa">Trang quản trị</RouterLink>
+            <RouterLink v-if="role" class="header__sub_list" to="xa">Đăng xuất</RouterLink>
+          </div>
+        </RouterLink>
+
         <span class="link_distance">
           <RouterLink to="xa" class="header__user_link">EN</RouterLink>
           <span>|</span>
@@ -80,9 +134,9 @@ onUnmounted(() => {
 </template>
 
 <style scoped lang="scss">
-.activeLink{
+.activeLink {
   color: #ffffff !important;
-  font-weight:600;
+  font-weight: 600;
 }
 
 .header {
@@ -104,7 +158,6 @@ onUnmounted(() => {
 
 .header__logo {
   .logo_itviec {
-  
     margin-right: 30px;
   }
 }
@@ -160,7 +213,7 @@ onUnmounted(() => {
     }
 
     .header__sub {
-      display: block; 
+      display: block;
     }
   }
 }
@@ -172,8 +225,7 @@ onUnmounted(() => {
   left: 0;
   background-color: #121212;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
- flex-direction: column;
-
+  flex-direction: column;
 }
 
 .header__sub_list {
@@ -183,23 +235,21 @@ onUnmounted(() => {
   min-height: 45px;
   text-decoration: none;
   color: rgb(166, 166, 166);
-  padding:0 16px;
+  padding: 0 16px;
   width: 250px;
   font-size: 14px !important;
   border: 0.2px solid rgba(166, 166, 166, 0.103);
 
-  &:hover{
+  &:hover {
     background-color: #414042;
     color: white;
   }
 }
 
-
 .header__user {
   display: flex;
   align-items: center;
   color: white;
-
 
   .link_distance {
     padding: 0 10px;
@@ -207,14 +257,20 @@ onUnmounted(() => {
 
   .header__user_link {
     margin: 0 3px;
+    color: #ffffff;
 
     &:hover {
       text-decoration: underline;
     }
   }
 }
-
-.sub__list_item{
+.link__user_name {
+  min-width: 140px;
+  .header__sub_list {
+    width: 230px;
+  }
+}
+.sub__list_item {
   position: absolute;
   top: 0;
   left: 250px;

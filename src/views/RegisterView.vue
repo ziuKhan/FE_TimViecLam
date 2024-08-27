@@ -60,7 +60,7 @@ const disabled = computed(() => {
       <a-form
         :model="formState"
         layout="vertical"
-        name="normal_login"
+        name="normal_register"
         class="login-form"
         @finish="onFinish"
       >
