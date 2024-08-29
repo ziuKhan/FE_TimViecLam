@@ -1,23 +1,15 @@
 <template>
   <RouterLink to="/ad" class="card__employer">
     <div class="card__first">
-      <div class="first__logoBrand"><img src="../assets/image/company/viettel.png" alt="" /></div>
+      <div class="first__logoBrand"><img :src="linkUploads('company/' + logo)" alt="" /></div>
     </div>
     <div class="card__second">
-      <div class="card__name">ABBANK</div>
-      <!-- <div class="card__skills">
-        <span class="card_skill">Java</span>
-        <span class="card_skill">Ho Chi Minh</span>
-        <span class="card_skill">Ho Chi Minh</span>
-        <span class="card_skill">Ho Chi Minh</span>
-        <span class="card_skill">Ho Chi Minh</span>
-        <span class="card_skill">Ho Chi Minh</span>
-      </div> -->
+      <div class="card__name">{{ name }}</div>
     </div>
     <div class="card__third">
-      <div class="card__address">Ho Chi Minh - Ha Noi</div>
+      <div class="card__address">{{ address }}</div>
       <div class="card__job">
-        22 việc làm
+        {{ jobs }} việc làm
         <img src="../assets/image/icon/icons8_chevron_right.svg" alt="" />
       </div>
     </div>
@@ -26,6 +18,14 @@
 
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
+import { linkUploads } from '../constant/api'
+
+defineProps({
+  address: String,
+  name: String,
+  logo: String,
+  jobs: Number
+})
 </script>
 
 <style scoped lang="scss">
@@ -101,6 +101,7 @@ import { RouterLink } from 'vue-router'
 
   .card__address {
     font-size: 14px;
+    width: 70%;
   }
   .card__job {
     display: flex;

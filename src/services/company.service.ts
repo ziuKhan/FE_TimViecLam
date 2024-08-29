@@ -1,11 +1,13 @@
 import { apiClient } from '@/constant/api'
 
-export const paginateCompanyApi = async (): Promise<any> => {
+export const paginateCompanyApi = async (params: any): Promise<any> => {
   try {
-    const res = await apiClient.get('/companies?current=1&pageSize=4&sort=-updatedAt')
-
-    return res.data
-  } catch (err: unknown) {
-    console.log(err)
-  }
+    const res = await apiClient.get(`/companies${params}`)
+    return res.data.data.result
+  } catch (err:any) {
+    alert(
+       err?.response?.data?.message 
+    );
 }
+}
+

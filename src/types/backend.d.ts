@@ -41,3 +41,17 @@ export interface IAccount {
         }[]
     }
 }
+
+export interface ICompany {
+    _id?: string;
+    name?: string;
+    address?: string;
+    logo?: string;
+    description?: string;
+    createdBy?: string;
+    isDeleted?: boolean;
+    deletedAt?: boolean | null;
+    createdAt?: string;
+    updatedAt?: string;
+    jobs?:number;
+}

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, watchEffect } from 'vue'
+import { ref, onMounted, onUnmounted, watchEffect, onUpdated, inject } from 'vue'
 import type { IAccount } from '../types/backend'
 const isSticky = ref<boolean>(false)
 const collapsed = ref<boolean>(false)
@@ -20,12 +20,10 @@ const handleScroll = (): void => {
 
 const isUser = ref<boolean>(false)
 const inforUser = ref<IAccount['user']>()
-const user = localStorage.getItem('user')
 const role = ref<boolean>(false)
-
+const user = localStorage.getItem('user')
 watchEffect(() => {
   if (user) {
-    debugger
     isUser.value = true
     inforUser.value = JSON.parse(user)
     if (inforUser.value?.role?.name === 'SUPER_ADMIN') {
@@ -37,6 +35,13 @@ watchEffect(() => {
     role.value = false
   }
 })
+const handleLogout = () => {
+  localStorage.removeItem('user')
+  isUser.value = false
+  inforUser.value = undefined
+  role.value = false
+}
+
 onMounted(() => {
   window.addEventListener('scroll', handleScroll)
 })
@@ -119,7 +124,7 @@ onUnmounted(() => {
           <div class="header__sub">
             <RouterLink class="header__sub_list" to="ad">Hồ sơ</RouterLink>
             <RouterLink v-if="role" class="header__sub_list" to="xa">Trang quản trị</RouterLink>
-            <RouterLink v-if="role" class="header__sub_list" to="xa">Đăng xuất</RouterLink>
+            <div @click="handleLogout" class="header__sub_list">Đăng xuất</div>
           </div>
         </RouterLink>
 

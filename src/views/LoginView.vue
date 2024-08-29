@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { reactive, computed, onMounted, watchEffect, ref } from 'vue'
+import { reactive, computed, onMounted, watchEffect, ref, provide } from 'vue'
 import { UserOutlined, LockOutlined } from '@ant-design/icons-vue'
 import { paginateCompanyApi } from '../services/company.service'
 import { accountApi, loginApi, refreshApi } from '../services/auth.service'
@@ -27,7 +27,7 @@ const openNotificationWithIcon = () => {
 const onFinish = async (values: IFormState) => {
   try {
     const { username, password } = values
-    loading.value = true
+     loading.value = true
     const response = await loginApi(username, password)
     if (response.data) {
       const { access_token } = response.data
@@ -37,7 +37,6 @@ const onFinish = async (values: IFormState) => {
       // Lưu các thông tin khác vào localStorage
       const account = await accountApi(access_token)
       localStorage.setItem('user', JSON.stringify(account.data))
-
       openNotificationWithIcon()
     }
     loading.value = false
