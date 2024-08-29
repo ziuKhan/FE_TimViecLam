@@ -1,19 +1,19 @@
 export interface IUser {
     _id?: string;
-    name: string;
-    email: string;
+    name?: string;
+    email?: string;
     password?: string;
-    age: number;
-    gender: string;
-    address: string;
+    age?: number;
+    gender?: string;
+    address?: string;
     role?: {
-        _id: string;
-        name: string;
+        _id?: string;
+        name?: string;
     }
 
     company?: {
-        _id: string;
-        name: string;
+        _id?: string;
+        name?: string;
     }
     createdBy?: string;
     isDeleted?: boolean;

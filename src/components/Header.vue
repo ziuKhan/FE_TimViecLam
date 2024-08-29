@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, watchEffect, onUpdated, inject } from 'vue'
 import type { IAccount } from '../types/backend'
+import { useHeaderStore } from '../stores/headerStore'
 const isSticky = ref<boolean>(false)
 const collapsed = ref<boolean>(false)
 
@@ -18,28 +19,18 @@ const handleScroll = (): void => {
   }
 }
 
-const isUser = ref<boolean>(false)
-const inforUser = ref<IAccount['user']>()
-const role = ref<boolean>(false)
-const user = localStorage.getItem('user')
+const store = useHeaderStore()
 watchEffect(() => {
-  if (user) {
-    isUser.value = true
-    inforUser.value = JSON.parse(user)
-    if (inforUser.value?.role?.name === 'SUPER_ADMIN') {
-      role.value = true
-    }
+  if (store.local) {
+    store.toggleHeader(true)
   } else {
-    isUser.value = false
-    inforUser.value = undefined
-    role.value = false
+    store.toggleHeader(false)
   }
 })
+
+
 const handleLogout = () => {
-  localStorage.removeItem('user')
-  isUser.value = false
-  inforUser.value = undefined
-  role.value = false
+  store.logout()
 }
 
 onMounted(() => {
@@ -102,7 +93,7 @@ onUnmounted(() => {
       </nav>
       <div class="header__user">
         <RouterLink to="xa" class="header__user_link link_distance">Nhà Tuyển Dụng</RouterLink>
-        <RouterLink v-if="!isUser" to="/login" class="header__user_link link_distance"
+        <RouterLink v-if="!store.isShowHeader" to="/login" class="header__user_link link_distance"
           >Đăng Nhập/Đăng ký
         </RouterLink>
 
@@ -112,7 +103,7 @@ onUnmounted(() => {
           class="header__user_link link_distance header__nav_link link__user_name"
         >
           <img src="../assets/image/icon/icons8_male_user.svg" alt="" />
-          {{ inforUser?.name }}
+          {{ store.local?.name }}
           <div class="icon-wrapper">
             <img class="icon-default" src="../assets/image/icon/icons8_chevron_down_1.svg" alt="" />
             <img
@@ -123,8 +114,8 @@ onUnmounted(() => {
           </div>
           <div class="header__sub">
             <RouterLink class="header__sub_list" to="ad">Hồ sơ</RouterLink>
-            <RouterLink v-if="role" class="header__sub_list" to="xa">Trang quản trị</RouterLink>
-            <div @click="handleLogout" class="header__sub_list">Đăng xuất</div>
+            <RouterLink class="header__sub_list" to="xa">Trang quản trị</RouterLink>
+            <div @click="handleLogout()" class="header__sub_list">Đăng xuất</div>
           </div>
         </RouterLink>
 

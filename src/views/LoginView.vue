@@ -4,6 +4,7 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons-vue'
 import { paginateCompanyApi } from '../services/company.service'
 import { accountApi, loginApi, refreshApi } from '../services/auth.service'
 import { notification } from 'ant-design-vue'
+import { useHeaderStore } from '../stores/headerStore'
 
 interface IFormState {
   username: string
@@ -23,20 +24,23 @@ const openNotificationWithIcon = () => {
     description: 'Đăng nhập thành công.'
   })
 }
+const store = useHeaderStore()
 
 const onFinish = async (values: IFormState) => {
   try {
     const { username, password } = values
-     loading.value = true
+    loading.value = true
     const response = await loginApi(username, password)
     if (response.data) {
       const { access_token } = response.data
 
-      // Lưu access_token vào cookie
+      // Lưu access_token vào localStorage
       localStorage.setItem('access_token', access_token)
-      // Lưu các thông tin khác vào localStorage
+
+      // Lưu thông tin người dùng vào store
       const account = await accountApi(access_token)
-      localStorage.setItem('user', JSON.stringify(account.data))
+      store.updateLocal(account.data)
+
       openNotificationWithIcon()
     }
     loading.value = false
