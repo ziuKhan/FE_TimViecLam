@@ -95,7 +95,7 @@ const disabled = computed(() => {
             { type: 'email', message: 'Email phải là email!' }
           ]"
         >
-          <a-input v-model:value="formState.username" size="large">
+          <a-input v-model:value="formState.username" size="large" placeholder="Vui lòng nhập email">
             <template #prefix>
               <UserOutlined class="site-form-item-icon" />
             </template>
@@ -110,7 +110,7 @@ const disabled = computed(() => {
             { type: 'string', min: 6, message: 'Mật bạn phải là 6 kiểu!' }
           ]"
         >
-          <a-input-password v-model:value="formState.password" size="large">
+          <a-input-password v-model:value="formState.password" size="large" placeholder="Vui lòng nhập mật khẩu">
             <template #prefix>
               <LockOutlined class="site-form-item-icon" />
             </template>

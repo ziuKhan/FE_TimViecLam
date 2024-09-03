@@ -1,6 +1,6 @@
 <template>
-  <RouterLink to="/ad" class="card__employer">
-    <div class="card__first">
+<RouterLink :to="`/company/${id}`" class="card__employer">   
+   <div class="card__first">
       <div class="first__logoBrand"><img :src="linkUploads('company/' + logo)" alt="" /></div>
     </div>
     <div class="card__second">
@@ -24,7 +24,8 @@ defineProps({
   address: String,
   name: String,
   logo: String,
-  jobs: Number
+  jobs: Number,
+  id: String
 })
 </script>
 

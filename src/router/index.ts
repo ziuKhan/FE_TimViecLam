@@ -11,9 +11,9 @@ const router = createRouter({
       component: HomeView
     },
     {
-      path: '/category',
-      name: 'category',
-      component: () => import('../views/CategoryView.vue')
+      path: '/company/:id',
+      name: 'company',
+      component: () => import('../views/CompanyView.vue')
     },    
     {
       path: '/login',
@@ -25,6 +25,27 @@ const router = createRouter({
       name: 'register',
       component: () => import('../views/RegisterView.vue')
     },
+    {
+      path: '/register',
+      name: 'register',
+      component: () => import('../views/RegisterView.vue')
+    },
+    {
+      path: '/job/:id',
+      name: 'job',
+      component: () => import('../views/JobView.vue')
+    },
+
+
+
+
+
+
+
+
+
+
+
     {
       path: '/:pathMatch(.*)*',
       name: 'NotFound',
