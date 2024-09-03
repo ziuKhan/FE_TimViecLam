@@ -12,15 +12,15 @@ watchEffect(() => {
 
 <template>
   <footer v-if="!isHiddenFooter" class="theme_blackred w-full pt-12 relative overflow-hidden ">
-    <div class="m-auto w-10/12 mb-12 flex">
-      <div class="h-full flex justify-center flex-col w-1/4">
+    <div class="m-auto w-11/12 lg:w-10/12 mb-12 flex flex-wrap gap-2 lg:gap-0 lg:flex-nowrap ">
+      <div class="w-full lg:h-full flex justify-center flex-col mb-3 items-center lg:w-1/4">
         <div class="h-12">
           <img class="h-full" src="../assets/image/icon/logo-itviec.png" alt="" />
         </div>
         <div class="text-white pt-1">Ít nhưng mà chất</div>
       </div>
 
-      <div class="w-1/6">
+      <div class="w-5/12 lg:w-1/6">
         <h3 class="text-base text-gray-50">Về ITViec</h3>
         <div class="text-gray-400 text-sm font-normal">
           <p>Trang chủ</p>
@@ -32,7 +32,7 @@ watchEffect(() => {
         </div>
       </div>
 
-      <div class="w-1/6">
+       <div class="w-5/12 lg:w-1/6">
         <h3 class="text-base text-gray-50">Chương trình</h3>
         <div class="text-gray-400 text-sm font-normal">
           <p>Chuyện IT</p>
@@ -41,7 +41,7 @@ watchEffect(() => {
         </div>
       </div>
 
-      <div class="w-1/6">
+       <div class="w-5/12 lg:w-1/6">
         <h3 class="text-base text-gray-50">Điều khoản chung</h3>
         <div class="text-gray-400 text-sm font-normal">
           <p>Quy định bảo mật</p>
@@ -51,7 +51,7 @@ watchEffect(() => {
           <p>Thông cáo báo chí</p>
         </div>
       </div>
-      <div class="w-1/4">
+      <div class="w-5/12 lg:w-1/4">
         <h3 class="text-base text-gray-50">Liên hệ để đăng tin tuyển dụng tại:</h3>
         <div class="text-gray-400 text-sm font-normal">
           <p>Hồ Chí Minh: (+84) 977 460 519</p>

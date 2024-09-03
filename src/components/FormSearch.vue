@@ -1,8 +1,8 @@
 <template>
   
 
-  <div class="form_search theme_blackred">
-    <div class="form__search_title">
+  <div class="form_search theme_blackred p-5  lg:py-16 lg:px-40">
+    <div class="form__search_title text-[20px] lg:text-[32px]">
         1,024 Việc làm IT cho Developer "Chất"
     </div>
     <Search></Search>
@@ -30,14 +30,12 @@ import Search from './Search.vue';
 <style lang="scss" scoped>
 .form_search{
     width: 100%;
-    padding: 64px 160px;
 }
 .form__search_title{
-    font-size: 32px;
+
     font-weight: 600;
     margin-bottom: 32px;
     color: white;
-
 }
 
 .form__search_suggest{

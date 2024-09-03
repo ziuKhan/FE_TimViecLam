@@ -1,0 +1,113 @@
+<script setup lang="ts">
+import { ref, watchEffect } from 'vue';
+import { useHeaderStore } from '../stores/headerStore';
+const openUser = ref<boolean>(false);
+const openMenu = ref<boolean>(false);
+
+const afterOpenChange = (bool: boolean) => {
+  console.log('open', bool);
+};
+
+
+const store = useHeaderStore()
+watchEffect(() => {
+  if (store.local) {
+    store.toggleHeader(true)
+  } else {
+    store.toggleHeader(false)
+  }
+})
+
+
+const handleLogout = () => {
+  store.logout()
+}
+
+
+</script>
+
+
+<template>
+    <header class="theme_blackred w-full max-h-14 m-0 p-0 px-4 py-3 overflow-hidden flex justify-between items-center sticky top-0 z-50">
+
+
+        <button class="w-8 h-full p-1" @click="openMenu = true"><img class="h-full object-contain" src="../assets/image/icon/icons8_menu.svg" alt=""></button>    
+
+        <RouterLink to="/" class="w-20 absolute left-1/2 transform -translate-x-1/2">
+                <img class="h-full w-full object-contain" src="../assets/image/icon/logo-itviec.png" alt="">
+        </RouterLink>
+
+        <RouterLink v-if="!store.isShowHeader" to="/login" class="text-white">Đăng nhập</RouterLink>
+        <div v-else class="flex gap-x-1" @click="openUser = true"> <div class="border border-white rounded-full w-8 h-8">
+            <img class="h-full w-full object-contain"  src="../assets/image/icon/icons8_google.svg" alt="">
+        </div>
+        <img class="h-9/12" src="../assets/image/icon/icons8_chevron_down_1.svg" alt="">
+    </div>
+    </header>
+
+
+    <a-drawer
+    v-model:open="openMenu"
+    class="custom-class"
+    root-class-name="root-class-name"
+    :root-style="{ color: 'white' }"
+    style="color: white ; background:#121212; font-size: 17px; font-weight: 400;"
+    width="250"
+    placement="left"
+    @after-open-change="afterOpenChange"
+  >
+  <div class="flex flex-col">
+    <RouterLink to="" class="header__nav_link pl-3 py-4"> Việc làm IT</RouterLink>
+    <RouterLink to="" class="header__nav_link pl-3 py-4"> Việc làm IT</RouterLink>
+    <RouterLink to="" class="header__nav_link pl-3 py-4"> Việc làm IT</RouterLink>
+    <RouterLink to="" class="header__nav_link pl-3 py-4"> Việc làm IT</RouterLink>
+  </div>
+
+
+  </a-drawer>
+
+
+    <a-drawer
+  v-model:open="openUser"
+  class="custom-class"
+  root-class-name="root-class-name"
+    :root-style="{ color: 'white' }"
+  style="color: white ; background:#121212; font-size: 17px; font-weight: 400;"
+  width="250"
+  placement="right"
+  @after-open-change="afterOpenChange"
+>
+
+<div class="flex flex-col">
+    <RouterLink to="" class="header__nav_link pl-3 py-4"> Hồ sơ và CV</RouterLink>
+    <RouterLink to="" class="header__nav_link pl-3 py-4"> Việc làm của tôi</RouterLink>
+    <RouterLink to="" @click="handleLogout()" class="header__nav_link pl-3 py-4"> Đăng xuất</RouterLink>
+
+  </div>
+</a-drawer>
+
+
+
+</template>
+
+
+
+<style >
+.ant-drawer-title{
+color: white !important;
+}
+.ant-drawer-close{
+    color: white !important;
+}
+.ant-drawer-body{
+    padding: 0 !important;
+}
+</style>
+
+<style scoped>
+.header__nav_link{
+    width: 100%;
+    border-bottom: 1px solid rgb(197, 197, 197);
+}
+
+</style>

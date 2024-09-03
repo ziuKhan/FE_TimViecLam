@@ -1,8 +1,8 @@
 <template>
   
-  <div class="container__search_form">
+  <div class="container__search_form flex-wrap md:flex-nowrap ">
         <select
-            class="search_form-select search_form-ctl"
+            class="search_form-select search_form-ctl min-w-full md:min-w-60"
             name=""
             id=""
         >
@@ -12,7 +12,7 @@
             <option value="">Đà Nẵng</option>
             <option value="">Khác</option>
         </select>
-    <input type="text"  class="search_form-inp search_form-ctl" id="search_form-inp" placeholder="Nhập từ khoá theo chức năng, chức vụ công ty...">
+    <input type="text"  class="search_form-inp search_form-ctl " id="search_form-inp" placeholder="Nhập từ khoá theo chức năng, chức vụ công ty...">
     <button type="button" class="search_form-btn"><img src="../assets/image/icon/icons8_search.svg" alt="">Tìm kiếm</button>
   </div>
 </template>
@@ -27,7 +27,7 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  gap:0 12px;
+  gap:12px;
 }
 
 .search_form-ctl{
@@ -41,9 +41,6 @@
   }
 }
 
-.search_form-select{
-  min-width: 240px;
-}
 .search_form-inp{
 width: 100%;
 }

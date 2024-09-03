@@ -5,6 +5,7 @@
 body{
     font-family: 'Lexend', sans-serif;
     background-color: #ffffff;
+    position: relative;
 }
 
 .theme_blackred{

@@ -56,12 +56,12 @@ const disabled = computed(() => {
 
 
 <template>
-  <div class="container__login">
+  <div class="container__login ">
     <div class="container__login_title">
       Chào mừng bạn đến với <img src="../assets/image/icon/logo-itviec-black.png" alt="" />
     </div>
 
-    <div class="leftSide">
+    <div class="leftSide w-full lg:w-2/4 mx-auto lg:pr-[120px]">
       <div class="leftSide__title">
         Bằng việc đăng nhập, bạn đồng ý với các
         <a href="https://itviec.com/blog/terms-conditions-vn/" target="_blank" class="hyperlink"
@@ -140,7 +140,7 @@ const disabled = computed(() => {
       </a-form>
     </div>
 
-    <div class="rightSide">
+    <div class="rightSide w-full lg:w-2/4">
       <div class="rightSide__title">
         Đăng nhập để truy cập ngay vào hàng ngàn đánh giá và dữ liệu lương thị trường IT
       </div>
@@ -166,7 +166,6 @@ const disabled = computed(() => {
 
 <style scoped lang="scss">
 .container__login {
-  height: calc(100vh - 88px);
   width: 88%;
   display: flex;
   flex-wrap: wrap;
@@ -186,8 +185,6 @@ const disabled = computed(() => {
 }
 
 .leftSide {
-  width: 50%;
-  padding-right: 120px;
   .login-form {
     background-color: #fff;
     width: 100%;
@@ -230,7 +227,6 @@ const disabled = computed(() => {
 }
 
 .rightSide {
-  width: 50%;
   .rightSide__title {
     font-size: 22px;
     font-weight: 700;

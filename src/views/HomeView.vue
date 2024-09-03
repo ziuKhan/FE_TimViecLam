@@ -46,8 +46,8 @@ onMounted(() => {
       /></RouterLink>
     </div>
 
-    <div class="home__employer w-10/12">
-      <div class="home__employer_title text-3xl">Nhà tuyển dụng hàng đầu</div>
+    <div class="home__employer grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-10/12">
+      <div class="home__employer_title lg:col-span-3 md:col-span-2 text-xl lg:text-3xl">Nhà tuyển dụng hàng đầu</div>
       <template v-for="data in dataCompany" :key="data._id">
         <CardEmployer
           :id="data._id"
@@ -61,7 +61,7 @@ onMounted(() => {
 
     <div class="w-full bg-gray-50 border-solid border-gray-300 border-y pt-7 pb-20">
       <h2 class="text-3xl font-bold mb-7 text-center w-full">Việc làm tốt nhất</h2>
-      <div class="grid grid-cols-3 gap-4 w-10/12 mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-10/12 mx-auto">
         <template v-for="data in dataJobs" :key="data._id">
           <CardJob
             :_id="data._id"
@@ -99,8 +99,6 @@ onMounted(() => {
   background-color: #fff;
   /* width: 88%; */
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 cột đều nhau */
   gap: 30px; /* Khoảng cách giữa các card */
   margin-top: 60px;
   margin-bottom: 45px;
@@ -110,7 +108,6 @@ onMounted(() => {
     font-size: 28px;
     width: 100%;
     text-align: center;
-    grid-column: span 3; /* Để tiêu đề chiếm toàn bộ chiều rộng */
   }
 }
 </style>
