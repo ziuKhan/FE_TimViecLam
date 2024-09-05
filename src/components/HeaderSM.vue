@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, watchEffect } from 'vue';
 import { useHeaderStore } from '../stores/headerStore';
+import { useAuthStore } from '../stores/AuthStore';
 const openUser = ref<boolean>(false);
 const openMenu = ref<boolean>(false);
 
@@ -9,18 +10,12 @@ const afterOpenChange = (bool: boolean) => {
 };
 
 
-const store = useHeaderStore()
-watchEffect(() => {
-  if (store.local) {
-    store.toggleHeader(true)
-  } else {
-    store.toggleHeader(false)
-  }
-})
+const storeAuth = useAuthStore()
+
 
 
 const handleLogout = () => {
-  store.logout()
+  storeAuth.logout()
 }
 
 
@@ -37,7 +32,7 @@ const handleLogout = () => {
                 <img class="h-full w-full object-contain" src="../assets/image/icon/logo-itviec.png" alt="">
         </RouterLink>
 
-        <RouterLink v-if="!store.isShowHeader" to="/login" class="text-white">Đăng nhập</RouterLink>
+        <RouterLink v-if="!storeAuth.isAuth" to="/login" class="text-white">Đăng nhập</RouterLink>
         <div v-else class="flex gap-x-1" @click="openUser = true"> <div class="border border-white rounded-full w-8 h-8">
             <img class="h-full w-full object-contain"  src="../assets/image/icon/icons8_google.svg" alt="">
         </div>

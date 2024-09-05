@@ -5,7 +5,8 @@ const moduleName = '/jobs'
 export const paginateJobsApi = async (params: any): Promise<any> => {
     try {
         const response = await apiClient.get(`${moduleName}${params}`)
-        return response.data.data.result
+
+        return response.data.data
     } catch (err:any) {
         alert(
             err?.response?.data?.message

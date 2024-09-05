@@ -1,3 +1,12 @@
+<script lang="ts" setup>
+import { ref } from 'vue';
+import { useSearchStore } from '../stores/searchStore';
+
+const store = useSearchStore()
+
+</script>
+
+
 <template>
   
   <div class="container__search_form flex-wrap md:flex-nowrap ">
@@ -5,21 +14,19 @@
             class="search_form-select search_form-ctl min-w-full md:min-w-60"
             name=""
             id=""
+            v-model="store.location"
         >
-            <option selected>Tất cả thành phố</option>
-            <option value="">Hà Nội</option>
-            <option value="">TP Hồ Chí Minh</option>
-            <option value="">Đà Nẵng</option>
-            <option value="">Khác</option>
+            <option selected value="">Tất cả thành phố</option>
+            <option value="HANOI">Hà Nội</option>
+            <option value="HOCHIMINH">TP Hồ Chí Minh</option>
+            <option value="DANANG">Đà Nẵng</option>
         </select>
-    <input type="text"  class="search_form-inp search_form-ctl " id="search_form-inp" placeholder="Nhập từ khoá theo chức năng, chức vụ công ty...">
-    <button type="button" class="search_form-btn"><img src="../assets/image/icon/icons8_search.svg" alt="">Tìm kiếm</button>
+    <input type="text" v-model="store.keyword"  class="search_form-inp search_form-ctl " id="search_form-inp" placeholder="Nhập từ khoá kĩ năng">
+    <button type="button" @click="store.handleSearch()" class="search_form-btn"><img src="../assets/image/icon/icons8_search.svg" alt="">Tìm kiếm</button>
   </div>
 </template>
 
-<script setup lang="ts">
 
-</script>
 
 <style lang="scss" scoped>
 .container__search_form{

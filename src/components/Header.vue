@@ -2,6 +2,8 @@
 import { ref, onMounted, onUnmounted, watchEffect, onUpdated, inject } from 'vue'
 import type { IAccount } from '../types/backend'
 import { useHeaderStore } from '../stores/headerStore'
+import { useAuthStore } from '../stores/AuthStore';
+import { refreshApi } from '../services/auth.service';
 const isSticky = ref<boolean>(false)
 const collapsed = ref<boolean>(false)
 
@@ -18,20 +20,12 @@ const handleScroll = (): void => {
     }
   }
 }
-
-const store = useHeaderStore()
-watchEffect(() => {
-  if (store.local) {
-    store.toggleHeader(true)
-  } else {
-    store.toggleHeader(false)
-  }
-})
-
+const storeAuth = useAuthStore()
 
 const handleLogout = () => {
-  store.logout()
+  storeAuth.logout()
 }
+
 
 onMounted(() => {
   window.addEventListener('scroll', handleScroll)
@@ -93,17 +87,17 @@ onUnmounted(() => {
       </nav>
       <div class="header__user">
         <RouterLink to="xa" class="header__user_link link_distance">Nhà Tuyển Dụng</RouterLink>
-        <RouterLink v-if="!store.isShowHeader" to="/login" class="header__user_link link_distance"
+        <RouterLink v-if="!storeAuth.isAuth" to="/login" class="header__user_link link_distance"
           >Đăng Nhập/Đăng ký
         </RouterLink>
 
-        <RouterLink
+        <span
           v-else
           to="/login"
           class="header__user_link link_distance header__nav_link link__user_name"
         >
           <img src="../assets/image/icon/icons8_male_user.svg" alt="" />
-          {{ store.local?.name }}
+          {{ storeAuth.user?.name }}
           <div class="icon-wrapper">
             <img class="icon-default" src="../assets/image/icon/icons8_chevron_down_1.svg" alt="" />
             <img
@@ -114,10 +108,10 @@ onUnmounted(() => {
           </div>
           <div class="header__sub">
             <RouterLink class="header__sub_list" to="ad">Hồ sơ</RouterLink>
-            <RouterLink class="header__sub_list" to="xa">Trang quản trị</RouterLink>
+            <RouterLink class="header__sub_list" to="">Trang quản trị</RouterLink>
             <div @click="handleLogout()" class="header__sub_list">Đăng xuất</div>
           </div>
-        </RouterLink>
+        </span>
 
         <span class="link_distance">
           <RouterLink to="xa" class="header__user_link">EN</RouterLink>

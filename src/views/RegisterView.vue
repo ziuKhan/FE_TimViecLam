@@ -51,7 +51,7 @@ const disabled = computed(() => {
       Chào mừng bạn đến với <img src="../assets/image/icon/logo-itviec-black.png" alt="" />
     </div>
 
-    <div class="leftSide">
+    <div class="leftSide w-full lg:w-6/12 lg:pr-32">
       <div class="leftSide__title">Đăng ký tài khoản</div>
       <a-button danger class="login__btn_google"
         ><img src="../assets/image/icon/icons8_google.svg" alt="" /> Đăng ký với Google</a-button
@@ -144,12 +144,12 @@ const disabled = computed(() => {
             Đăng nhập ngay
           </a-button>
           Bạn đã có tài khoản
-          <RouterLink to="/login">đăng nhập ngay!</RouterLink>
+          <RouterLink to="/login" class="font-bold">đăng nhập ngay!</RouterLink>
         </a-form-item>
       </a-form>
     </div>
 
-    <div class="rightSide">
+    <div class="rightSide hidden lg:flex">
       <img src="../assets/image/icon/robby-login.png" alt="" />
     </div>
   </div>
@@ -177,8 +177,6 @@ const disabled = computed(() => {
 }
 
 .leftSide {
-  width: 50%;
-  padding-right: 120px;
   .leftSide__title {
     font-size: 28px;
     font-weight: 700;
@@ -225,7 +223,6 @@ const disabled = computed(() => {
 }
 .rightSide {
   width: 50%;
-  display: flex;
   justify-content: center;
   align-items: center;
 }

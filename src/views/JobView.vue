@@ -1,20 +1,26 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import type { IJob } from '../types/backend';
 import { getJobsApi } from '../services/job.service';
 import { linkUploads } from '../constant/api';
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import { vi } from 'date-fns/locale';
-
+import Loading from '../components/Loading.vue';
+import { formatSalary } from '../until/until';
+import ApplyJob from '../components/modal/ApplyJob.vue';
+import { useAuthStore } from '../stores/AuthStore';
 
 const route = useRoute()
 const load = ref<Boolean>(false)
 const data = ref<IJob>()
+const open = ref<Boolean>(false)
+const router = useRouter()
+const storeAuth = useAuthStore()
 
 const getData = async () => {
     load.value = false
-    const id = route.params.id as string
+    const id = route.params.id as string    
     try {
         const result = await getJobsApi(id) 
         result.startDate = formatDistanceToNow(parseISO(result.startDate), { addSuffix: true, locale: vi })
@@ -26,6 +32,18 @@ const getData = async () => {
 }
 
 
+const handleOk = () => {
+    if(storeAuth.isAuth) {
+    console.log('ok ')
+    } 
+    else {
+        router.push(`/login`)
+    }
+    open.value = false
+  
+
+}
+
 
 onMounted(() => {
     getData()
@@ -35,19 +53,31 @@ onMounted(() => {
 
 
 <template >
-    <div class="theme_gray_no_border relative">
+    <Loading v-if="!load"></Loading>
+
+    <div v-else class="theme_gray_no_border relative">
 
         <div class="w-11/12 mx-auto flex gap-y-4 lg:gap-0 py-8 flex-wrap lg:flex-nowrap">
             <div class="w-full lg:w-8/12 lg:mr-5">
                 <div class="bg-white px-5 py-3 rounded-xl rounded-b-none sticky top-[65px] z-10 shadow-custom">
-                    <h1 class="font-bold text-[20px] lg:text-[28px] mt-4">{{ data?.name }}
+                    <h1 class="font-bold text-[20px] lg:text-[25px] mt-4">{{ data?.name }} - <span class="text-red-600">{{ data?.level }}</span> 
                     </h1>
                     <p class="text-base lg:text-lg font-light">HCL Vietnam Company Limited                </p>
                     <div class="text-[#0AB305] flex gap-x-2 items-center font-bold text-base">
                         <img class="max-w-6 "  src="../assets/image/icon/icons8_us_dollar.svg" alt="">
-                        {{ data?.salary }} đ
+                        {{  formatSalary(data?.salary) }}
                     </div>
-                    <button class="w-full bg-[#ed1b2f] rounded-md text-white font-semibold text-base py-2 mt-4 hover:bg-red-700">Ứng tuyển</button>
+                    <button @click="open = true" class="w-full bg-[#ed1b2f] rounded-md text-white font-semibold text-base py-2 mt-4 hover:bg-red-700">Ứng tuyển</button>
+                    <a-modal v-model:open="open" width="600px" title="Ứng tuyển JOB" @ok=" handleOk" :okText="storeAuth.isAuth ? `Xác nhận` : `Đăng nhập ngay`" cancelText="Huỷ bỏ" :maskClosable=false   
+                    :cancelButtonProps="{ style: { display: 'none' } }"
+                    :okButtonProps="{ style: { background: '#ed1b2f' } }"
+                    
+                    >
+                    
+                    
+                    <hr>
+                    <ApplyJob/>
+                </a-modal>
                 </div>
 
                 <div class="bg-white px-5 py-3 rounded-xl rounded-t-none drop-shadow-lg shadow-gray-500 text-sm lg:text-base font-normal pb-10">

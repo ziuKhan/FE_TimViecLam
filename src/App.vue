@@ -8,7 +8,7 @@ import { onBeforeUnmount, onMounted, ref } from 'vue';
 const isMobile = ref(false);
 
 const checkScreenSize = () => {
-  isMobile.value = window.innerWidth <= 768;
+  isMobile.value = window.innerWidth <= 1000;
 };
 
 onMounted(() => {
@@ -26,7 +26,6 @@ onBeforeUnmount(() => {
   <div class="container_app">
     <Header v-if="!isMobile"></Header>
     <HeaderSM v-else></HeaderSM>
-    <component :is="isMobile ? 'HeaderSM' : 'Header'"></component>
     <RouterView />
     <Footer></Footer>
   </div>

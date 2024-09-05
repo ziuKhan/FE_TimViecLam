@@ -21,7 +21,7 @@ const getData = async () => {
   try {
     const [companies, jobs] = await Promise.all([getCompanyApi(id), paginateJobsApi(params)]);
     dataCompany.value = companies
-    dataJobs.value = jobs
+    dataJobs.value = jobs.result
     load.value = true
 
   } catch (error) {
@@ -36,10 +36,10 @@ watchEffect(() => {
 
 <template>
   <Loading v-if="!load"></Loading>
-  <div class="theme_gray_no_border" v-else>
+  <div v-else class="theme_gray_no_border" >
     <header class="theme_blackred w-full min-h-56 py-8">
       <div class="w-11/12 mx-auto flex gap-x-6">
-        <div class="min-w-32  max-h-32  lg:min-w-40 lg:max-w-40 lg:max-h-40  bg-white rounded-md p-2">
+        <div class="min-w-32  max-h-32 max-w-32 lg:min-w-40 lg:max-w-40 lg:max-h-40  bg-white rounded-md p-2">
           <img class="h-full object-contain" :src="linkUploads('company/'+dataCompany.logo)" alt="" />
         </div>
         <div class="text-white w-7/12">
@@ -97,6 +97,8 @@ watchEffect(() => {
             :logo="data.company?.logo"
             :salary="data.salary?.toString()"
             :nameCompany="data.company?.name"
+            :company_id="data.company?._id"
+
             ></CardJob>
           </template>
          

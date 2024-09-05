@@ -44,6 +44,16 @@ export const registerApi = async (user: any): Promise<any> => {
     }
 }
 
+export const logoutApi = async (): Promise<any> => {
+    try {
+        const res = await apiClient.post(`${moduleName}/logout`)
+        return res.data
+    } catch (err:any) {
+        alert(
+           err?.response?.data?.message 
+        )
+    }
+}
 export const accountApi = async (token:any): Promise<any> => {
     try {
         const res = await apiClient.get(`${moduleName}/account`,{
@@ -58,4 +68,15 @@ export const accountApi = async (token:any): Promise<any> => {
            err?.response?.data?.message 
         )
     }
+}
+
+export const accountApi2 = async (): Promise<any> => {
+    try{
+        const res = await apiClient.get(`${moduleName}/account`)
+        return res.data 
+    }
+    catch (err:any) {
+       
+    }
+      
 }

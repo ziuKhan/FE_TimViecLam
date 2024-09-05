@@ -1,15 +1,20 @@
 
 <script setup lang="ts">
 import { linkUploads } from '../constant/api';
+import { formatSalary } from '../until/until';
 
 defineProps({
     name: String,
     nameCompany: String,
     address: String,
     logo: String,
-    salary: String
-    ,_id: String
-})
+    salary: String, // Nếu salary là dạng chuỗi số
+    _id: String,
+    company_id: String
+});
+
+
+
 </script>
 
 <template>
@@ -23,12 +28,12 @@ defineProps({
                {{ name }}
             </RouterLink>
 
-            <RouterLink to="" class="truncate max-w-full text-xs text-zinc-500 pt-1">
+            <RouterLink :to="`/company/${company_id}`" class="truncate max-w-full text-xs text-zinc-500 pt-1">
                 {{ nameCompany }}
             </RouterLink>
 
             <div class="text-xs flex gap-x-2 font-medium pt-1">
-                <div class="px-2 py-1 bg-zinc-100 rounded-md">{{ salary }}</div>
+                <div class="px-2 py-1 bg-zinc-100 rounded-md">${{ formatSalary(salary) }}</div>
                 <div class="px-2 py-1 bg-zinc-100 rounded-md">{{ address }}</div>
             </div>
         </div>

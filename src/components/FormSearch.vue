@@ -1,3 +1,5 @@
+
+
 <template>
   
 
@@ -9,22 +11,23 @@
     <div class="form__search_suggest">
         <span> Gợi ý của bạn:</span>
        
-        <RouterLink to="adax" class="search__suggest_link">Java</RouterLink>
-        <RouterLink to="a" class="search__suggest_link">React</RouterLink>
-        <RouterLink to="x" class="search__suggest_link">Vue</RouterLink>
-        <RouterLink to="d" class="search__suggest_link">NodeJS</RouterLink>
-        <RouterLink to="d" class="search__suggest_link">Business Analyst</RouterLink>
-        <RouterLink to="d" class="search__suggest_link">Tester</RouterLink>
-        <RouterLink to="d" class="search__suggest_link">.Net</RouterLink>
-        <RouterLink to="d" class="search__suggest_link">PHP</RouterLink>
-        <RouterLink to="d" class="search__suggest_link">Manager</RouterLink>
+        <span  @click="store.updateKeyword('java')"  class="search__suggest_link  cursor-pointer">Java</span>
+        <span @click="store.updateKeyword('React')" class="search__suggest_link  cursor-pointer">React</span>
+        <span @click="store.updateKeyword('Vue')" class="search__suggest_link  cursor-pointer">Vue</span>
+        <span @click="store.updateKeyword('NodeJS')" class="search__suggest_link  cursor-pointer">NodeJS</span>
+        <span @click="store.updateKeyword('Business Analyst')" class="search__suggest_link  cursor-pointer">Business Analyst</span>
+        <span @click="store.updateKeyword('Tester')" class="search__suggest_link  cursor-pointer">Tester</span>
+        <span @click="store.updateKeyword('Net')" class="search__suggest_link  cursor-pointer">.Net</span>
+        <span @click="store.updateKeyword('PHP')" class="search__suggest_link  cursor-pointer">PHP</span>
+        <span @click="store.updateKeyword('Manager')" class="search__suggest_link  cursor-pointer">Manager</span>
     </div>
   </div>
-
 </template>
 
 <script setup lang="ts">
 import Search from './Search.vue';
+import { useSearchStore } from '../stores/searchStore';
+    const store = useSearchStore()
 </script>
 
 <style lang="scss" scoped>

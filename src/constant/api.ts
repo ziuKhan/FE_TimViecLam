@@ -1,5 +1,7 @@
 import axios from 'axios'
 import Cookies from 'js-cookie';
+import { useAuthStore } from '../stores/AuthStore';
+
 
 export const apiClient = axios.create({
   baseURL: "http://localhost:8080/api/v1",
@@ -22,8 +24,10 @@ apiClient.interceptors.request.use(
   error => Promise.reject(error)
 );
 
+
 // Interceptor để xử lý tự động refresh token
 apiClient.interceptors.response.use(
+
   response => response,
   async error => {
     const originalRequest = error.config;
@@ -32,22 +36,16 @@ apiClient.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const refreshToken = Cookies.get('refresh_token');
-        if (!refreshToken) {
-          throw new Error('Không tìm thấy refresh_token');
-        }
 
         // Refresh token
-        const { data } = await apiClient.get('/auth/refresh');
-        localStorage.setItem('access_token', data.access_token)
-
+        const  {data}  = await apiClient.get('/auth/refresh');
+        localStorage.setItem('access_token', data.data.access_token)
         // Cập nhật token mới vào headers
-        apiClient.defaults.headers.common['Authorization'] = `Bearer ${data.access_token}`;
-
+        apiClient.defaults.headers.common['Authorization'] = `Bearer ${data.data.access_token}`;
         // Thực hiện lại yêu cầu gốc
         return apiClient(originalRequest);
       } catch (refreshError) {
-        console.error('Refresh token failed:', refreshError);
+        // console.error('Refresh token failed:', refreshError);
         return Promise.reject(refreshError);
       }
     }

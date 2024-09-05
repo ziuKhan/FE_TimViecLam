@@ -73,7 +73,6 @@ export interface IJob {
     startDate: Date;
     endDate: Date;
     isActive: boolean;
-
     createdBy?: string;
     isDeleted?: boolean;
     deletedAt?: boolean | null;
@@ -147,4 +146,14 @@ export interface ISubscribers {
     deletedAt?: boolean | null;
     createdAt?: string;
     updatedAt?: string;
+}
+
+export interface IPaginate {
+   
+            current?: number,
+            pageSize?: number,
+            pages?: number,
+            total?: number,
+            keyword?: string
+       
 }

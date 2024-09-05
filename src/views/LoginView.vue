@@ -5,6 +5,9 @@ import { paginateCompanyApi } from '../services/company.service'
 import { accountApi, loginApi, refreshApi } from '../services/auth.service'
 import { notification } from 'ant-design-vue'
 import { useHeaderStore } from '../stores/headerStore'
+import { useAuthStore } from '../stores/AuthStore'
+import { useRouter } from 'vue-router'
+
 
 interface IFormState {
   username: string
@@ -24,8 +27,8 @@ const openNotificationWithIcon = () => {
     description: 'Đăng nhập thành công.'
   })
 }
-const store = useHeaderStore()
-
+const storeAuth = useAuthStore()
+const router = useRouter()
 const onFinish = async (values: IFormState) => {
   try {
     const { username, password } = values
@@ -36,12 +39,9 @@ const onFinish = async (values: IFormState) => {
 
       // Lưu access_token vào localStorage
       localStorage.setItem('access_token', access_token)
-
-      // Lưu thông tin người dùng vào store
-      const account = await accountApi(access_token)
-      store.updateLocal(account.data)
-
+      storeAuth.statusIsAuth()
       openNotificationWithIcon()
+      router.back()
     }
     loading.value = false
   } catch (error) {

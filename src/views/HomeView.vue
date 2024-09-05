@@ -16,10 +16,9 @@ const getData = async () => {
   const params = '?current=1&pageSize=9&sort=-createdAt'
   const [companies, jobs] = await Promise.all([paginateCompanyApi(params), paginateJobsApi(params)])
 
-  console.log('Jobs:', jobs)
 
   dataCompany.value = companies
-  dataJobs.value = jobs
+  dataJobs.value = jobs.result
   load.value = true
 }
 
@@ -70,6 +69,8 @@ onMounted(() => {
             :logo="data.company?.logo"
             :salary="data.salary?.toString()"
             :nameCompany="data.company?.name"
+            :company_id="data.company?._id"
+
           ></CardJob>
         </template>
       </div>
