@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, watchEffect, onUpdated, inject } from 'vue'
-import type { IAccount } from '../types/backend'
-import { useHeaderStore } from '../stores/headerStore'
-import { useAuthStore } from '../stores/AuthStore';
-import { refreshApi } from '../services/auth.service';
+import type { IAccount } from '../../types/backend'
+import { useHeaderStore } from '../../stores/headerStore'
+import { useAuthStore } from '../../stores/AuthStore';
+import { refreshApi } from '../../services/auth.service';
+import ManagerAccount from '../modal/ManagerAccount.vue';
 const isSticky = ref<boolean>(false)
 const collapsed = ref<boolean>(false)
+  const open = ref<boolean>(false)
 
 const handleScroll = (): void => {
   const header = document.querySelector('.header')
@@ -43,7 +45,7 @@ onUnmounted(() => {
       <RouterLink to="/">
         <img
           class="logo_itviec"
-          src="../assets/image/icon/logo-itviec.png"
+          src="../../assets/image/icon/logo-itviec.png "
           alt="#"
           :style="{
             width: collapsed ? '80px' : '108px',
@@ -57,10 +59,10 @@ onUnmounted(() => {
         <RouterLink to="/category" class="header__nav_link">
           Việc Làm IT
           <div class="icon-wrapper">
-            <img class="icon-default" src="../assets/image/icon/icons8_chevron_down_1.svg" alt="" />
+            <img class="icon-default" src="../../assets/image/icon/icons8_chevron_down_1.svg" alt="" />
             <img
               class="icon-hover"
-              src="../assets/image/icon/icons8_chevron_down_white.svg"
+              src="../../assets/image/icon/icons8_chevron_down_white.svg"
               alt=""
             />
           </div>
@@ -75,10 +77,10 @@ onUnmounted(() => {
         <RouterLink to="adax" class="header__nav_link">
           Top Công ty IT
           <div class="icon-wrapper">
-            <img class="icon-default" src="../assets/image/icon/icons8_chevron_down_1.svg" alt="" />
+            <img class="icon-default" src="../../assets/image/icon/icons8_chevron_down_1.svg" alt="" />
             <img
               class="icon-hover"
-              src="../assets/image/icon/icons8_chevron_down_white.svg"
+              src="../../assets/image/icon/icons8_chevron_down_white.svg"
               alt=""
             />
           </div>
@@ -96,20 +98,27 @@ onUnmounted(() => {
           to="/login"
           class="header__user_link link_distance header__nav_link link__user_name"
         >
-          <img src="../assets/image/icon/icons8_male_user.svg" alt="" />
+          <img src="../../assets/image/icon/icons8_male_user.svg" alt="" />
           {{ storeAuth.user?.name }}
           <div class="icon-wrapper">
-            <img class="icon-default" src="../assets/image/icon/icons8_chevron_down_1.svg" alt="" />
+            <img class="icon-default" src="../../assets/image/icon/icons8_chevron_down_1.svg" alt="" />
             <img
               class="icon-hover"
-              src="../assets/image/icon/icons8_chevron_down_white.svg"
+              src="../../assets/image/icon/icons8_chevron_down_white.svg"
               alt=""
             />
           </div>
           <div class="header__sub">
-            <RouterLink class="header__sub_list" to="ad">Hồ sơ</RouterLink>
+            <span @click="open = true"  class="header__sub_list" >Quản lý tài khoản</span>
+            <a-modal v-model:open="open" width="1000px"  title="Quản lý tài khoản"  :maskClosable=false 
+                :okButtonProps="{ style: { display: 'none' } }"
+                :cancelButtonProps="{ style: { display: 'none' } }"
+                >
+                 <ManagerAccount/>
+            </a-modal>
+
             <RouterLink class="header__sub_list" to="">Trang quản trị</RouterLink>
-            <div @click="handleLogout()" class="header__sub_list">Đăng xuất</div>
+            <span @click="handleLogout()" class="header__sub_list">Đăng xuất</span>
           </div>
         </span>
 
@@ -124,10 +133,10 @@ onUnmounted(() => {
 </template>
 
 <style scoped lang="scss">
-.activeLink {
+/* .activeLink {
   color: #ffffff !important;
   font-weight: 600;
-}
+} */
 
 .header {
   padding: 0 30px;
@@ -220,6 +229,7 @@ onUnmounted(() => {
 
 .header__sub_list {
   display: flex;
+  cursor: pointer;
   justify-content: space-between;
   align-items: center;
   min-height: 45px;

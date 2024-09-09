@@ -1,4 +1,3 @@
-
 <script setup lang="ts">
 import { ref, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
@@ -6,7 +5,7 @@ import { useRoute } from 'vue-router'
 const route = useRoute()
 const isHiddenFooter = ref<Boolean>(false)
 watchEffect(() => {
-  isHiddenFooter.value = route.path === '/login' || route.path === '/register'
+  isHiddenFooter.value = route.path === '/login' || route.path === '/register' || route.path === '/customer/login' || route.path === '/customer/register'
 })
 </script>
 
@@ -32,7 +31,7 @@ watchEffect(() => {
         </div>
       </div>
 
-       <div class="w-5/12 lg:w-1/6">
+      <div class="w-5/12 lg:w-1/6">
         <h3 class="text-base text-gray-50">Chương trình</h3>
         <div class="text-gray-400 text-sm font-normal">
           <p>Chuyện IT</p>
@@ -41,7 +40,7 @@ watchEffect(() => {
         </div>
       </div>
 
-       <div class="w-5/12 lg:w-1/6">
+      <div class="w-5/12 lg:w-1/6">
         <h3 class="text-base text-gray-50">Điều khoản chung</h3>
         <div class="text-gray-400 text-sm font-normal">
           <p>Quy định bảo mật</p>
@@ -71,5 +70,4 @@ watchEffect(() => {
 
 
 
-<style scoped>
-</style>
+<style scoped></style>

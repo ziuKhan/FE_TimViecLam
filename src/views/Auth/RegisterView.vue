@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { reactive, computed, onMounted, watchEffect } from 'vue'
 import { UserOutlined, LockOutlined } from '@ant-design/icons-vue'
-import { paginateCompanyApi } from '../services/company.service'
-import { loginApi, registerApi } from '../services/auth.service'
+import { paginateCompanyApi } from '../../services/company.service'
+import { loginApi, registerApi } from '../../services/auth.service'
 import { notification } from 'ant-design-vue'
 
 interface IFormState {

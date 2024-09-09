@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import CardJob from '../components/CardJob.vue';
-import Search from '../components/Search.vue';
+import CardJob from '../../components/CardJob.vue';
+import Search from '../../components/search/Search.vue';
 import { ref, watch, watchEffect } from 'vue';
-import type { IJob, IPaginate } from '../types/backend';
-import { paginateJobsApi } from '../services/job.service';
+import type { IJob, IPaginate } from '../../types/backend';
+import { paginateJobsApi } from '../../services/job.service';
 import { useRoute } from 'vue-router';
-import { useSearchStore } from '../stores/searchStore';
+import { useSearchStore } from '../../stores/searchStore';
 import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
 import { createVNode } from 'vue';
 import { Modal } from 'ant-design-vue';
-import FilterSearch from '../components/modal/FilterSearch.vue';
+import FilterSearch from '../../components/modal/FilterSearch.vue';
 
 
 const store = useSearchStore()

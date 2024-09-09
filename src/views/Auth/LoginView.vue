@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import { reactive, computed, onMounted, watchEffect, ref, provide } from 'vue'
 import { UserOutlined, LockOutlined } from '@ant-design/icons-vue'
-import { paginateCompanyApi } from '../services/company.service'
-import { accountApi, loginApi, refreshApi } from '../services/auth.service'
+import { paginateCompanyApi } from '../../services/company.service'
+import { accountApi, loginApi, refreshApi } from '../../services/auth.service'
 import { notification } from 'ant-design-vue'
-import { useHeaderStore } from '../stores/headerStore'
-import { useAuthStore } from '../stores/AuthStore'
+import { useHeaderStore } from '../../stores/headerStore'
+import { useAuthStore } from '../../stores/AuthStore'
 import { useRouter } from 'vue-router'
 
 
@@ -125,6 +125,7 @@ const disabled = computed(() => {
         </a-form-item>
 
         <a-form-item>
+
           <a-button
             :disabled="disabled"
             type="primary"
@@ -134,6 +135,8 @@ const disabled = computed(() => {
           >
             Đăng nhập ngay
           </a-button>
+
+          
           hoặc
           <RouterLink to="/register">đăng ký ngay!</RouterLink>
         </a-form-item>

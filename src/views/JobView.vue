@@ -10,6 +10,8 @@ import Loading from '../components/Loading.vue';
 import { formatSalary } from '../until/until';
 import ApplyJob from '../components/modal/ApplyJob.vue';
 import { useAuthStore } from '../stores/AuthStore';
+import { message } from 'ant-design-vue';
+import { createResumeApi } from '../services/resume.service';
 
 const route = useRoute()
 const load = ref<Boolean>(false)
@@ -17,7 +19,7 @@ const data = ref<IJob>()
 const open = ref<Boolean>(false)
 const router = useRouter()
 const storeAuth = useAuthStore()
-
+const loadButton = ref<Boolean>(true)
 const getData = async () => {
     load.value = false
     const id = route.params.id as string    
@@ -30,19 +32,39 @@ const getData = async () => {
         console.error('Error fetching data:', error)
     }
 }
+const urlFile = ref<string>('')
 
+const handleOk = async () => {
+  if (storeAuth.isAuth) {
+    if (urlFile.value) {
+        loadButton.value = false
+        const dataCreate = {
+            url: urlFile.value,
+            jobId: data.value?._id,
+            companyId: data.value?.company?._id
+        }
+        try
+        {
 
-const handleOk = () => {
-    if(storeAuth.isAuth) {
-    console.log('ok ')
-    } 
-    else {
-        router.push(`/login`)
+            const res = await createResumeApi(dataCreate)
+            if (res) {
+                message.success('Rải CV thành công')
+                loadButton.value = true
+
+            }
+        }
+        catch (error) {
+            console.log(error)
+                 loadButton.value = true
+            
+        }
+       
     }
-    open.value = false
-  
-
-}
+  } else {
+    router.push(`/login`);
+  }
+  open.value = false;
+};
 
 
 onMounted(() => {
@@ -68,16 +90,22 @@ onMounted(() => {
                         {{  formatSalary(data?.salary) }}
                     </div>
                     <button @click="open = true" class="w-full bg-[#ed1b2f] rounded-md text-white font-semibold text-base py-2 mt-4 hover:bg-red-700">Ứng tuyển</button>
-                    <a-modal v-model:open="open" width="600px" title="Ứng tuyển JOB" @ok=" handleOk" :okText="storeAuth.isAuth ? `Xác nhận` : `Đăng nhập ngay`" cancelText="Huỷ bỏ" :maskClosable=false   
+                    <a-modal
+                    v-model:open="open"
+                    width="600px"
+                    title="Ứng tuyển JOB"
+                    @ok="handleOk"
+                    :okText="storeAuth.isAuth ? `Xác nhận` : `Đăng nhập ngay`"
+                    cancelText="Huỷ bỏ"
+                    :maskClosable="false"
+                    :loading="loadButton"
                     :cancelButtonProps="{ style: { display: 'none' } }"
-                    :okButtonProps="{ style: { background: '#ed1b2f' } }"
-                    
+                    :okButtonProps="{ style: { background: '#ed1b2f' },   disabled: storeAuth.isAuth ? urlFile === '' : false }"
                     >
-                    
-                    
-                    <hr>
-                    <ApplyJob/>
-                </a-modal>
+                    <hr />
+                    <ApplyJob :nameJob="data?.name" :nameCompany="data?.company?.name" v-model:urlFile="urlFile" />
+                    </a-modal>
+
                 </div>
 
                 <div class="bg-white px-5 py-3 rounded-xl rounded-t-none drop-shadow-lg shadow-gray-500 text-sm lg:text-base font-normal pb-10">
