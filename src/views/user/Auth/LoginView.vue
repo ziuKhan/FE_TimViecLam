@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import { reactive, computed, onMounted, watchEffect, ref, provide } from 'vue'
 import { UserOutlined, LockOutlined } from '@ant-design/icons-vue'
-import { paginateCompanyApi } from '../../services/company.service'
-import { accountApi, loginApi, refreshApi } from '../../services/auth.service'
+import { paginateCompanyApi } from '../../../services/company.service'
+import { accountApi, loginApi, refreshApi } from '../../../services/auth.service'
 import { notification } from 'ant-design-vue'
-import { useHeaderStore } from '../../stores/headerStore'
-import { useAuthStore } from '../../stores/AuthStore'
+import { useHeaderStore } from '../../../stores/headerStore'
+import { useAuthStore } from '../../../stores/AuthStore'
 import { useRouter } from 'vue-router'
 
 
@@ -52,6 +52,13 @@ const onFinish = async (values: IFormState) => {
 const disabled = computed(() => {
   return !(formState.username && formState.password)
 })
+
+onMounted(() => {
+  const user = localStorage.getItem('access_token')
+  if (user) {
+    router.push('/')
+  }
+})
 </script>
 
 
@@ -64,37 +71,22 @@ const disabled = computed(() => {
     <div class="leftSide w-full lg:w-2/4 mx-auto lg:pr-[120px]">
       <div class="leftSide__title">
         Bằng việc đăng nhập, bạn đồng ý với các
-        <a href="https://itviec.com/blog/terms-conditions-vn/" target="_blank" class="hyperlink"
-          >Điều khoản dịch vụ</a
-        >
+        <a href="https://itviec.com/blog/terms-conditions-vn/" target="_blank" class="hyperlink">Điều khoản dịch vụ</a>
         và
-        <a href="https://itviec.com/blog/chinh-sach-bao-mat/" target="_blank" class="hyperlink"
-          >Chính sách quyền riêng tư</a
-        >
+        <a href="https://itviec.com/blog/chinh-sach-bao-mat/" target="_blank" class="hyperlink">Chính sách quyền riêng
+          tư</a>
         của ITviec liên quan đến thông tin riêng tư của bạn.
       </div>
 
-      <a-button danger class="login__btn_google"
-        ><img src="../assets/image/icon/icons8_google.svg" alt="" /> Đăng nhập với Google</a-button
-      >
+      <a-button danger class="login__btn_google"><img src="../assets/image/icon/icons8_google.svg" alt="" /> Đăng nhập
+        với Google</a-button>
 
-      <a-form
-        :model="formState"
-        layout="vertical"
-        name="normal_login"
-        class="login-form"
-        @finish="onFinish"
-      >
+      <a-form :model="formState" layout="vertical" name="normal_login" class="login-form" @finish="onFinish">
         <div class="or">hoặc</div>
-        <a-form-item
-          label="Email"
-          name="username"
-          class="login-form-username"
-          :rules="[
-            { required: true, message: 'Vui lòng điền email!' },
-            { type: 'email', message: 'Email phải là email!' }
-          ]"
-        >
+        <a-form-item label="Email" name="username" class="login-form-username" :rules="[
+          { required: true, message: 'Vui lòng điền email!' },
+          { type: 'email', message: 'Email phải là email!' }
+        ]">
           <a-input v-model:value="formState.username" size="large" placeholder="Vui lòng nhập email">
             <template #prefix>
               <UserOutlined class="site-form-item-icon" />
@@ -102,14 +94,10 @@ const disabled = computed(() => {
           </a-input>
         </a-form-item>
 
-        <a-form-item
-          label="Mật khẩu"
-          name="password"
-          :rules="[
-            { required: true, message: 'Vui lòng điền mật khẩu!' },
-            { type: 'string', min: 6, message: 'Mật bạn phải là 6 kiểu!' }
-          ]"
-        >
+        <a-form-item label="Mật khẩu" name="password" :rules="[
+          { required: true, message: 'Vui lòng điền mật khẩu!' },
+          { type: 'string', min: 6, message: 'Mật bạn phải là 6 kiểu!' }
+        ]">
           <a-input-password v-model:value="formState.password" size="large" placeholder="Vui lòng nhập mật khẩu">
             <template #prefix>
               <LockOutlined class="site-form-item-icon" />
@@ -126,17 +114,11 @@ const disabled = computed(() => {
 
         <a-form-item>
 
-          <a-button
-            :disabled="disabled"
-            type="primary"
-            html-type="submit"
-            class="login-form-button"
-            :loading="loading"
-          >
+          <a-button :disabled="disabled" type="primary" html-type="submit" class="login-form-button" :loading="loading">
             Đăng nhập ngay
           </a-button>
 
-          
+
           hoặc
           <RouterLink to="/register">đăng ký ngay!</RouterLink>
         </a-form-item>
@@ -173,6 +155,7 @@ const disabled = computed(() => {
   display: flex;
   flex-wrap: wrap;
   margin: 0 auto;
+
   .container__login_title {
     display: flex;
     width: 100%;
@@ -181,6 +164,7 @@ const disabled = computed(() => {
     font-weight: 700;
     gap: 0 10px;
     margin: 24px 0;
+
     img {
       width: 75px;
     }
@@ -193,15 +177,18 @@ const disabled = computed(() => {
     width: 100%;
     border-radius: 10px;
   }
+
   .or {
     text-align: center;
     font-size: 14px;
     font-weight: 500;
     margin-top: 10px;
   }
+
   .login-form-forgot {
     float: right;
   }
+
   .login__btn_google {
     width: 100%;
     height: 45px;
@@ -213,16 +200,19 @@ const disabled = computed(() => {
     align-items: center;
     gap: 0 10px;
   }
+
   .login-form-button {
     width: 100%;
     height: 45px;
     background-color: #ed1b2f;
     font-size: 20px;
   }
+
   .leftSide__title {
     font-size: 14px;
     color: #414042;
     margin-bottom: 30px;
+
     a {
       color: rgb(14, 46, 237);
     }

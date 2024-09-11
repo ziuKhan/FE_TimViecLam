@@ -1,6 +1,6 @@
 <template>
-<RouterLink :to="`/company/${id}`" class="card__employer">   
-   <div class="card__first">
+  <RouterLink :to="`/company/${id}`" class="card__employer">
+    <div class="card__first">
       <div class="first__logoBrand"><img :src="linkUploads('company/' + logo)" alt="" /></div>
     </div>
     <div class="card__second">
@@ -10,7 +10,7 @@
       <div class="card__address">{{ address }}</div>
       <div class="card__job">
         {{ jobs }} việc làm
-        <img src="../assets/image/icon/icons8_chevron_right.svg" alt="" />
+        <img src="../../assets/image/icon/icons8_chevron_right.svg" alt="" />
       </div>
     </div>
   </RouterLink>
@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
-import { linkUploads } from '../constant/api'
+import { linkUploads } from '../../constant/api'
 
 defineProps({
   address: String,
@@ -35,18 +35,21 @@ defineProps({
   background-color: #fdfdfd;
   border-radius: 8px;
   border: 0.8px solid rgb(222, 222, 222);
+
   &:hover {
     box-shadow: 0 0 30px rgba(44, 44, 44, 0.1);
   }
 }
+
 .card__first {
   display: flex;
   justify-content: center;
   align-items: end;
-  background-image: url('../assets/image/icon/icon_theme_cardEmployer.svg');
+  background-image: url('../../assets/image/icon/icon_theme_cardEmployer.svg');
   background-repeat: repeat-x;
 
   height: 192px;
+
   .first__logoBrand {
     width: 160px;
     background-color: #fff;
@@ -56,6 +59,7 @@ defineProps({
     align-items: center;
     border-radius: 8px;
     box-shadow: 0 10px 20px rgba(44, 44, 44, 0.1);
+
     img {
       width: 100%;
     }
@@ -92,6 +96,7 @@ defineProps({
     }
   }
 }
+
 .card__third {
   background-color: #f7f7f7;
   padding: 12px 16px;
@@ -104,6 +109,7 @@ defineProps({
     font-size: 14px;
     width: 70%;
   }
+
   .card__job {
     display: flex;
     align-items: center;

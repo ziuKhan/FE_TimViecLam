@@ -14,7 +14,7 @@ watchEffect(() => {
     <div class="m-auto w-11/12 lg:w-10/12 mb-12 flex flex-wrap gap-2 lg:gap-0 lg:flex-nowrap ">
       <div class="w-full lg:h-full flex justify-center flex-col mb-3 items-center lg:w-1/4">
         <div class="h-12">
-          <img class="h-full" src="../assets/image/icon/logo-itviec.png" alt="" />
+          <img class="h-full" src="../../assets/image/icon/logo-itviec.png" alt="" />
         </div>
         <div class="text-white pt-1">Ít nhưng mà chất</div>
       </div>

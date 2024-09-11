@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import Header from './components/header/Header.vue'
-import Footer from './components/Footer.vue'
-import HeaderSM from './components/header/HeaderSM.vue';
 import { onBeforeUnmount, onMounted, ref } from 'vue';
+import Header from './components/user/header/Header.vue';
+import HeaderSM from './components/user/header/HeaderSM.vue';
+import Footer from './components/user/Footer.vue';
 
 const isMobile = ref(false);
 

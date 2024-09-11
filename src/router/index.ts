@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/Home/HomeView.vue'
+import HomeView from '../views/user/Home/HomeView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,46 +20,50 @@ const router = createRouter({
     {
       path: '/company/:id',
       name: 'company',
-      component: () => import('../views/CompanyView.vue')
+      component: () => import('../views/user/CompanyView.vue')
     },
     {
       path: '/login',
       name: 'login',
-      component: () => import('../views/Auth/LoginView.vue')
+      component: () => import('../views/user/Auth/LoginView.vue')
     },
     {
       path: '/register',
       name: 'register',
-      component: () => import('../views/Auth/RegisterView.vue')
+      component: () => import('../views/user/Auth/RegisterView.vue')
     },
     {
       path: '/register',
       name: 'register',
-      component: () => import('../views/Auth/RegisterView.vue')
+      component: () => import('../views/user/Auth/RegisterView.vue')
     },
     {
       path: '/job/:id',
       name: 'job',
-      component: () => import('../views/JobView.vue')
+      component: () => import('../views/user/JobView.vue')
     },
     {
       path: '/search',
       name: 'search',
-      component: () => import('../views/Home/SearchView.vue')
+      component: () => import('../views/user/Home/SearchView.vue')
     },
 
     //customer
     {
       path: '/customer/login',
       name: 'customerLogin',
-      component: () => import('../views/Customer/LoginView.vue')
+      component: () => import('../views/user/Customer/LoginView.vue')
     },
     {
       path: '/customer/register',
       name: 'customerRegister',
-      component: () => import('../views/Customer/RegisterView.vue')
+      component: () => import('../views/user/Customer/RegisterView.vue')
     },
-
+    {
+      path: '/test',
+      name: 'test',
+      component: () => import('../views/TestView.vue')
+    },
     // Error pages
     {
       path: '/401',

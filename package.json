@@ -13,10 +13,15 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^43.1.0",
+    "@ckeditor/ckeditor5-vue": "^7.0.0",
     "@types/axios": "^0.14.0",
     "@types/sass": "^1.45.0",
     "ant-design-vue": "^4.2.3",
     "axios": "^1.7.5",
+    "ckeditor-tailwind-reset": "^1.0.5",
+    "ckeditor5": "^43.1.0",
+    "ckeditor5-premium-features": "^43.1.0",
     "date-fns": "^3.6.0",
     "dayjs": "^1.11.13",
     "js-cookie": "^3.0.5",

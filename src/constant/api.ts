@@ -13,28 +13,27 @@ export const apiClient = axios.create({
 })
 
 // Interceptor request để thêm header Authorization
-apiClient.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('access_token')
-    if (token) {
+const token = localStorage.getItem('access_token')
+
+if (token) {
+  apiClient.interceptors.request.use(
+    (config) => {
       config.headers['Authorization'] = `Bearer ${token}`
-    }
-    return config
-  },
-  (error) => Promise.reject(error)
-)
+      return config
+    },
+    (error) => Promise.reject(error)
+  )
 
-// Interceptor để xử lý tự động refresh token và lỗi
-apiClient.interceptors.response.use(
-  (response) => response,
-  async (error) => {
-    const originalRequest = error.config
+  // Interceptor để xử lý tự động refresh token và lỗi
+  apiClient.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+      const originalRequest = error.config
 
-    // Kiểm tra xem có lỗi 401 và chưa thử refresh token hay không
-    if (error.response && error.response.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true
+      // Kiểm tra xem có lỗi 401 và chưa thử refresh token hay không
+      if (error.response && error.response.status === 401 && !originalRequest._retry) {
+        originalRequest._retry = true
 
-      try {
         // Refresh token
         const { data } = await apiClient.get('/auth/refresh')
         localStorage.setItem('access_token', data.data.access_token)
@@ -44,22 +43,10 @@ apiClient.interceptors.response.use(
 
         // Thực hiện lại yêu cầu gốc
         return apiClient(originalRequest)
-      } catch (refreshError) {
-        // Điều hướng đến trang 401 nếu refresh token thất bại
-        router.push({ name: 'Unauthorized' })
-        return Promise.reject(refreshError)
       }
+      return Promise.reject(error)
     }
-
-    // Điều hướng đến các trang lỗi dựa trên status code
-    if (error.response && error.response.status === 400) {
-      router.push({ name: 'BadRequest' })
-    } else if (error.response && error.response.status === 500) {
-      router.push({ name: 'ServerError' })
-    }
-
-    return Promise.reject(error)
-  }
-)
+  )
+}
 
 export const linkUploads = (id: string) => `http://localhost:8080/images/${id}`

@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, watchEffect, onUpdated, inject } from 'vue'
-import type { IAccount } from '../../types/backend'
-import { useHeaderStore } from '../../stores/headerStore'
-import { useAuthStore } from '../../stores/AuthStore';
-import { refreshApi } from '../../services/auth.service';
+import type { IAccount } from '../../../types/backend'
+import { useHeaderStore } from '../../../stores/headerStore'
+import { useAuthStore } from '../../../stores/AuthStore';
+import { refreshApi } from '../../../services/auth.service';
 import ManagerAccount from '../modal/ManagerAccount.vue';
 const isSticky = ref<boolean>(false)
 const collapsed = ref<boolean>(false)
-  const open = ref<boolean>(false)
+const open = ref<boolean>(false)
 
 const handleScroll = (): void => {
   const header = document.querySelector('.header')
@@ -43,15 +43,10 @@ onUnmounted(() => {
   <header class="header theme_blackred">
     <div class="header__logo">
       <RouterLink to="/">
-        <img
-          class="logo_itviec"
-          src="../../assets/image/icon/logo-itviec.png "
-          alt="#"
-          :style="{
-            width: collapsed ? '80px' : '108px',
-            height: collapsed ? '30px' : '40px'
-          }"
-        />
+        <img class="logo_itviec" src="../../../assets/image/icon/logo-itviec.png " alt="#" :style="{
+          width: collapsed ? '80px' : '108px',
+          height: collapsed ? '30px' : '40px'
+        }" />
       </RouterLink>
     </div>
     <div class="header__control">
@@ -59,12 +54,8 @@ onUnmounted(() => {
         <RouterLink to="/category" class="header__nav_link">
           Việc Làm IT
           <div class="icon-wrapper">
-            <img class="icon-default" src="../../assets/image/icon/icons8_chevron_down_1.svg" alt="" />
-            <img
-              class="icon-hover"
-              src="../../assets/image/icon/icons8_chevron_down_white.svg"
-              alt=""
-            />
+            <img class="icon-default" src="../../../assets/image/icon/icons8_chevron_down_1.svg" alt="" />
+            <img class="icon-hover" src="../../../assets/image/icon/icons8_chevron_down_white.svg" alt="" />
           </div>
 
           <div class="header__sub">
@@ -77,44 +68,29 @@ onUnmounted(() => {
         <RouterLink to="adax" class="header__nav_link">
           Top Công ty IT
           <div class="icon-wrapper">
-            <img class="icon-default" src="../../assets/image/icon/icons8_chevron_down_1.svg" alt="" />
-            <img
-              class="icon-hover"
-              src="../../assets/image/icon/icons8_chevron_down_white.svg"
-              alt=""
-            />
+            <img class="icon-default" src="../../../assets/image/icon/icons8_chevron_down_1.svg" alt="" />
+            <img class="icon-hover" src="../../../assets/image/icon/icons8_chevron_down_white.svg" alt="" />
           </div>
         </RouterLink>
         <RouterLink to="adax" class="header__nav_link"> Blog </RouterLink>
       </nav>
       <div class="header__user">
-        <RouterLink to="xa" class="header__user_link link_distance">Nhà Tuyển Dụng</RouterLink>
-        <RouterLink v-if="!storeAuth.isAuth" to="/login" class="header__user_link link_distance"
-          >Đăng Nhập/Đăng ký
+        <RouterLink to="/customer/login" class="header__user_link link_distance">Nhà Tuyển Dụng</RouterLink>
+        <RouterLink v-if="!storeAuth.isAuth" to="/login" class="header__user_link link_distance">Đăng Nhập/Đăng ký
         </RouterLink>
 
-        <span
-          v-else
-          to="/login"
-          class="header__user_link link_distance header__nav_link link__user_name"
-        >
-          <img src="../../assets/image/icon/icons8_male_user.svg" alt="" />
+        <span v-else to="/login" class="header__user_link link_distance header__nav_link link__user_name">
+          <img src="../../../assets/image/icon/icons8_male_user.svg" alt="" />
           {{ storeAuth.user?.name }}
           <div class="icon-wrapper">
-            <img class="icon-default" src="../../assets/image/icon/icons8_chevron_down_1.svg" alt="" />
-            <img
-              class="icon-hover"
-              src="../../assets/image/icon/icons8_chevron_down_white.svg"
-              alt=""
-            />
+            <img class="icon-default" src="../../../assets/image/icon/icons8_chevron_down_1.svg" alt="" />
+            <img class="icon-hover" src="../../../assets/image/icon/icons8_chevron_down_white.svg" alt="" />
           </div>
           <div class="header__sub">
-            <span @click="open = true"  class="header__sub_list" >Quản lý tài khoản</span>
-            <a-modal v-model:open="open" width="1000px"  title="Quản lý tài khoản"  :maskClosable=false 
-                :okButtonProps="{ style: { display: 'none' } }"
-                :cancelButtonProps="{ style: { display: 'none' } }"
-                >
-                 <ManagerAccount/>
+            <span @click="open = true" class="header__sub_list">Quản lý tài khoản</span>
+            <a-modal v-model:open="open" width="1000px" title="Quản lý tài khoản" :maskClosable=false
+              :okButtonProps="{ style: { display: 'none' } }" :cancelButtonProps="{ style: { display: 'none' } }">
+              <ManagerAccount />
             </a-modal>
 
             <RouterLink class="header__sub_list" to="">Trang quản trị</RouterLink>
@@ -147,12 +123,14 @@ onUnmounted(() => {
   border-bottom: 0.2px solid rgba(166, 166, 166, 0.216);
   position: sticky;
   top: 0;
-  transition: height 0.3s; /* Thêm hiệu ứng chuyển tiếp */
+  transition: height 0.3s;
+  /* Thêm hiệu ứng chuyển tiếp */
   z-index: 999;
 }
 
 .header.sticky {
-  height: 65px; /* Chiều cao khi sticky */
+  height: 65px;
+  /* Chiều cao khi sticky */
 }
 
 .header__logo {
@@ -206,6 +184,7 @@ onUnmounted(() => {
       .icon-hover {
         opacity: 1;
       }
+
       .icon-default {
         opacity: 0;
       }
@@ -264,12 +243,15 @@ onUnmounted(() => {
     }
   }
 }
+
 .link__user_name {
   min-width: 140px;
+
   .header__sub_list {
     width: 230px;
   }
 }
+
 .sub__list_item {
   position: absolute;
   top: 0;

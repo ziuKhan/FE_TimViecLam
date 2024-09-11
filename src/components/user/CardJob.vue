@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { linkUploads } from '../constant/api';
-import { formatSalary } from '../until/until';
+import { linkUploads } from '../../constant/api';
+import { formatSalary } from '../../until/until';
 
 defineProps({
     name: String,
