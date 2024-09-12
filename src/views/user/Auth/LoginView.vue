@@ -42,9 +42,12 @@ const onFinish = async (values: IFormState) => {
       storeAuth.statusIsAuth()
       openNotificationWithIcon()
       router.back()
+      window.location.reload();
     }
     loading.value = false
   } catch (error) {
+    loading.value = false
+
     console.error('Lỗi do try catch bắt:', error)
   }
 }
@@ -65,7 +68,7 @@ onMounted(() => {
 <template>
   <div class="container__login ">
     <div class="container__login_title">
-      Chào mừng bạn đến với <img src="../assets/image/icon/logo-itviec-black.png" alt="" />
+      Chào mừng bạn đến với <img src="../../../assets/image/icon/logo-itviec-black.png" alt="" />
     </div>
 
     <div class="leftSide w-full lg:w-2/4 mx-auto lg:pr-[120px]">
@@ -78,7 +81,8 @@ onMounted(() => {
         của ITviec liên quan đến thông tin riêng tư của bạn.
       </div>
 
-      <a-button danger class="login__btn_google"><img src="../assets/image/icon/icons8_google.svg" alt="" /> Đăng nhập
+      <a-button danger class="login__btn_google"><img src="../../../assets/image/icon/icons8_google.svg" alt="" /> Đăng
+        nhập
         với Google</a-button>
 
       <a-form :model="formState" layout="vertical" name="normal_login" class="login-form" @finish="onFinish">
@@ -120,7 +124,7 @@ onMounted(() => {
 
 
           hoặc
-          <RouterLink to="/register">đăng ký ngay!</RouterLink>
+          <RouterLink to="/register" class="font-medium">đăng ký ngay!</RouterLink>
         </a-form-item>
       </a-form>
     </div>
@@ -130,19 +134,19 @@ onMounted(() => {
         Đăng nhập để truy cập ngay vào hàng ngàn đánh giá và dữ liệu lương thị trường IT
       </div>
       <div class="rightSide__part">
-        <img src="../assets/image/icon/icons8_checkmark.svg" alt="" />Xem trước mức lương để có thể
+        <img src="../../../assets/image/icon/icons8_checkmark.svg" alt="" />Xem trước mức lương để có thể
         lợi thế khi thoả thuận lương
       </div>
       <div class="rightSide__part">
-        <img src="../assets/image/icon/icons8_checkmark.svg" alt="" />Tìm hiểu về phúc lợi, con
+        <img src="../../../assets/image/icon/icons8_checkmark.svg" alt="" />Tìm hiểu về phúc lợi, con
         người, văn hóa công ty qua các đánh giá chân thật
       </div>
       <div class="rightSide__part">
-        <img src="../assets/image/icon/icons8_checkmark.svg" alt="" />Dễ dàng ứng tuyển chỉ với một
+        <img src="../../../assets/image/icon/icons8_checkmark.svg" alt="" />Dễ dàng ứng tuyển chỉ với một
         thao tác
       </div>
       <div class="rightSide__part">
-        <img src="../assets/image/icon/icons8_checkmark.svg" alt="" />Quản lý hồ sơ và quyền riêng
+        <img src="../../../assets/image/icon/icons8_checkmark.svg" alt="" />Quản lý hồ sơ và quyền riêng
         tư của bạn
       </div>
     </div>

@@ -44,6 +44,7 @@ const onFinish = async (values: IFormState) => {
             storeAuth.statusIsAuth()
             openNotificationWithIcon()
             router.push({ path: '/' })
+            window.location.reload();
         }
         loading.value = false
     } catch (error) {
@@ -60,12 +61,12 @@ const onFinish = async (values: IFormState) => {
     <div v-else>
         <div class="flex">
             <div class="w-1/2 theme_blackred hidden lg:block"> <img
-                    src="../../assets/image/company/logo_login_customer.png" alt="">
+                    src="../../../assets/image/company/logo_login_customer.png" alt="">
             </div>
             <div class="w-full lg:w-1/2 ">
                 <div class="w-[90%] lg:w-[65%] mx-auto  my-[16vh]">
                     <div class="flex gap-x-4 text-base font-bold items-center"><img class="w-[108px]"
-                            src="../../assets/image/icon/logo-itviec-black.png" alt="">
+                            src="../../../assets/image/icon/logo-itviec-black.png" alt="">
                         <span>CUSTOMER ADMIN SITE</span>
                     </div>
                     <div class="mt-12 font-bold text-[22px]">Đăng nhập ITviec Customer</div>
