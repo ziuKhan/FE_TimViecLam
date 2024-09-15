@@ -25,7 +25,7 @@
 
 <script setup lang="ts">
 import Search from './Search.vue';
-import { useSearchStore } from '../../../stores/searchStore';
+import { useSearchStore } from '../../../stores/user/searchStore';
 const store = useSearchStore()
 </script>
 

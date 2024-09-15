@@ -5,7 +5,7 @@ import { ref, watch, watchEffect } from 'vue';
 import type { IJob, IPaginate } from '../../../types/backend';
 import { paginateJobsApi } from '../../../services/job.service';
 import { useRoute } from 'vue-router';
-import { useSearchStore } from '../../../stores/searchStore';
+import { useSearchStore } from '../../../stores/user/searchStore';
 import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
 import { createVNode } from 'vue';
 import { Modal } from 'ant-design-vue';

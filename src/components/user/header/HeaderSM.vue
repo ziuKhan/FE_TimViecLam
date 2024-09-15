@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watchEffect } from 'vue';
-import { useHeaderStore } from '../../../stores/headerStore';
-import { useAuthStore } from '../../../stores/AuthStore';
+import { useHeaderStore } from '../../../stores/user/headerStore';
+import { useAuthStore } from '../../../stores/user/AuthStore';
 import ManagerAccount from '../modal/ManagerAccount.vue';
 const openUser = ref<boolean>(false);
 const openMenu = ref<boolean>(false);

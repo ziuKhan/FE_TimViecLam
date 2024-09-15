@@ -1,6 +1,6 @@
 import axios from 'axios'
 import Cookies from 'js-cookie'
-import { useAuthStore } from '../stores/AuthStore'
+import { useAuthStore } from '../stores/user/AuthStore'
 import router from '@/router' // Import router để điều hướng
 
 export const apiClient = axios.create({
@@ -13,40 +13,48 @@ export const apiClient = axios.create({
 })
 
 // Interceptor request để thêm header Authorization
-const token = localStorage.getItem('access_token')
-
-if (token) {
-  apiClient.interceptors.request.use(
-    (config) => {
+apiClient.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('access_token')
+    if (token) {
       config.headers['Authorization'] = `Bearer ${token}`
-      return config
-    },
-    (error) => Promise.reject(error)
-  )
+    }
+    return config
+  },
+  (error) => Promise.reject(error)
+)
 
-  // Interceptor để xử lý tự động refresh token và lỗi
-  apiClient.interceptors.response.use(
-    (response) => response,
-    async (error) => {
-      const originalRequest = error.config
+// Interceptor để xử lý tự động refresh token và lỗi
+apiClient.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config
 
-      // Kiểm tra xem có lỗi 401 và chưa thử refresh token hay không
-      if (error.response && error.response.status === 401 && !originalRequest._retry) {
-        originalRequest._retry = true
+    if (error.response && error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true
 
-        // Refresh token
+      try {
+        // Gọi API refresh token
         const { data } = await apiClient.get('/auth/refresh')
-        localStorage.setItem('access_token', data.data.access_token)
 
-        // Cập nhật token mới vào headers
+        // Cập nhật token mới vào localStorage và header
+        localStorage.setItem('access_token', data.data.access_token)
         apiClient.defaults.headers.common['Authorization'] = `Bearer ${data.data.access_token}`
 
-        // Thực hiện lại yêu cầu gốc
+        // Gửi lại request ban đầu với token mới
+        originalRequest.headers['Authorization'] = `Bearer ${data.data.access_token}`
         return apiClient(originalRequest)
+      } catch (refreshError) {
+        // Nếu refresh token thất bại, có thể chuyển hướng người dùng đến trang đăng nhập
+        const authStore = useAuthStore()
+        authStore.logout() // Gọi hành động logout nếu cần
+        router.push('/login')
+        return Promise.reject(refreshError)
       }
-      return Promise.reject(error)
     }
-  )
-}
+
+    return Promise.reject(error)
+  }
+)
 
 export const linkUploads = (id: string) => `http://localhost:8080/images/${id}`

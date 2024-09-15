@@ -9,7 +9,7 @@ import { vi } from 'date-fns/locale';
 import Loading from '../../components/Loading.vue';
 import { formatSalary } from '../../until/until';
 import ApplyJob from '../../components/user/modal/ApplyJob.vue';
-import { useAuthStore } from '../../stores/AuthStore';
+import { useAuthStore } from '../../stores/user/AuthStore';
 import { message } from 'ant-design-vue';
 import { createResumeApi } from '../../services/resume.service';
 

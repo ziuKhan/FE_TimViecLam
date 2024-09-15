@@ -23,7 +23,7 @@
 import { onMounted, ref, render, watch, watchEffect } from 'vue';
 import type { IPaginate, IResume } from '../../../types/backend';
 import { paginateResumeApi } from '../../../services/resume.service';
-import { useAuthStore } from '../../../stores/AuthStore';
+import { useAuthStore } from '../../../stores/user/AuthStore';
 import dayjs from 'dayjs';
 import { linkUploads } from '../../../constant/api';
 const load = ref<boolean>(false)

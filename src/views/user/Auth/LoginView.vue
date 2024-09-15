@@ -4,9 +4,8 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons-vue'
 import { paginateCompanyApi } from '../../../services/company.service'
 import { accountApi, loginApi, refreshApi } from '../../../services/auth.service'
 import { notification } from 'ant-design-vue'
-import { useHeaderStore } from '../../../stores/headerStore'
-import { useAuthStore } from '../../../stores/AuthStore'
 import { useRouter } from 'vue-router'
+import { useAuthStore } from '../../../stores/user/AuthStore'
 
 
 interface IFormState {

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { useSearchStore } from '../../../stores/searchStore';
+import { useSearchStore } from '../../../stores/user/searchStore';
 
 const store = useSearchStore()
 

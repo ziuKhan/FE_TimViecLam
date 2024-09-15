@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
-import type { IAccount, IUser } from '../types/backend'
-import { accountApi, accountApi2, logoutApi } from '../services/auth.service'
+
 import { message } from 'ant-design-vue'
 import { useRouter } from 'vue-router'
+import { accountApi2, logoutApi } from '../../services/auth.service'
+import type { IUser } from '../../types/backend'
 
 export const useAuthStore = defineStore('auth', () => {
   const isAuth = ref(false)

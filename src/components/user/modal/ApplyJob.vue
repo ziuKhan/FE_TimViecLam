@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useJobStore } from '../../../stores/JobStore';
-import { useAuthStore } from '../../../stores/AuthStore';
+import { useJobStore } from '../../../stores/user/JobStore';
+import { useAuthStore } from '../../../stores/user/AuthStore';
 import { message } from 'ant-design-vue';
 import { UploadOutlined } from '@ant-design/icons-vue';
 import type { UploadChangeParam } from 'ant-design-vue';

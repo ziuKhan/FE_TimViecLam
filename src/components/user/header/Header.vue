@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, watchEffect, onUpdated, inject } from 'vue'
 import type { IAccount } from '../../../types/backend'
-import { useHeaderStore } from '../../../stores/headerStore'
-import { useAuthStore } from '../../../stores/AuthStore';
+import { useHeaderStore } from '../../../stores/user/headerStore'
+import { useAuthStore } from '../../../stores/user/AuthStore';
 import { refreshApi } from '../../../services/auth.service';
 import ManagerAccount from '../modal/ManagerAccount.vue';
 const isSticky = ref<boolean>(false)

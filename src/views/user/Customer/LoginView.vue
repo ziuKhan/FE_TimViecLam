@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue';
 import Loading from '../../../components/Loading.vue';
-import { useAuthStore } from '../../../stores/AuthStore';
+import { useAuthStore } from '../../../stores/user/AuthStore';
 import { useRoute, useRouter } from 'vue-router';
 import { loginApi } from '../../../services/auth.service';
 import { notification } from 'ant-design-vue';
