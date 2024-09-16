@@ -63,7 +63,7 @@ watchEffect(() => {
     <hr />
     <div class="text-gray-400 text-center text-sm p-5">Copyright © IT VIEC JSC | 0312192258</div>
     <div class="absolute -top-4 right-0 z-0 h-full">
-      <img class="" src="../assets/image/icon/logo_footer.svg" alt="" />
+      <img class="" src="../../assets/image/icon/logo_footer.svg" alt="" />
     </div>
   </footer>
 </template>
