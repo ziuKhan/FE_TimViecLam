@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import CardEmployer from '../../../components/user/CardEmployer.vue'
-import { type ICompany, type IJob } from '../../../types/backend'
 import { paginateCompanyApi } from '../../../services/company.service'
 import CardJob from '../../../components/user/CardJob.vue'
 import { paginateJobsApi } from '../../../services/job.service'
 import Loading from '../../../components/Loading.vue'
 import FormSearch from '../../../components/user/search/FormSearch.vue'
+import type { ICompany, IJob } from '../../../types/backend'
 
 const dataCompany = ref<ICompany[]>([])
 const dataJobs = ref<IJob[]>([])
