@@ -3,7 +3,7 @@ import { refreshApi } from '../services/auth.service' // Import hàm refresh
 import TokenService from './token.service'
 
 export const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: import.meta.env.VITE_API_URL + '/api/v1',
   headers: {
     'Content-Type': 'application/json'
   },
@@ -55,4 +55,4 @@ apiClient.interceptors.response.use(
   }
 )
 
-export const linkUploads = (id: string) => `http://localhost:8080/images/${id}`
+export const linkUploads = (id: string) => `${import.meta.env.VITE_API_URL}/images/${id}`
