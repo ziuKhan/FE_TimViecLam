@@ -4,7 +4,7 @@ import { useAuthStore } from '../stores/user/AuthStore'
 import router from '@/router' // Import router để điều hướng
 
 export const apiClient = axios.create({
-  baseURL: 'http://localhost:8080/api/v1',
+  baseURL: 'https://da4-be-nestjs.onrender.com/api/v1',
   headers: {
     'Content-Type': 'application/json'
   },

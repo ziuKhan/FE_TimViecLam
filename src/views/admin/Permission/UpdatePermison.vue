@@ -48,7 +48,6 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
 import type { Rule } from 'ant-design-vue/es/form';
 import usePermissionStore from '../../../stores/admin/PermissionStore';
 import { ALL_METHODS, ALL_MODULES } from '../../../types/permision';

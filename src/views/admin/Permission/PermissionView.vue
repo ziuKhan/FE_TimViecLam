@@ -128,7 +128,6 @@ onMounted(() => {
                                     <img class="h-5/6" src="../../../assets/image/icon/icons8_remove.svg"
                                         alt=""></button>
                             </a-popconfirm>
-
                         </template>
                     </template>
                 </a-table>

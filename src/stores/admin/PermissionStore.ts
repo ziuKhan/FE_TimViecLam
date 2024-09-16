@@ -109,6 +109,7 @@ const usePermissionStore = defineStore('permission', () => {
     loading.value = false
   }
 
+  //chức năng xem chi tiết
   const getPermissionByID = async (id: string) => {
     try {
       debugger
