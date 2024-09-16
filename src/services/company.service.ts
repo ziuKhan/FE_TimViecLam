@@ -1,4 +1,5 @@
 import { apiClient } from '@/constant/api'
+import { handleApiError } from '../until/until'
 const moduleName = '/companies'
 
 export const paginateCompanyApi = async (params: any): Promise<any> => {
@@ -6,7 +7,8 @@ export const paginateCompanyApi = async (params: any): Promise<any> => {
     const response = await apiClient.get(`${moduleName}${params}`)
     return response.data.data.result
   } catch (err: any) {
-    alert(err?.response?.data?.message)
+        handleApiError(err) 
+
   }
 }
 
@@ -15,7 +17,8 @@ export const getCompanyApi = async (id: string): Promise<any> => {
     const response = await apiClient.get(`${moduleName}/${id}`)
     return response.data.data
   } catch (err: any) {
-    alert(err?.response?.data?.message)
+        handleApiError(err) 
+
   }
 }
 

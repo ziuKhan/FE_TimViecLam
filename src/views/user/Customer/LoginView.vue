@@ -5,6 +5,7 @@ import { useAuthStore } from '../../../stores/user/AuthStore';
 import { useRoute, useRouter } from 'vue-router';
 import { loginApi } from '../../../services/auth.service';
 import { notification } from 'ant-design-vue';
+import tokenService from '../../../constant/token.service';
 
 const load = ref<boolean>(true)
 interface IFormState {
@@ -40,7 +41,7 @@ const onFinish = async (values: IFormState) => {
         const response = await loginApi(username, password)
         if (response.data) {
             const { access_token } = response.data
-            localStorage.setItem('access_token', access_token)
+            tokenService.createToken(access_token, formState.remember)
             storeAuth.statusIsAuth()
             openNotificationWithIcon()
             router.push({ path: '/' })

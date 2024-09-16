@@ -1,4 +1,5 @@
 import { apiClient } from '../constant/api'
+import { handleApiError } from '../until/until'
 
 const moduleName = '/auth'
 
@@ -10,18 +11,15 @@ export const loginApi = async (username: string, password: string): Promise<any>
     })
     return res.data
   } catch (err: any) {
-    alert(err?.response?.data?.message)
+    handleApiError(err)
   }
 }
 
 export const refreshApi = async (): Promise<any> => {
   try {
     const res = await apiClient.get(`${moduleName}/refresh`)
-    console.log('check refresh api', res.data)
     return res.data
-  } catch (err: any) {
-    alert(err?.response?.data?.message)
-  }
+  } catch (err: any) {}
 }
 
 export const registerApi = async (user: any): Promise<any> => {
@@ -29,7 +27,7 @@ export const registerApi = async (user: any): Promise<any> => {
     const res = await apiClient.post(`${moduleName}/register`, user)
     return res.data
   } catch (err: any) {
-    alert(err?.response?.data?.message)
+    handleApiError(err)
   }
 }
 
@@ -38,7 +36,7 @@ export const registerHRApi = async (user: any): Promise<any> => {
     const res = await apiClient.post(`${moduleName}/customer/register`, user)
     return res.data
   } catch (err: any) {
-    alert(err?.response?.data?.message)
+    handleApiError(err)
   }
 }
 
@@ -47,7 +45,7 @@ export const createCompanyApi = async (data: any): Promise<any> => {
     const res = await apiClient.post(`${moduleName}/customer/company`, data)
     return res.data
   } catch (err: any) {
-    alert(err?.response?.data?.message)
+    handleApiError(err)
   }
 }
 
@@ -56,23 +54,11 @@ export const logoutApi = async (): Promise<any> => {
     const res = await apiClient.post(`${moduleName}/logout`)
     return res.data
   } catch (err: any) {
-    alert(err?.response?.data?.message)
-  }
-}
-export const accountApi = async (token: any): Promise<any> => {
-  try {
-    const res = await apiClient.get(`${moduleName}/account`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-    return res.data
-  } catch (err: any) {
-    alert(err?.response?.data?.message)
+    handleApiError(err)
   }
 }
 
-export const accountApi2 = async (): Promise<any> => {
+export const accountApi = async (): Promise<any> => {
   try {
     const res = await apiClient.get(`${moduleName}/account`)
     return res.data

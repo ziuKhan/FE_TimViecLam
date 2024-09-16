@@ -92,7 +92,7 @@ onMounted(() => {
 
                 <a-input-search placeholder="Vui lòng nhập thông tin cần tìm kiếm" enter-button="Tìm kiếm"
                     v-model:value="store.valueSearch" @search="store.getData(store.valueSearch)" class="w-2/3" />
-                <button class="bg-[#23B55A] hover:bg-green-500 text-white rounded-[7px] px-5 font-medium "
+                <button class="bg-[#21aa55] hover:bg-green-500 text-white rounded-[7px] px-5 font-medium "
                     @click="store.handleOpenModal()">Thêm
                     mới</button>
             </div>

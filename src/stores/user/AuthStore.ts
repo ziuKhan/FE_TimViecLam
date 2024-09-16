@@ -3,16 +3,16 @@ import { ref, watch } from 'vue'
 
 import { message } from 'ant-design-vue'
 import { useRouter } from 'vue-router'
-import { accountApi2, logoutApi } from '../../services/auth.service'
+import { accountApi, logoutApi } from '../../services/auth.service'
 import type { IUser } from '../../types/backend'
+import tokenService from '../../constant/token.service'
 
 export const useAuthStore = defineStore('auth', () => {
   const isAuth = ref(false)
   const user = ref<IUser>()
-  const router = useRouter()
 
   const getUser = async () => {
-    const use = await accountApi2()
+    const use = await accountApi()
     if (!use?.data) {
       isAuth.value = false
       return
@@ -25,7 +25,7 @@ export const useAuthStore = defineStore('auth', () => {
   const logout = async () => {
     const res: any = await logoutApi()
     if (res.data === 'OK') {
-      await localStorage.removeItem('access_token')
+      tokenService.removeToken()
       user.value = undefined
       statusIsAuth()
       window.location.reload()
@@ -34,7 +34,7 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   const statusIsAuth = () => {
-    const token = localStorage.getItem('access_token')
+    const token = tokenService.getToken()?.token
     if (!token) {
       return (isAuth.value = false)
     }

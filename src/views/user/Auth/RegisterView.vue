@@ -5,6 +5,7 @@ import { paginateCompanyApi } from '../../../services/company.service'
 import { loginApi, registerApi } from '../../../services/auth.service'
 import { notification } from 'ant-design-vue'
 import { useRouter } from 'vue-router'
+import tokenService from '../../../constant/token.service'
 
 interface IFormState {
   email: string
@@ -45,8 +46,8 @@ const disabled = computed(() => {
 })
 const router = useRouter()
 onMounted(() => {
-  const user = localStorage.getItem('access_token')
-  if (user) {
+  const user = tokenService.getToken()?.token
+  if (user && user !== 'undefined') {
     router.push('/')
   }
 })

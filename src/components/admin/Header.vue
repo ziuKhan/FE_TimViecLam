@@ -1,12 +1,17 @@
 <template>
     <a-layout-sider v-model:collapsed="collapsed" collapsible>
-        <div class="logo__itviec w-3/5 mx-auto my-5"> <img src="../../assets/image/icon/logo-itviec.png" alt=""
-                class="w-full object-contain"> </div>
+        <div class="logo__itviec w-3/5 mx-auto my-5">
+            <RouterLink to="/admin"> <img src="../../assets/image/icon/logo-itviec.png" alt=""
+                    class="w-full object-contain"></RouterLink>
+        </div>
         <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="inline">
-            <a-menu-item key="1">
-                <pie-chart-outlined />
-                <span>Trang chủ</span>
-            </a-menu-item>
+            <RouterLink to="/admin">
+                <a-menu-item key="1">
+                    <pie-chart-outlined />
+                    <span>Trang chủ</span>
+                </a-menu-item>
+            </RouterLink>
+
             <a-menu-item key="2">
                 <desktop-outlined />
                 <span>Tài khoản</span>
@@ -18,7 +23,10 @@
                         <span>Quản lý tài khoản</span>
                     </span>
                 </template>
-                <a-menu-item key="3">Phân quyền</a-menu-item>
+                <RouterLink to="/admin/permission">
+
+                    <a-menu-item key="3">Phân quyền</a-menu-item>
+                </RouterLink>
                 <a-menu-item key="4">Quyền</a-menu-item>
             </a-sub-menu>
             <a-sub-menu key="sub2">
@@ -48,6 +56,7 @@ import {
     FileOutlined,
 } from '@ant-design/icons-vue';
 import { ref } from 'vue';
+import { RouterLink } from 'vue-router';
 
 const collapsed = ref<boolean>(false);
 const selectedKeys = ref<string[]>(['1']);

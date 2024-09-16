@@ -6,6 +6,7 @@ import { accountApi, loginApi, refreshApi } from '../../../services/auth.service
 import { notification } from 'ant-design-vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../../../stores/user/AuthStore'
+import tokenService from '../../../constant/token.service'
 
 
 interface IFormState {
@@ -16,7 +17,7 @@ interface IFormState {
 const formState = reactive<IFormState>({
   username: '',
   password: '',
-  remember: true
+  remember: false
 })
 
 const loading = ref<boolean>(false)
@@ -36,8 +37,9 @@ const onFinish = async (values: IFormState) => {
     if (response.data) {
       const { access_token } = response.data
 
-      // Lưu access_token vào localStorage
-      localStorage.setItem('access_token', access_token)
+      // Lưu access_token vào bộ nhớ trình duyệt
+      tokenService.createToken(access_token, formState.remember)
+
       storeAuth.statusIsAuth()
       openNotificationWithIcon()
       router.back()
@@ -56,8 +58,8 @@ const disabled = computed(() => {
 })
 
 onMounted(() => {
-  const user = localStorage.getItem('access_token')
-  if (user) {
+  const user = tokenService.getToken()?.token
+  if (user && user !== 'undefined') {
     router.push('/')
   }
 })

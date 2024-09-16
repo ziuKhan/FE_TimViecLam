@@ -1,7 +1,7 @@
 <template>
-  <a-result status="404" title="404" sub-title="Sorry, the page you visited does not exist.">
+  <a-result status="404" title="404" sub-title="Rất tiếc, trang bạn đã truy cập không tồn tại..">
     <template #extra>
-      <a-button type="primary">Back Home</a-button>
+      <a-button type="primary" @click="$router.push('/')">Quay lại</a-button>
     </template>
   </a-result>
 </template>

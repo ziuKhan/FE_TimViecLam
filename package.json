@@ -24,6 +24,7 @@
     "ckeditor5-premium-features": "^43.1.0",
     "date-fns": "^3.6.0",
     "dayjs": "^1.11.13",
+    "dotenv": "^16.4.5",
     "js-cookie": "^3.0.5",
     "pinia": "^2.1.7",
     "vue": "^3.4.29",
