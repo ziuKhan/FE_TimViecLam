@@ -30,6 +30,7 @@ const formModel = ref({
 
 
 const getSkills = async () => {
+    debugger
     const res = await getSubscriberApi(storeAuth.user?.email);
     if (res.data) {
         formModel.value.skills = res.data.skills

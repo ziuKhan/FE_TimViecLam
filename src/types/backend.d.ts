@@ -3,13 +3,15 @@ export interface IUser {
   name?: string
   email?: string
   password?: string
-  age?: number
   gender?: string
   address?: string
-  role?: {
-    _id?: string
-    name?: string
-  }
+  isActive?: boolean
+  role?:
+    | {
+        _id?: string
+        name?: string
+      }
+    | string
 
   company?: {
     _id?: string
@@ -130,7 +132,7 @@ export interface IRole {
   name: string
   description: string
   isActive: boolean
-  permissions: IPermission[] | string[]
+  permissions: string[]
 
   createdBy?: string
   isDeleted?: boolean

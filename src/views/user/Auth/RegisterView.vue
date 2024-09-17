@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { reactive, computed, onMounted, watchEffect } from 'vue'
 import { UserOutlined, LockOutlined } from '@ant-design/icons-vue'
-import { paginateCompanyApi } from '../../../services/company.service'
 import { loginApi, registerApi } from '../../../services/auth.service'
 import { notification } from 'ant-design-vue'
 import { useRouter } from 'vue-router'
@@ -33,8 +32,10 @@ const onFinish = async (values: IFormState) => {
     const { email, password, name } = values
     const response = await registerApi({ email, password, name })
     if (response.data) {
+      router.push('/login')
+
       openNotificationWithIcon()
-      console.log(response.data)
+
     }
   } catch (error) {
     console.error('Lỗi do try catch bắt:', error)

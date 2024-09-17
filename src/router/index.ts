@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/user/Home/HomeView.vue'
 import UserLayout from '../views/user/UserLayout.vue'
+import AdminLayout from '../views/admin/AdminLayout.vue'
+import { useAuthStore } from '../stores/user/AuthStore'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -31,6 +33,7 @@ const router = createRouter({
         {
           path: 'login',
           name: 'login',
+
           component: () => import('../views/user/Auth/LoginView.vue')
         },
         {
@@ -66,11 +69,10 @@ const router = createRouter({
     //admin
     {
       path: '/admin',
-      name: 'admin',
-      component: () => import('../views/admin/AdminLayout.vue'),
+      component: AdminLayout,
       children: [
         {
-          path: '',
+          path: '', // Đây là route mặc định khi vào /admin
           component: () => import('../views/admin/IndexView.vue')
         },
         {
@@ -80,6 +82,10 @@ const router = createRouter({
         {
           path: 'role',
           component: () => import('../views/admin/Role/RoleView.vue')
+        },
+        {
+          path: 'user',
+          component: () => import('../views/admin/User/UserView.vue')
         }
       ]
     },
@@ -91,7 +97,7 @@ const router = createRouter({
 
     // Error pages
     {
-      path: '/401',
+      path: '/403',
       name: 'Unauthorized',
       component: () => import('../errors/403.vue')
     },

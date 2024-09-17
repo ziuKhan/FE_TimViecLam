@@ -1,21 +1,22 @@
 import { defineStore } from 'pinia'
-import { reactive, ref } from 'vue'
-import type { IPaginate, IPermission, IRole } from '../../types/backend'
-import {
-  createPermissionApi,
-  deletePermissionApi,
-  getPermissionApi,
-  paginatePermissionApi,
-  updatePermissionApi
-} from '../../services/permission.service'
+import { ref, reactive } from 'vue'
+import type { IPaginate, IRole } from '../../types/backend'
 import { message } from 'ant-design-vue'
 import roleService from '../../services/role.service'
 
-const useRoleStore = defineStore('permission', () => {
+interface RoleStoreState {
+  openModal: boolean
+  dataMeta: IPaginate
+  data: IRole[]
+  valueSearch: string
+  form: IRole
+  loading: boolean
+}
+
+const useRoleStore = defineStore('role', () => {
   const { getApi, createApi, updateApi, deleteApi, paginateApi } = roleService
 
   const openModal = ref<boolean>(false)
-
   const dataMeta = ref<IPaginate>({
     current: 1,
     pageSize: 6,
@@ -24,7 +25,6 @@ const useRoleStore = defineStore('permission', () => {
   })
 
   const data = ref<IRole[]>([])
-
   const valueSearch = ref<string>('')
 
   const form = reactive<IRole>({
@@ -32,10 +32,11 @@ const useRoleStore = defineStore('permission', () => {
     name: '',
     description: '',
     isActive: false,
-    permissions: []
+    permissions: [] as any
   })
 
   const loading = ref<boolean>(false)
+
   const refreshInput = () => {
     form._id = ''
     form.name = ''
@@ -65,24 +66,20 @@ const useRoleStore = defineStore('permission', () => {
     }
   }
 
-  //chức năng xoá
   const deleteByID = async (id: string) => {
     loading.value = true
     try {
       const res = await deleteApi(id)
       if (res) {
-        message.success('Xóa thành công!')
+        message.success('Xóa thành công!')
         loading.value = false
         getData()
       }
     } catch (error) {
       loading.value = false
-
       console.error('Error fetching data:', error)
     }
   }
-
-  //code dành cho permission update
 
   const updateAndAdd = async () => {
     loading.value = true
@@ -90,7 +87,7 @@ const useRoleStore = defineStore('permission', () => {
       try {
         const res = await updateApi(form, form._id)
         if (res) {
-          message.success('Cập nhật thành công!')
+          message.success('Cập nhật thành công!')
           refreshInput()
           openModal.value = false
           loading.value = false
@@ -103,7 +100,7 @@ const useRoleStore = defineStore('permission', () => {
       try {
         const res = await createApi(form)
         if (res) {
-          message.success('Thêm thành công!')
+          message.success('Thêm thành công!')
           refreshInput()
           openModal.value = false
           loading.value = false
@@ -116,23 +113,22 @@ const useRoleStore = defineStore('permission', () => {
     loading.value = false
   }
 
-  //chức năng xem chi tiết
   const getByID = async (id: string) => {
     try {
       loading.value = true
       const res = await getApi(id)
+      const { _id, name, description, isActive, permissions } = res.data
       if (res) {
-        form._id = res._id
-        form.name = res.name
-        form.description = res.description
-        form.isActive = res.isActive
-        form.permissions = res.permissions
+        form._id = _id
+        form.name = name
+        form.description = description
+        form.isActive = isActive
+        form.permissions = permissions.map((permission: any) => permission._id)
         openModal.value = true
         loading.value = false
       }
     } catch (error) {
       loading.value = false
-
       console.error('Error fetching data:', error)
     }
   }

@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 body {
   font-family: 'Lexend', sans-serif;
   background-color: #ffffff;
@@ -21,4 +20,7 @@ body {
 }
 .theme_gray_no_border {
   background-color: #f7f7f7;
+}
+.ant-modal-body {
+  padding: 20px !important;
 }

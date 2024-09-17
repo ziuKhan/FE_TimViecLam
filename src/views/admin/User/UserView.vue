@@ -1,14 +1,14 @@
 <script lang="ts" setup>
 
-
-import { onMounted, watch, watchEffect } from 'vue';
+import { onMounted, watchEffect } from 'vue';
 import type { IPaginate } from '../../../types/backend';
+
 import dayjs from 'dayjs';
-import UpdatePermison from './UpdatePermison.vue';
-import usePermissionStore from '../../../stores/admin/PermissionStore';
+import UpdateUser from './UpdateUser.vue';
+import useUserStore from '../../../stores/admin/UserStore';
 
 
-const store = usePermissionStore()
+const store = useUserStore()
 
 const columns = [
     {
@@ -19,16 +19,20 @@ const columns = [
         dataIndex: 'name',
     },
     {
-        title: 'Địa chỉ API',
-        dataIndex: 'apiPath',
+        title: 'Email',
+        dataIndex: 'email',
     },
     {
-        title: 'Thuộc tính',
-        dataIndex: 'method',
+        title: 'Giới tính',
+        dataIndex: 'gender',
     },
     {
-        title: 'Module',
-        dataIndex: 'module',
+        title: 'Trạng thái',
+        dataIndex: 'isActive',
+    },
+    {
+        title: 'Địa chỉ',
+        dataIndex: 'address',
     },
     {
         title: 'Ngày tạo',
@@ -48,39 +52,15 @@ const handleTableChange = (pagination: IPaginate) => {
 
 
 
-
-
-const renderColorMethod = (method: string) => {
-    switch (method) {
-        case 'DELETE':
-            return 'red'
-        case 'GET':
-            return 'green'
-        case 'POST':
-            return 'gold'
-        case 'PUT':
-            return 'blue'
-        case 'PATCH':
-            return 'purple'
-        case 'HEAD':
-            return 'cyan'
-        case 'OPTIONS':
-            return 'magenta'
-        default:
-    }
-}
-
 onMounted(() => {
     store.getData()
 })
 
-watchEffect(() => {
-    console.log('đã chạy trang permission')
-})
+
 </script>
 <template>
     <a-layout-header :style="{ background: '#fff', padding: '0 20px' }" class="p-0 text-lg font-medium">Trang quản lý
-        phân quyền</a-layout-header>
+        quyền</a-layout-header>
     <a-layout-content style="margin: 0 16px">
 
         <a-breadcrumb style="margin: 16px 0">
@@ -98,8 +78,8 @@ watchEffect(() => {
             </div>
 
             <div class="mt-3 border rounded-[10px]">
-                <a-table :columns="columns" :data-source="store.data" :loading="store.load" :pagination=store.dataMeta
-                    @change="handleTableChange">
+                <a-table :columns="columns" :data-source="store.data" :loading="store.loading"
+                    :pagination=store.dataMeta @change="handleTableChange">
                     <template #bodyCell="{ column, text, index }">
                         <template v-if="column.title === 'STT'">
                             {{ ((store.dataMeta.current || 1) - 1) * (store.dataMeta.pageSize || 6) + index + 1 }}
@@ -107,32 +87,32 @@ watchEffect(() => {
                         <template v-else-if="column.dataIndex === 'createdAt'">
                             {{ dayjs(text).format('DD/MM/YYYY [lúc] HH:mm:ss') }}
                         </template>
-
-                        <template v-else-if="column.dataIndex === 'method'">
-                            <span>
-                                <a-tag :color="renderColorMethod(text)">
-                                    {{ text.toUpperCase() }}
-                                </a-tag>
+                        <template v-else-if="column.dataIndex === 'isActive'">
+                            <span :class="text ? 'text-green-600' : 'text-red-500'">
+                                Active
                             </span>
                         </template>
                         <template v-else-if="column.dataIndex === '_id'">
-                            <button type="button"
-                                class="mr-2  bg-[#1669dcec] hover:bg-[#498ff1] rounded-[5px] px-[10px] py-1 h-8 "
-                                @click="store.getPermissionByID(text)">
-                                <img class=" h-5/6" src="../../../assets/image/icon/icons8_settings.svg" alt="">
-                            </button>
-                            <a-popconfirm title="Bạn có chắc muốn xoá?" ok-text="Có" cancel-text="Không"
-                                :loading="store.load" @confirm="store.deletePermission(text)" @cancel="">
+                            <div class="flex">
                                 <button type="button"
-                                    class=" bg-red-500 hover:bg-red-400 rounded-[5px] px-[10px] ] py-1 h-8 ">
-                                    <img class="h-5/6" src="../../../assets/image/icon/icons8_remove.svg"
-                                        alt=""></button>
-                            </a-popconfirm>
+                                    class="mr-2  bg-[#1669dcec] hover:bg-[#498ff1] rounded-[5px] px-[10px] py-1 h-8 "
+                                    @click="store.getByID(text)">
+                                    <img class=" h-[24px]" src="../../../assets/image/icon/icons8_settings.svg" alt="">
+                                </button>
+
+                                <a-popconfirm title="Bạn có chắc muốn xoá?" ok-text="Có" cancel-text="Không"
+                                    :loading="store.loading" @confirm="store.deleteByID(text)" @cancel="">
+                                    <button type="button"
+                                        class=" bg-red-500 hover:bg-red-400 rounded-[5px] px-[10px] ] py-1 h-8 ">
+                                        <img class="h-[24px]" src="../../../assets/image/icon/icons8_remove.svg"
+                                            alt=""></button>
+                                </a-popconfirm>
+                            </div>
                         </template>
                     </template>
                 </a-table>
             </div>
         </div>
     </a-layout-content>
-    <UpdatePermison> </UpdatePermison>
+    <UpdateUser> </UpdateUser>
 </template>

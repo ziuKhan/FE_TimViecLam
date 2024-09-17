@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import CardEmployer from '../../../components/user/CardEmployer.vue'
-import { paginateCompanyApi } from '../../../services/company.service'
 import CardJob from '../../../components/user/CardJob.vue'
 import { paginateJobsApi } from '../../../services/job.service'
 import Loading from '../../../components/Loading.vue'
 import FormSearch from '../../../components/user/search/FormSearch.vue'
 import type { ICompany, IJob } from '../../../types/backend'
+import companyService from '../../../services/company.service'
 
 const dataCompany = ref<ICompany[]>([])
 const dataJobs = ref<IJob[]>([])
@@ -14,7 +14,7 @@ const load = ref<boolean>(false)
 const getData = async () => {
   load.value = false
   const params = '?current=1&pageSize=9&sort=-createdAt&isActive=true'
-  const [companies, jobs] = await Promise.all([paginateCompanyApi(params), paginateJobsApi(params)])
+  const [companies, jobs] = await Promise.all([companyService.paginateApi(params), paginateJobsApi(params)])
 
 
   dataCompany.value = companies

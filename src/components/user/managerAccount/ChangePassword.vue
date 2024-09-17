@@ -30,8 +30,8 @@
 <script lang="ts" setup>
 import { reactive } from 'vue';
 import { useAuthStore } from '../../../stores/user/AuthStore';
-import { changePasswordApi } from '../../../services/user.service';
 import { message } from 'ant-design-vue';
+import userService from '../../../services/user.service';
 
 const storeAuth = useAuthStore()
 
@@ -60,7 +60,7 @@ const onFinish = async (values: any) => {
         password: values.password,
         newPassword: values.newPassword,
     }
-    const res = await changePasswordApi(data);
+    const res = await userService.changePasswordApi(data);
     if (res.data) {
         message.success('Đổi mật khẩu thành công')
         formState.password = '';

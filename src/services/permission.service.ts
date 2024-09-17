@@ -3,7 +3,7 @@ import { handleApiError } from '../until/until'
 
 const moduleName = '/permissions'
 
-export const paginatePermissionApi = async (params: any): Promise<any> => {
+export const paginatePermissionApi = async (params?: any): Promise<any> => {
   try {
     const response = await apiClient.get(moduleName + params)
     return response.data.data

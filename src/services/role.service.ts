@@ -3,7 +3,7 @@ import { handleApiError } from '../until/until'
 
 const moduleName = '/roles'
 class Role {
-  paginateApi = async (params: any): Promise<any> => {
+  paginateApi = async (params?: any): Promise<any> => {
     try {
       const response = await apiClient.get(moduleName + params)
       return response.data.data
@@ -21,7 +21,6 @@ class Role {
     }
   }
 
-  
   createApi = async (data: any): Promise<any> => {
     try {
       const response = await apiClient.post(moduleName, data)

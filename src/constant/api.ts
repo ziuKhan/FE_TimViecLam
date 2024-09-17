@@ -15,7 +15,7 @@ export const apiClient = axios.create({
 apiClient.interceptors.request.use(
   (config) => {
     const token = TokenService.getToken()?.token
-    if (token || token !== 'undefined') {
+    if (token && token !== 'undefined') {
       config.headers['Authorization'] = `Bearer ${token}`
     }
     return config
@@ -28,7 +28,7 @@ apiClient.interceptors.request.use(
 apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
-    debugger
+    
     const originalConfig = error.config
     // Nếu lỗi là 401 (Unauthorized) và chưa thực hiện refresh
     if (error.response?.status === 401 && !originalConfig._retry) {

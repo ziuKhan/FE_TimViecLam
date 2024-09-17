@@ -4,9 +4,9 @@ import CardJob from '../../components/user/CardJob.vue'
 import { ref, watchEffect } from 'vue';
 import type { ICompany, IJob } from '../../types/backend';
 import Loading from '../../components/Loading.vue';
-import { getCompanyApi } from '../../services/company.service';
 import { paginateJobsApi } from '../../services/job.service';
 import { linkUploads } from '../../constant/api';
+import companyService from '../../services/company.service';
 
 const route = useRoute()
 
@@ -19,7 +19,7 @@ const getData = async () => {
   const id = route.params.id as string;
   const params = `?current=1&pageSize=20&isActive=true&company._id=${id}`
   try {
-    const [companies, jobs] = await Promise.all([getCompanyApi(id), paginateJobsApi(params)]);
+    const [companies, jobs] = await Promise.all([companyService.getApi(id), paginateJobsApi(params)]);
     dataCompany.value = companies
     dataJobs.value = jobs.result
     load.value = true

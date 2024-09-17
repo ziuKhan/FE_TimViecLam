@@ -1,6 +1,7 @@
 <template>
-    <a-drawer title="Thêm mới quyền" :width="650" :open="store.openModal" :body-style="{ paddingBottom: '80px' }"
-        :footer-style="{ textAlign: 'right' }" @close="store.openModal = false" :maskClosable="false">
+    <a-drawer :title="store.form._id ? 'Cập nhật Permission' : 'Tạo  Tạo mới Permission'" :width="650"
+        :open="store.openModal" :body-style="{ paddingBottom: '80px' }" :footer-style="{ textAlign: 'right' }"
+        @close="store.openModal = false" :maskClosable="false">
 
         <a-form :model="store.form" :rules="rules" layout="vertical" class="px-20 py-3">
             <a-row :gutter="16">

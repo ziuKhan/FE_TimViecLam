@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 
-import { onMounted, ref, watch } from 'vue';
-import type { IPaginate, IPermission } from '../../../types/backend';
+import { onMounted, watchEffect } from 'vue';
+import type { IPaginate } from '../../../types/backend';
 
 import dayjs from 'dayjs';
 import useRoleStore from '../../../stores/admin/RoleStore';
@@ -45,8 +45,6 @@ const handleTableChange = (pagination: IPaginate) => {
     store.dataMeta.pageSize = pagination.pageSize;
     store.getData();
 };
-
-
 
 onMounted(() => {
     store.getData()
@@ -92,11 +90,6 @@ onMounted(() => {
                         </template>
                         <template v-else-if="column.dataIndex === '_id'">
                             <div class="flex">
-                                <button type="button"
-                                    class="mr-2  border border-[#3b3b3bec] hover:border-[#498ff1] font-[400] text-[#3b3b3bec] hover:text-[#498ff1]  rounded-[5px] px-[10px] py-1 "
-                                    @click="store.getByID(text)">
-                                    Cấp quyền
-                                </button>
                                 <button type="button"
                                     class="mr-2  bg-[#1669dcec] hover:bg-[#498ff1] rounded-[5px] px-[10px] py-1 h-8 "
                                     @click="store.getByID(text)">

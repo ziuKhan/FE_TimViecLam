@@ -1,6 +1,6 @@
 <template>
-    <a-layout style="min-height: 100vh">
-        <Header></Header>
+    <a-layout style="min-height: 100vh" >
+        <Header />
         <a-layout>
 
             <RouterView />
@@ -12,6 +12,7 @@
 </template>
 <script lang="ts" setup>
 
+import { RouterView } from 'vue-router';
 import Header from '../../components/admin/Header.vue';
 
 </script>

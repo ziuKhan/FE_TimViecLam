@@ -12,37 +12,33 @@
                 </a-menu-item>
             </RouterLink>
 
-            <a-menu-item key="2">
-                <desktop-outlined />
-                <span>Tài khoản</span>
-            </a-menu-item>
+
             <a-sub-menu key="sub1">
                 <template #title>
                     <span>
                         <user-outlined />
-                        <span>Quản lý tài khoản</span>
+                        <span>Quản lý người dùng</span>
                     </span>
                 </template>
-                <RouterLink to="/admin/permission">
-
-                    <a-menu-item key="3">Phân quyền</a-menu-item>
+                <RouterLink to="/admin/user">
+                    <a-menu-item key="2">
+                        <span>Tài khoản</span>
+                    </a-menu-item>
                 </RouterLink>
-                <a-menu-item key="4">Quyền</a-menu-item>
+                <RouterLink to="/admin/permission">
+                    <a-menu-item key="3">
+                        Quyền
+                    </a-menu-item>
+                </RouterLink>
+                <RouterLink to="/admin/role">
+                    <a-menu-item key="4">
+                        Vai trò
+                    </a-menu-item>
+                </RouterLink>
+
+
             </a-sub-menu>
-            <a-sub-menu key="sub2">
-                <template #title>
-                    <span>
-                        <team-outlined />
-                        <span>Team</span>
-                    </span>
-                </template>
-                <a-menu-item key="6">Team 1</a-menu-item>
-                <a-menu-item key="8">Team 2</a-menu-item>
-            </a-sub-menu>
-            <a-menu-item key="9">
-                <file-outlined />
-                <span>File</span>
-            </a-menu-item>
+
         </a-menu>
     </a-layout-sider>
 </template>
@@ -55,10 +51,34 @@ import {
     TeamOutlined,
     FileOutlined,
 } from '@ant-design/icons-vue';
-import { ref } from 'vue';
-import { RouterLink } from 'vue-router';
+import { ref, watch } from 'vue';
+import { RouterLink, useRoute } from 'vue-router';
 
 const collapsed = ref<boolean>(false);
 const selectedKeys = ref<string[]>(['1']);
+const route = useRoute();
+watch(
+    () => route.path,
+    (newPath) => {
+        switch (newPath) {
+
+            case '/admin/role':
+                selectedKeys.value = ['4'];
+                break;
+            case '/admin/permission':
+                selectedKeys.value = ['3'];
+                break;
+            case '/admin/user':
+                selectedKeys.value = ['2'];
+                break;
+            default:
+                selectedKeys.value = ['1'];
+                break;
+        }
+    },
+    { immediate: true }
+);
+
+
 </script>
 <style scoped></style>
