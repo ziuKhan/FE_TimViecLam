@@ -113,20 +113,20 @@ const getData = async () => {
 }
 
 const handleCompanyChange = (companyId: string) => {
-    if (!store.form.company) {
-        store.form.company = { _id: '', name: '' };
+    if (store.form.company) {
+        if (companyId === 'undefined') {
+            store.form.company._id = '';
+            store.form.company.name = '';
+        }
+
+        const selectedCompany = dataCompanies.value.find(company => company._id === companyId);
+        if (selectedCompany) {
+            store.form.company._id = selectedCompany._id;
+            store.form.company.name = selectedCompany.name;
+        }
     }
 
-    if (companyId === 'undefined') {
-        store.form.company._id = '';
-        store.form.company.name = '';
-    }
 
-    const selectedCompany = dataCompanies.value.find(company => company._id === companyId);
-    if (selectedCompany) {
-        store.form.company._id = selectedCompany._id;
-        store.form.company.name = selectedCompany.name;
-    }
 }
 
 
