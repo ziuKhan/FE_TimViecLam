@@ -58,7 +58,7 @@
                 </a-col>
                 <a-col :span="24">
                     <a-form-item label="company (công ty)" name="company._id">
-                        <a-select v-model:value="store.form.company._id" @change="handleCompanyChange">
+                        <a-select v-model:value="store.form.company?._id" @change="handleCompanyChange">
                             <a-select-option value="undefined"></a-select-option>
                             <template v-for="company in dataCompanies" :key="company._id">
                                 <a-select-option :value="company._id">{{ company.name }}</a-select-option>
@@ -113,18 +113,21 @@ const getData = async () => {
 }
 
 const handleCompanyChange = (companyId: string) => {
+    if (!store.form.company) {
+        store.form.company = { _id: '', name: '' };
+    }
+
     if (companyId === 'undefined') {
         store.form.company._id = '';
         store.form.company.name = '';
     }
+
     const selectedCompany = dataCompanies.value.find(company => company._id === companyId);
     if (selectedCompany) {
         store.form.company._id = selectedCompany._id;
         store.form.company.name = selectedCompany.name;
     }
-
-
-};
+}
 
 
 onMounted(() => {

@@ -4,15 +4,6 @@ import type { IPaginate, IRole } from '../../types/backend'
 import { message } from 'ant-design-vue'
 import roleService from '../../services/role.service'
 
-interface RoleStoreState {
-  openModal: boolean
-  dataMeta: IPaginate
-  data: IRole[]
-  valueSearch: string
-  form: IRole
-  loading: boolean
-}
-
 const useRoleStore = defineStore('role', () => {
   const { getApi, createApi, updateApi, deleteApi, paginateApi } = roleService
 

@@ -93,8 +93,8 @@ onUnmounted(() => {
               <ManagerAccount />
             </a-modal>
 
-            <RouterLink v-if="storeAuth.user?.role?.name !== 'NORMAL_USER'" class="header__sub_list" to="/admin">Trang
-              quản
+            <RouterLink v-if="typeof storeAuth.user?.role === 'object' && storeAuth.user?.role?.name !== 'NORMAL_USER'"
+              class="header__sub_list" to="/admin"> quản
               trị</RouterLink>
             <span @click="handleLogout()" class="header__sub_list">Đăng xuất</span>
           </div>

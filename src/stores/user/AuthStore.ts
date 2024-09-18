@@ -15,7 +15,6 @@ export const useAuthStore = defineStore('auth', () => {
     const use = await accountApi()
     if (!use?.data) {
       isAuth.value = false
-      return
     } else {
       user.value = use.data
       isAuth.value = true
@@ -38,13 +37,16 @@ export const useAuthStore = defineStore('auth', () => {
     if (!token) {
       return (isAuth.value = false)
     }
-    return (isAuth.value = !isAuth.value)
+    return (isAuth.value = true)
   }
 
   watch(
     () => isAuth.value,
     () => {
-      getUser()
+      statusIsAuth()
+      if (isAuth.value) {
+        getUser()
+      }
     },
     { immediate: true }
   )
