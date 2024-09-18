@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watchEffect } from 'vue';
 import { useHeaderStore } from '../../../stores/user/headerStore';
-import { useAuthStore } from '../../../stores/user/AuthStore';
+import { useAuthStore } from '../../../stores/AuthStore';
 import ManagerAccount from '../modal/ManagerAccount.vue';
 const openUser = ref<boolean>(false);
 const openMenu = ref<boolean>(false);
@@ -14,13 +14,9 @@ const afterOpenChange = (bool: boolean) => {
 
 const storeAuth = useAuthStore()
 
-
-
 const handleLogout = () => {
   storeAuth.logout()
 }
-
-
 </script>
 
 

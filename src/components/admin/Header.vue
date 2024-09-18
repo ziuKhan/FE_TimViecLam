@@ -38,6 +38,35 @@
 
 
             </a-sub-menu>
+            <RouterLink to="/admin/company">
+                <a-menu-item key="5">
+                    Công ty
+                </a-menu-item>
+            </RouterLink>
+            <RouterLink to="/admin/resume">
+                <a-menu-item key="6">
+                    Hồ sơ
+                </a-menu-item>
+            </RouterLink>
+            <RouterLink to="/admin/job">
+                <a-menu-item key="7">
+                    Công việc
+                </a-menu-item>
+            </RouterLink>
+            <a-sub-menu key="sub2">
+                <template #title>
+                    <span>
+                        <user-outlined />
+                        <span>Quản lý nhận Mail</span>
+                    </span>
+                </template>
+                <RouterLink to="/admin/subscriber">
+                    <a-menu-item key="8">
+                        Người đăng ký
+                    </a-menu-item>
+                </RouterLink>
+            </a-sub-menu>
+
 
         </a-menu>
     </a-layout-sider>
@@ -61,15 +90,27 @@ watch(
     () => route.path,
     (newPath) => {
         switch (newPath) {
-
-            case '/admin/role':
-                selectedKeys.value = ['4'];
-                break;
             case '/admin/permission':
                 selectedKeys.value = ['3'];
                 break;
+
             case '/admin/user':
                 selectedKeys.value = ['2'];
+                break;
+            case '/admin/role':
+                selectedKeys.value = ['4'];
+                break;
+            case '/admin/company':
+                selectedKeys.value = ['5'];
+                break;
+            case '/admin/resume':
+                selectedKeys.value = ['6'];
+                break;
+            case '/admin/job':
+                selectedKeys.value = ['7'];
+                break;
+            case '/admin/subscriber':
+                selectedKeys.value = ['8'];
                 break;
             default:
                 selectedKeys.value = ['1'];

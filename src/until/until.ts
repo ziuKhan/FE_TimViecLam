@@ -30,8 +30,9 @@ export const handleApiError = (err: any): void => {
     return
   } else if (status === 500) {
     router.push('/500') // Điều hướng tới trang lỗi 404
-  } else {
-    // Xử lý lỗi chung cho các lỗi khác
+  } else if (status === 400) {
     alert(err?.response?.data?.message)
+  } else {
+    console.error(err)
   }
 }

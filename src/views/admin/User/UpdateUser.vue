@@ -1,9 +1,82 @@
+<script lang="ts" setup>
+import type { FormInstance, Rule } from 'ant-design-vue/es/form';
+import useUserStore from '../../../stores/admin/UserStore';
+import { onMounted, ref, watch } from 'vue';
+import type { ICompany, IRole } from '../../../types/backend';
+import roleService from '../../../services/role.service';
+import companyService from '../../../services/company.service';
+import { message } from 'ant-design-vue';
+
+
+// Sử dụng Permission Store
+const store = useUserStore()
+
+
+// Định nghĩa các rule cho form
+const rules: Record<string, Rule[]> = {
+    name: [{ required: true, message: 'Vui lòng nhập name' }],
+    email: [
+        { required: true, message: 'Vui lòng nhập apiPath' },
+        { type: 'email', message: 'vui lòng nhập email hợp lệ' }
+    ],
+    age: [{ required: true, message: 'Vui lòng nhập age ' }],
+    role: [{ required: true, message: 'Vui lòng nhập role ' }],
+    address: [{ required: true, message: 'Vui lòng nhập address ' }],
+    gender: [{ required: true, message: 'Vui lòng nhập gender ' }],
+};
+
+const dataRoles = ref<IRole[]>()
+const dataCompanies = ref<ICompany[]>([])
+
+const getData = async () => {
+    try {
+        const [role, company] = await Promise.all([roleService.paginateApi('?current=1&pageSize=200'), companyService.paginateApi('?current=1&pageSize=200')])
+
+        dataRoles.value = role.result
+        dataCompanies.value = company.result
+    } catch (e) {
+
+    }
+}
+
+const handleCompanyChange = (companyId: string) => {
+    if (store.form.company) {
+
+        if (companyId === 'undefined') {
+            store.form.company._id = '';
+            store.form.company.name = '';
+        }
+        const selectedCompany = dataCompanies.value.find(company => company._id === companyId);
+        if (selectedCompany) {
+            store.form.company._id = selectedCompany._id;
+            store.form.company.name = selectedCompany.name;
+        }
+    }
+}
+
+const formRef = ref<any>(null);
+const handleOk = () => {
+    formRef.value.validate().then(() => {
+        store.updateAndAdd();
+    }).catch(() => {
+        message.error('Vui lòng kiểm tra lại các trường đã nhập!');
+    });
+};
+
+
+onMounted(() => {
+    getData()
+})
+
+</script>
+
+
 <template>
     <a-modal {{ debugger }} :title="store.form._id ? 'Cập nhật Role' : 'Tạo mới Role'"
         :okText="store.form._id ? 'Cập nhật' : 'Thêm mới'" :width="850" v-model:open="store.openModal"
-        :maskClosable="false" :cancelButtonProps="{ style: { display: 'none' } }" @ok="store.updateAndAdd()">
+        :maskClosable="false" :cancelButtonProps="{ style: { display: 'none' } }" @ok="handleOk">
 
-        <a-form :model="store.form" :rules="rules" layout="vertical" class="px-20 py-3">
+        <a-form ref="formRef" :model="store.form" :rules="rules" layout="vertical" class="px-20 py-3">
             <a-row :gutter="16">
                 <a-col :span="12">
                     <a-form-item label="Name (tên)" name="name">
@@ -58,7 +131,7 @@
                 </a-col>
                 <a-col :span="24">
                     <a-form-item label="company (công ty)" name="company._id">
-                        <a-select v-model:value="store.form.company?._id" @change="handleCompanyChange">
+                        <a-select :value="store.form.company?.['_id']" @change="handleCompanyChange">
                             <a-select-option value="undefined"></a-select-option>
                             <template v-for="company in dataCompanies" :key="company._id">
                                 <a-select-option :value="company._id">{{ company.name }}</a-select-option>
@@ -67,76 +140,10 @@
                     </a-form-item>
                 </a-col>
             </a-row>
-
-
         </a-form>
 
     </a-modal>
 </template>
-
-<script lang="ts" setup>
-import type { Rule } from 'ant-design-vue/es/form';
-import useUserStore from '../../../stores/admin/UserStore';
-import { onMounted, ref, watch } from 'vue';
-import type { ICompany, IRole } from '../../../types/backend';
-import roleService from '../../../services/role.service';
-import companyService from '../../../services/company.service';
-
-// Sử dụng Permission Store
-const store = useUserStore()
-
-// Định nghĩa các rule cho form
-const rules: Record<string, Rule[]> = {
-    name: [{ required: true, message: 'Vui lòng nhập name' }],
-    email: [
-        { required: true, message: 'Vui lòng nhập apiPath' },
-        { type: 'email', message: 'vui lòng nhập email hợp lệ' }
-    ],
-    age: [{ required: true, message: 'Vui lòng nhập age ' }],
-    role: [{ required: true, message: 'Vui lòng nhập role ' }],
-    address: [{ required: true, message: 'Vui lòng nhập address ' }],
-    gender: [{ required: true, message: 'Vui lòng nhập gender ' }],
-};
-
-const dataRoles = ref<IRole[]>()
-const dataCompanies = ref<ICompany[]>([])
-
-const getData = async () => {
-    try {
-        const [role, company] = await Promise.all([roleService.paginateApi('?current=1&pageSize=200'), companyService.paginateApi('?current=1&pageSize=200')])
-
-        dataRoles.value = role.result
-        dataCompanies.value = company.result
-    } catch (e) {
-
-    }
-}
-
-const handleCompanyChange = (companyId: string) => {
-    if (store.form.company) {
-        if (companyId === 'undefined') {
-            store.form.company._id = '';
-            store.form.company.name = '';
-        }
-
-        const selectedCompany = dataCompanies.value.find(company => company._id === companyId);
-        if (selectedCompany) {
-            store.form.company._id = selectedCompany._id;
-            store.form.company.name = selectedCompany.name;
-        }
-    }
-
-
-}
-
-
-onMounted(() => {
-    getData()
-})
-
-
-
-</script>
 
 <style>
 .ant-drawer-header-title button,

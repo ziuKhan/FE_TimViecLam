@@ -20,7 +20,7 @@ const getData = async () => {
   const params = `?current=1&pageSize=20&isActive=true&company._id=${id}`
   try {
     const [companies, jobs] = await Promise.all([companyService.getApi(id), paginateJobsApi(params)]);
-    dataCompany.value = companies
+    dataCompany.value = companies.data
     dataJobs.value = jobs.result
     load.value = true
 

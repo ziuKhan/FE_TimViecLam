@@ -2,9 +2,9 @@
     <a-modal :title="store.form._id ? 'Cập nhật Role' : 'Tạo mới Role'"
         :okText="store.form._id ? 'Cập nhật' : 'Thêm mới'" :width="850" v-model:open="store.openModal"
         :body-style="{ paddingBottom: '80px' }" :footer-style="{ textAlign: 'right' }" :maskClosable="false"
-        :cancelButtonProps="{ style: { display: 'none' } }" @ok="store.updateAndAdd()">
+        :cancelButtonProps="{ style: { display: 'none' } }" @ok="handleOk" :confirm-loading="store.loading">
 
-        <a-form :model="store.form" layout="vertical" class="px-8 py-3">
+        <a-form :model="store.form" ref="formRef" layout="vertical" class="px-8 py-3">
             <a-row :gutter="16">
                 <a-col :span="20">
                     <a-form-item label="Name" name="name"
@@ -38,11 +38,21 @@
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue';
 import useRoleStore from '../../../stores/admin/RoleStore';
 import CollapseUpdateRole from './Collapse.UpdateRole.vue';
+import { message } from 'ant-design-vue';
 
 const store = useRoleStore()
 
+const formRef = ref<any>(null);
+const handleOk = () => {
+    formRef.value.validate().then(() => {
+        store.updateAndAdd();
+    }).catch(() => {
+        message.error('Vui lòng kiểm tra lại các trường đã nhập!');
+    });
+};
 
 
 </script>

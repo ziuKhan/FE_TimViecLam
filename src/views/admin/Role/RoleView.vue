@@ -82,7 +82,7 @@ onMounted(() => {
                         </template>
                         <template v-else-if="column.dataIndex === 'isActive'">
                             <span :class="text ? 'text-green-600' : 'text-red-500'">
-                                {{ text ? 'Hoạt động' : 'Không hoạt động' }}
+                                Active
                             </span>
                         </template>
                         <template v-else-if="column.dataIndex === 'createdAt'">

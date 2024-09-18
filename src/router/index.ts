@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/user/Home/HomeView.vue'
 import UserLayout from '../views/user/UserLayout.vue'
 import AdminLayout from '../views/admin/AdminLayout.vue'
-import { useAuthStore } from '../stores/user/AuthStore'
+import { useAuthStore } from '../stores/AuthStore'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -86,7 +86,23 @@ const router = createRouter({
         {
           path: 'user',
           component: () => import('../views/admin/User/UserView.vue')
+        },
+        {
+          path: 'company',
+          component: () => import('../views/admin/Company/CompanyView.vue')
+        },
+        {
+          path: 'resume',
+          component: () => import('../views/admin/Resumes/ResumeView.vue')
         }
+        // ,{
+        //   path: 'job',
+        //   component: () => import('../views/admin/Job/JobView.vue')
+        // }
+        // ,{
+        //   path: 'subscriber',
+        //   component: () => import('../views/admin/Subscriber/SubscriberView.vue')
+        // }
       ]
     },
     {

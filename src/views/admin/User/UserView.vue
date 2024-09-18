@@ -31,6 +31,10 @@ const columns = [
         dataIndex: 'isActive',
     },
     {
+        title: 'Quyền',
+        dataIndex: ["role", "name"],
+    },
+    {
         title: 'Địa chỉ',
         dataIndex: 'address',
     },
@@ -60,7 +64,7 @@ onMounted(() => {
 </script>
 <template>
     <a-layout-header :style="{ background: '#fff', padding: '0 20px' }" class="p-0 text-lg font-medium">Trang quản lý
-        quyền</a-layout-header>
+        tài khoản</a-layout-header>
     <a-layout-content style="margin: 0 16px">
 
         <a-breadcrumb style="margin: 16px 0">
@@ -70,8 +74,14 @@ onMounted(() => {
         <div class="p-6 bg-white min-h-[360px] rounded-[10px]">
             <div class="flex justify-between">
 
-                <a-input-search placeholder="Vui lòng nhập thông tin cần tìm kiếm" enter-button="Tìm kiếm"
-                    v-model:value="store.valueSearch" @search="store.getData(store.valueSearch)" class="w-2/3" />
+                <div class="w-3/4 flex">
+                    <a-input-search placeholder="Vui lòng nhập thông tin cần tìm kiếm" enter-button="Tìm kiếm"
+                        v-model:value="store.valueSearch" @search="store.getData(store.valueSearch)" />
+                    <div class="ml-5 flex items-center">
+                        <span class="mr-3 font-medium">Active</span>
+                        <a-switch v-model:checked="store.isActive" />
+                    </div>
+                </div>
                 <button class="bg-[#21aa55] hover:bg-green-500 text-white rounded-[7px] px-5 font-medium "
                     @click="store.handleOpenModal()">Thêm
                     mới</button>

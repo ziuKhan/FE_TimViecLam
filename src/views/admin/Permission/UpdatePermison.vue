@@ -3,7 +3,7 @@
         :open="store.openModal" :body-style="{ paddingBottom: '80px' }" :footer-style="{ textAlign: 'right' }"
         @close="store.openModal = false" :maskClosable="false">
 
-        <a-form :model="store.form" :rules="rules" layout="vertical" class="px-20 py-3">
+        <a-form :model="store.form" :rules="rules" ref="formRef" layout="vertical" class="px-20 py-3">
             <a-row :gutter="16">
                 <a-col :span="24">
                     <a-form-item label="Name" name="name">
@@ -42,7 +42,7 @@
 
         <template #footer>
             <a-space>
-                <a-button :loading="store.loading" type="primary" @click="store.updateAndAdd()">Cập nhật</a-button>
+                <a-button :loading="store.loading" type="primary" @click="handleOk">Cập nhật</a-button>
             </a-space>
         </template>
     </a-drawer>
@@ -52,6 +52,8 @@
 import type { Rule } from 'ant-design-vue/es/form';
 import usePermissionStore from '../../../stores/admin/PermissionStore';
 import { ALL_METHODS, ALL_MODULES } from '../../../types/permision';
+import { ref } from 'vue';
+import { message } from 'ant-design-vue';
 
 // Sử dụng Permission Store
 const store = usePermissionStore()
@@ -68,6 +70,14 @@ const rules: Record<string, Rule[]> = {
     ],
     method: [{ required: true, message: 'Vui lòng nhập method ' }],
     module: [{ required: true, message: 'Vui lòng nhập module ' }],
+};
+const formRef = ref<any>(null);
+const handleOk = () => {
+    formRef.value.validate().then(() => {
+        store.updateAndAdd();
+    }).catch(() => {
+        message.error('Vui lòng kiểm tra lại các trường đã nhập!');
+    });
 };
 
 </script>

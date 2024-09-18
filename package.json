@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^43.1.0",
+    "@ckeditor/ckeditor5-font": "^43.1.0",
     "@ckeditor/ckeditor5-vue": "^7.0.0",
     "@types/axios": "^0.14.0",
     "@types/sass": "^1.45.0",

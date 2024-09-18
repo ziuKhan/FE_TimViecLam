@@ -22,10 +22,10 @@
 <script lang="ts" setup>
 import { onMounted, ref, render, watch, watchEffect } from 'vue';
 import type { IPaginate, IResume } from '../../../types/backend';
-import { paginateResumeApi } from '../../../services/resume.service';
-import { useAuthStore } from '../../../stores/user/AuthStore';
+import { useAuthStore } from '../../../stores/AuthStore';
 import dayjs from 'dayjs';
 import { linkUploads } from '../../../constant/api';
+import resumeService from '../../../services/resume.service';
 const load = ref<boolean>(false)
 
 const storeAuth = useAuthStore()
@@ -43,7 +43,7 @@ const dataMeta = ref<IPaginate>({
 const getData = async () => {
     load.value = true
     const params = `?current=${dataMeta.value?.current || 1}&pageSize=${dataMeta.value?.pageSize || 5}&populate=jobId,companyId&createdBy._id=${storeAuth.user?._id}&sort=-createdAt`
-    const res = await paginateResumeApi(params);
+    const res = await resumeService.paginateApi(params);
     if (res) {
         dataResume.value = res.result
         dataMeta.value = res.meta

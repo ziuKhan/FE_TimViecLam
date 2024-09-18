@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
-import { onMounted, reactive, ref } from 'vue'
+import { onMounted, reactive, ref, watch } from 'vue'
 import type { IPaginate, IRole, IUser } from '../../types/backend'
-import { message } from 'ant-design-vue'
+import { message, type FormInstance } from 'ant-design-vue'
 import userService from '../../services/user.service'
 
 const useUserStore = defineStore('user', () => {
@@ -15,7 +15,11 @@ const useUserStore = defineStore('user', () => {
     pages: 0,
     total: 0
   })
+  const isActive = ref<boolean>(true)
 
+  watch(isActive, () => {
+    getData()
+  })
   const data = ref<IUser[]>([])
 
   const valueSearch = ref<string>('')
@@ -72,7 +76,7 @@ const useUserStore = defineStore('user', () => {
   const getData = async (search?: string) => {
     loading.value = true
     try {
-      const params = `?current=${dataMeta.value?.current}&pageSize=${dataMeta.value?.pageSize}&sort=-createdAt${search ? '&name=/' + search + '/' : ''}`
+      const params = `?current=${dataMeta.value?.current}&pageSize=${dataMeta.value?.pageSize}&populate=role&isActive=${isActive.value}&sort=-createdAt${search ? '&name=/' + search + '/' : ''}`
       const res = await paginateApi(params)
       if (res) {
         data.value = res.result
@@ -108,31 +112,21 @@ const useUserStore = defineStore('user', () => {
     loading.value = true
     try {
       const filteredForm = filterFormData(form)
-
       if (form._id) {
-        // Chế độ chỉnh sửa
         const res = await updateApi(filteredForm, form._id)
-        if (res) {
-          message.success('Cập nhật thành công!')
-          refreshInput()
-          openModal.value = false
-          getData()
-        }
+        if (res) message.success('Cập nhật thành công!')
       } else {
-        // Chế độ thêm mới
-        const res = await createApi(filteredForm)
-        if (res) {
-          message.success('Thêm mới thành công!')
-          refreshInput()
-          openModal.value = false
-          getData()
-        }
+        const res = await createApi(form)
+        if (res) message.success('Thêm thành công!')
       }
+      refreshInput()
+      openModal.value = false
+      loading.value = false
+      getData()
     } catch (error) {
-      console.error('Error:', error)
-    } finally {
       loading.value = false
     }
+    loading.value = false
   }
 
   //chức năng xem chi tiết
@@ -169,7 +163,8 @@ const useUserStore = defineStore('user', () => {
     valueSearch,
     deleteByID,
     getByID,
-    handleOpenModal
+    handleOpenModal,
+    isActive
   }
 })
 

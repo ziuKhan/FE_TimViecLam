@@ -18,7 +18,7 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue';
 import { createSubscriberApi, getSubscriberApi } from '../../../services/subscriber.service';
-import { useAuthStore } from '../../../stores/user/AuthStore';
+import { useAuthStore } from '../../../stores/AuthStore';
 import { SKILLS_LIST } from '../../../until/until';
 import { message } from 'ant-design-vue';
 

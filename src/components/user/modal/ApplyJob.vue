@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useJobStore } from '../../../stores/user/JobStore';
-import { useAuthStore } from '../../../stores/user/AuthStore';
+import { useAuthStore } from '../../../stores/AuthStore';
 import { message } from 'ant-design-vue';
 import { UploadOutlined } from '@ant-design/icons-vue';
 import type { UploadChangeParam } from 'ant-design-vue';
@@ -58,7 +58,7 @@ const handleUpload = async (options: UploadRequestOption) => {
 
 
 
-      <a-form-item label="Tài lên CV" name="urlfile">
+      <a-form-item label="Tải lên CV" name="urlfile">
         <a-upload maxCount="1" name="file" v-model:file-list="fileList"
           accept="application/pdf,application/msword,.doc,.docx,.pdf" :custom-request="handleUpload">
           <a-button class="test-button">

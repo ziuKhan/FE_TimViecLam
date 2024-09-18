@@ -60,7 +60,7 @@ const onFinish = async () => {
                 name: formState.nameCompany,
             }
         }
-        debugger
+
         const res = await createCompanyApi(dataCompany)
         if (res) {
             dataHR.company._id = res.data._id

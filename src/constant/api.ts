@@ -28,7 +28,6 @@ apiClient.interceptors.request.use(
 apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
-    
     const originalConfig = error.config
     // Nếu lỗi là 401 (Unauthorized) và chưa thực hiện refresh
     if (error.response?.status === 401 && !originalConfig._retry) {

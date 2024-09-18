@@ -17,7 +17,7 @@ const getData = async () => {
   const [companies, jobs] = await Promise.all([companyService.paginateApi(params), paginateJobsApi(params)])
 
 
-  dataCompany.value = companies
+  dataCompany.value = companies.result
   dataJobs.value = jobs.result
   load.value = true
 }

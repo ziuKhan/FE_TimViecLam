@@ -13,10 +13,12 @@ export interface IUser {
       }
     | string
 
-  company?: {
-    _id?: string
-    name?: string
-  }
+  company?:
+    | {
+        _id?: string | undefined
+        name?: string | undefined
+      }
+    | undefined
   createdBy?: string
   isDeleted?: boolean
   deletedAt?: boolean | null
@@ -49,8 +51,10 @@ export interface ICompany {
   name?: string
   address?: string
   logo?: string
+  isActive?: boolean
   description?: string
   createdBy?: string
+
   isDeleted?: boolean
   deletedAt?: boolean | null
   createdAt?: string

@@ -77,53 +77,38 @@ const usePermissionStore = defineStore('permission', () => {
 
   //code dành cho permission update
 
-  const updateAndAdd = async () => {
-    loading.value = true
-    if (form._id) {
-      try {
-        const res = await updatePermissionApi(form, form._id)
-        if (res) {
-          message.success('Cập nhật thành công!')
-          refreshInput()
-          openModal.value = false
-          loading.value = false
-          getData()
-        }
-      } catch (error) {
-        loading.value = false
-      }
-    } else {
-      try {
-        const res = await createPermissionApi(form)
-        if (res) {
-          message.success('Thêm thành công!')
-          refreshInput()
-          openModal.value = false
-          loading.value = false
-          getData()
-        }
-      } catch (error) {
-        loading.value = false
-      }
-    }
-    loading.value = false
-  }
-
-  //chức năng xem chi tiết
   const getPermissionByID = async (id: string) => {
     try {
+      loading.value = true
       const res = await getPermissionApi(id)
       if (res) {
-        form._id = res.data._id
-        form.name = res.data.name
-        form.apiPath = res.data.apiPath
-        form.module = res.data.module
-        form.method = res.data.method
+        Object.assign(form, res.data)
         openModal.value = true
+        loading.value = false
       }
     } catch (error) {
+      loading.value = false
       console.error('Error fetching data:', error)
     }
+  }
+  const updateAndAdd = async () => {
+    loading.value = true
+    try {
+      if (form._id) {
+        const res = await updatePermissionApi(form, form._id)
+        if (res) message.success('Cập nhật thành công!')
+      } else {
+        const res = await createPermissionApi(form)
+        if (res) message.success('Thêm thành công!')
+      }
+      refreshInput()
+      openModal.value = false
+      loading.value = false
+      getData()
+    } catch (error) {
+      loading.value = false
+    }
+    loading.value = false
   }
 
   return {

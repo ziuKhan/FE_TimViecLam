@@ -2,9 +2,9 @@
 import { ref, onMounted, onUnmounted, watchEffect, onUpdated, inject } from 'vue'
 import type { IAccount } from '../../../types/backend'
 import { useHeaderStore } from '../../../stores/user/headerStore'
-import { useAuthStore } from '../../../stores/user/AuthStore';
 import { refreshApi } from '../../../services/auth.service';
 import ManagerAccount from '../modal/ManagerAccount.vue';
+import { useAuthStore } from '../../../stores/AuthStore';
 const isSticky = ref<boolean>(false)
 const collapsed = ref<boolean>(false)
 const open = ref<boolean>(false)
@@ -23,7 +23,7 @@ const handleScroll = (): void => {
   }
 }
 const storeAuth = useAuthStore()
-
+console.log('check header', storeAuth.user)
 const handleLogout = () => {
   storeAuth.logout()
 }
@@ -93,7 +93,7 @@ onUnmounted(() => {
               <ManagerAccount />
             </a-modal>
 
-            <RouterLink v-if="typeof storeAuth.user?.role === 'object' && storeAuth.user?.role?.name !== 'NORMAL_USER'"
+            <RouterLink v-if="typeof storeAuth.user?.role === 'object' && storeAuth.user.role.name !== 'NORMAL_USER'"
               class="header__sub_list" to="/admin"> quản
               trị</RouterLink>
             <span @click="handleLogout()" class="header__sub_list">Đăng xuất</span>

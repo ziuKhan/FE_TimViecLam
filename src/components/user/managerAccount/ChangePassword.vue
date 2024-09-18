@@ -29,7 +29,7 @@
 </template>
 <script lang="ts" setup>
 import { reactive } from 'vue';
-import { useAuthStore } from '../../../stores/user/AuthStore';
+import { useAuthStore } from '../../../stores/AuthStore';
 import { message } from 'ant-design-vue';
 import userService from '../../../services/user.service';
 

@@ -4,7 +4,7 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons-vue'
 import { accountApi, loginApi, refreshApi } from '../../../services/auth.service'
 import { notification } from 'ant-design-vue'
 import { useRouter } from 'vue-router'
-import { useAuthStore } from '../../../stores/user/AuthStore'
+import { useAuthStore } from '../../../stores/AuthStore'
 import tokenService from '../../../constant/token.service'
 
 
@@ -38,8 +38,7 @@ const onFinish = async (values: IFormState) => {
 
       // Lưu access_token vào bộ nhớ trình duyệt
       tokenService.createToken(access_token, formState.remember)
-
-      storeAuth.statusIsAuth()
+      storeAuth.getUser()
       openNotificationWithIcon()
       router.back()
       window.location.reload();

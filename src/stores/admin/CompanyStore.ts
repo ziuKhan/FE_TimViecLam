@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia'
-import { ref, reactive } from 'vue'
-import type { IPaginate, IRole } from '../../types/backend'
+import { ref, reactive, watch } from 'vue'
+import type { ICompany, IPaginate } from '../../types/backend'
 import { message } from 'ant-design-vue'
-import roleService from '../../services/role.service'
+import companyService from '../../services/company.service'
 
-const useRoleStore = defineStore('role', () => {
-  const { getApi, createApi, updateApi, deleteApi, paginateApi } = roleService
+const useCompanyStore = defineStore('company', () => {
+  const { getApi, createApi, updateApi, deleteApi, paginateApi } = companyService
 
   const openModal = ref<boolean>(false)
   const dataMeta = ref<IPaginate>({
@@ -15,15 +15,22 @@ const useRoleStore = defineStore('role', () => {
     total: 0
   })
 
-  const data = ref<IRole[]>([])
+  const isActive = ref<boolean>(true)
+
+  watch(isActive, () => {
+    getData()
+  })
+
+  const data = ref<ICompany[]>([])
   const valueSearch = ref<string>('')
 
-  const form = reactive<IRole>({
+  const form = reactive<ICompany>({
     _id: '',
+    logo: '',
     name: '',
+    address: '',
     description: '',
-    isActive: false,
-    permissions: [] as any
+    isActive: false
   })
 
   const loading = ref<boolean>(false)
@@ -31,20 +38,21 @@ const useRoleStore = defineStore('role', () => {
   const refreshInput = () => {
     form._id = ''
     form.name = ''
+    form.address = ''
     form.description = ''
     form.isActive = false
-    form.permissions = []
+    form.logo = ''
   }
 
   const handleOpenModal = () => {
-    openModal.value = true
     refreshInput()
+    openModal.value = true
   }
 
   const getData = async (search?: string) => {
     loading.value = true
     try {
-      const params = `?current=${dataMeta.value?.current}&pageSize=${dataMeta.value?.pageSize}&sort=-createdAt${search ? '&name=/' + search + '/' : ''}`
+      const params = `?current=${dataMeta.value?.current}&pageSize=${dataMeta.value?.pageSize}&isActive=${isActive.value}&sort=-createdAt${search ? '&name=/' + search + '/' : ''}`
       const res = await paginateApi(params)
       if (res) {
         data.value = res.result
@@ -78,7 +86,6 @@ const useRoleStore = defineStore('role', () => {
       const res = await getApi(id)
       if (res) {
         Object.assign(form, res.data)
-        form.permissions = res.data.permissions.map((permission: any) => permission._id)
         openModal.value = true
         loading.value = false
       }
@@ -90,6 +97,7 @@ const useRoleStore = defineStore('role', () => {
   const updateAndAdd = async () => {
     loading.value = true
     try {
+      debugger
       if (form._id) {
         const res = await updateApi(form, form._id)
         if (res) message.success('Cập nhật thành công!')
@@ -106,7 +114,6 @@ const useRoleStore = defineStore('role', () => {
     }
     loading.value = false
   }
-
   return {
     openModal,
     updateAndAdd,
@@ -118,8 +125,9 @@ const useRoleStore = defineStore('role', () => {
     valueSearch,
     deleteByID,
     getByID,
-    handleOpenModal
+    handleOpenModal,
+    isActive
   }
 })
 
-export default useRoleStore
+export default useCompanyStore

@@ -9,9 +9,9 @@ import { vi } from 'date-fns/locale';
 import Loading from '../../components/Loading.vue';
 import { formatSalary } from '../../until/until';
 import ApplyJob from '../../components/user/modal/ApplyJob.vue';
-import { useAuthStore } from '../../stores/user/AuthStore';
+import { useAuthStore } from '../../stores/AuthStore';
 import { message } from 'ant-design-vue';
-import { createResumeApi } from '../../services/resume.service';
+import resumeService from '../../services/resume.service';
 
 const route = useRoute()
 const load = ref<Boolean>(false)
@@ -45,7 +45,7 @@ const handleOk = async () => {
             }
             try {
 
-                const res = await createResumeApi(dataCreate)
+                const res = await resumeService.createApi(dataCreate)
                 if (res) {
                     message.success('Rải CV thành công')
                     loadButton.value = true
