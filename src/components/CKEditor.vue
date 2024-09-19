@@ -2,7 +2,6 @@
     <div class="ckeditor-container">
         <div class="border-x border-t border-[#ccc] rounded-[1px] text-base font-medium p-2">{{ props.title }}
         </div>
-        {{ console.log('checkeditor ', props.description) }}
         <ckeditor :editor="editor" v-model="editorData" :config="editorConfig"></ckeditor>
     </div>
 </template>
@@ -30,9 +29,8 @@ watch(() => props.description, (newDescription) => {
     editorData.value = newDescription;
 }, { immediate: true });
 
-// Khi giá trị editorData thay đổi, gửi giá trị lên component cha
 watch(editorData, (newValue) => {
-    emit('update:modelValue', newValue);  // Truyền sự kiện 'update:modelValue'
+    emit('update:modelValue', newValue);
 }, { immediate: true });
 
 </script>

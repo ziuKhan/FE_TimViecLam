@@ -16,6 +16,14 @@ export const SKILLS_LIST = [
   { label: 'Fullstack', value: 'FULLSTACK' }
 ]
 
+export const LEVELS_LIST = [
+  { label: 'INTERN', value: 'INTERN' },
+  { label: 'FRESHER', value: 'FRESHER' },
+  { label: 'JUNIOR', value: 'JUNIOR' },
+  { label: 'MIDDLE', value: 'MIDDLE' },
+  { label: 'SENIOR', value: 'NEST.JS' }
+]
+
 import router from '@/router' // Import router để điều hướng
 
 // Hàm xử lý lỗi chung

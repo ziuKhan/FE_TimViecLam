@@ -74,9 +74,7 @@ onMounted(() => {
     store.getData()
 })
 
-watchEffect(() => {
-    console.log('đã chạy trang permission')
-})
+
 </script>
 <template>
     <a-layout-header :style="{ background: '#fff', padding: '0 20px' }" class="p-0 text-lg font-medium">Trang quản lý
@@ -118,11 +116,11 @@ watchEffect(() => {
                         <template v-else-if="column.dataIndex === '_id'">
                             <button type="button"
                                 class="mr-2  bg-[#1669dcec] hover:bg-[#498ff1] rounded-[5px] px-[10px] py-1 h-8 "
-                                @click="store.getPermissionByID(text)">
+                                @click="store.getByID(text)">
                                 <img class=" h-5/6" src="../../../assets/image/icon/icons8_settings.svg" alt="">
                             </button>
                             <a-popconfirm title="Bạn có chắc muốn xoá?" ok-text="Có" cancel-text="Không"
-                                :loading="store.load" @confirm="store.deletePermission(text)" @cancel="">
+                                :loading="store.load" @confirm="store.deleteByID(text)" @cancel="">
                                 <button type="button"
                                     class=" bg-red-500 hover:bg-red-400 rounded-[5px] px-[10px] ] py-1 h-8 ">
                                     <img class="h-5/6" src="../../../assets/image/icon/icons8_remove.svg"

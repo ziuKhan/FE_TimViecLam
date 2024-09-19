@@ -2,7 +2,6 @@
 import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import type { IJob } from '../../types/backend';
-import { getJobsApi } from '../../services/job.service';
 import { linkUploads } from '../../constant/api';
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import { vi } from 'date-fns/locale';
@@ -12,10 +11,12 @@ import ApplyJob from '../../components/user/modal/ApplyJob.vue';
 import { useAuthStore } from '../../stores/AuthStore';
 import { message } from 'ant-design-vue';
 import resumeService from '../../services/resume.service';
+import jobService from '../../services/job.service';
 
 const route = useRoute()
 const load = ref<Boolean>(false)
 const data = ref<IJob>()
+
 const open = ref<Boolean>(false)
 const router = useRouter()
 const storeAuth = useAuthStore()
@@ -24,9 +25,10 @@ const getData = async () => {
     load.value = false
     const id = route.params.id as string
     try {
-        const result = await getJobsApi(id)
-        result.startDate = formatDistanceToNow(parseISO(result.startDate), { addSuffix: true, locale: vi })
-        data.value = result
+        debugger
+        const result = await jobService.getApi(id)
+        result.data.startDate = formatDistanceToNow(parseISO(result.data.startDate), { addSuffix: true, locale: vi })
+        data.value = result.data
         load.value = true
     } catch (error) {
         console.error('Error fetching data:', error)
@@ -41,7 +43,7 @@ const handleOk = async () => {
             const dataCreate = {
                 url: urlFile.value,
                 jobId: data.value?._id,
-                companyId: data.value?.company?._id
+                companyId: data.value?.companyId?._id
             }
             try {
 
@@ -97,7 +99,8 @@ onMounted(() => {
                         :maskClosable="false" :loading="loadButton" :cancelButtonProps="{ style: { display: 'none' } }"
                         :okButtonProps="{ style: { background: '#ed1b2f' }, disabled: storeAuth.isAuth ? urlFile === '' : false }">
                         <hr />
-                        <ApplyJob :nameJob="data?.name" :nameCompany="data?.company?.name" v-model:urlFile="urlFile" />
+                        <ApplyJob :nameJob="data?.name" :nameCompany="data?.companyId?.name"
+                            v-model:urlFile="urlFile" />
                     </a-modal>
 
                 </div>
@@ -135,13 +138,14 @@ onMounted(() => {
                 <div class="bg-white px-5 py-3 rounded-xl  drop-shadow-lg shadow-gray-500 sticky top-[65px] z-10">
                     <div class="flex gap-x-3">
                         <div class="max-w-32 h-32 p-2 rounded-md border border-solid border-gray-300"><img
-                                class="h-full object-contain" :src="linkUploads('company/' + data?.company?.logo)"
+                                class="h-full object-contain" :src="linkUploads('company/' + data?.companyId?.logo)"
                                 alt="">
                         </div>
                         <div>
-                            <h2 class="text-lg font-bold">{{ data?.company?.name }}</h2>
-                            <RouterLink :to="`/company/${data?.company?._id}`"
-                                class="text-[#0e2eed] font-normal text-base">Xem công
+                            <h2 class="text-lg font-bold">{{ data?.companyId?.name }}</h2>
+                            <RouterLink :to="`/company/${data?.companyId?._id}`"
+                                class="text-[#0e2eed] font-normal text-base">Xem
+                                công
                                 ty</RouterLink>
                         </div>
                     </div>

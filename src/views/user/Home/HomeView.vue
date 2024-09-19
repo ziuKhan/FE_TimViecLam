@@ -2,11 +2,11 @@
 import { onMounted, ref } from 'vue'
 import CardEmployer from '../../../components/user/CardEmployer.vue'
 import CardJob from '../../../components/user/CardJob.vue'
-import { paginateJobsApi } from '../../../services/job.service'
 import Loading from '../../../components/Loading.vue'
 import FormSearch from '../../../components/user/search/FormSearch.vue'
 import type { ICompany, IJob } from '../../../types/backend'
 import companyService from '../../../services/company.service'
+import jobService from '../../../services/job.service'
 
 const dataCompany = ref<ICompany[]>([])
 const dataJobs = ref<IJob[]>([])
@@ -14,7 +14,8 @@ const load = ref<boolean>(false)
 const getData = async () => {
   load.value = false
   const params = '?current=1&pageSize=9&sort=-createdAt&isActive=true'
-  const [companies, jobs] = await Promise.all([companyService.paginateApi(params), paginateJobsApi(params)])
+  const paramJob = '?current=1&pageSize=9&populate=companyId&sort=-createdAt&isActive=true'
+  const [companies, jobs] = await Promise.all([companyService.paginateApi(params), jobService.paginateApi(paramJob)])
 
 
   dataCompany.value = companies.result
@@ -57,8 +58,8 @@ onMounted(() => {
       <h2 class="text-3xl font-bold mb-7 text-center w-full">Việc làm tốt nhất</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-10/12 mx-auto">
         <template v-for="data in dataJobs" :key="data._id">
-          <CardJob :_id="data._id" :name="data.name" :address="data.location" :logo="data.company?.logo"
-            :salary="data.salary?.toString()" :nameCompany="data.company?.name" :company_id="data.company?._id">
+          <CardJob :_id="data._id" :name="data.name" :address="data.location" :logo="data.companyId?.logo"
+            :salary="data.salary?.toString()" :nameCompany="data.companyId?.name" :company_id="data.companyId?._id">
           </CardJob>
         </template>
       </div>

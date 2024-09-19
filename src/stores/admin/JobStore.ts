@@ -1,86 +1,101 @@
 import { defineStore } from 'pinia'
-import { onMounted, reactive, ref } from 'vue'
-import type { IPaginate, IPermission } from '../../types/backend'
-import {
-  createPermissionApi,
-  deletePermissionApi,
-  getPermissionApi,
-  paginatePermissionApi,
-  updatePermissionApi
-} from '../../services/permission.service'
+import { ref, reactive, watch } from 'vue'
+import type { IJob, IPaginate } from '../../types/backend'
 import { message } from 'ant-design-vue'
+import jobService from '../../services/job.service'
 
-const usePermissionStore = defineStore('permission', () => {
+const useJobStore = defineStore('job', () => {
+  const { getApi, createApi, updateApi, deleteApi, paginateApi } = jobService
+
   const openModal = ref<boolean>(false)
-
-  const load = ref<boolean>(false)
   const dataMeta = ref<IPaginate>({
     current: 1,
     pageSize: 6,
     pages: 0,
     total: 0
   })
-  const data = ref<IPermission[]>([])
+
+  const data = ref<IJob[]>([])
   const valueSearch = ref<string>('')
-  const form = reactive<IPermission>({
+  const form = reactive<IJob>({
     _id: '',
     name: '',
-    apiPath: '',
-    module: '',
-    method: ''
+    skills: [],
+    location: '',
+    salary: 0,
+    quantity: 0,
+    level: '',
+    companyId: {
+      _id: ''
+    },
+    description: '',
+    startDate: null,
+    endDate: null,
+    isActive: true
   })
+
   const loading = ref<boolean>(false)
+
   const refreshInput = () => {
     form._id = ''
     form.name = ''
-    form.apiPath = ''
-    form.module = ''
-    form.method = ''
+    form.skills = []
+    form.location = ''
+    form.salary = 0
+    form.quantity = 0
+    form.companyId = {
+      _id: ''
+    }
+    form.level = ''
+    form.description = ''
+    ;(form.startDate = new Date()), (form.endDate = new Date()), (form.isActive = true)
   }
+
   const handleOpenModal = () => {
     openModal.value = true
     refreshInput()
   }
 
+  const isActive = ref<boolean>(true)
+  watch(isActive, () => {
+    getData()
+  })
+
   const getData = async (search?: string) => {
-    load.value = true
+    loading.value = true
     try {
-      const params = `?current=${dataMeta.value?.current}&pageSize=${dataMeta.value?.pageSize}&sort=-createdAt${search ? '&name=/' + search + '/' : ''}`
-      const res = await paginatePermissionApi(params)
+      const params = `?current=${dataMeta.value?.current}&pageSize=${dataMeta.value?.pageSize}&isActive=${isActive.value}&sort=-createdAt${search ? '&name=/' + search + '/' : ''}`
+      const res = await paginateApi(params)
       if (res) {
         data.value = res.result
         dataMeta.value = res.meta
-        load.value = false
+        loading.value = false
       }
     } catch (error) {
-      load.value = false
+      loading.value = false
       console.error('Error fetching data:', error)
     }
   }
 
-  //chức năng xoá
   const deleteByID = async (id: string) => {
-    load.value = true
+    loading.value = true
     try {
-      const res = await deletePermissionApi(id)
+      const res = await deleteApi(id)
       if (res) {
-        message.success('Xóa thành công!')
-        load.value = false
+        message.success('Xóa thành công!')
+        loading.value = false
         getData()
       }
     } catch (error) {
-      load.value = false
-
+      loading.value = false
       console.error('Error fetching data:', error)
     }
   }
-
-  //code dành cho permission update
 
   const getByID = async (id: string) => {
     try {
       loading.value = true
-      const res = await getPermissionApi(id)
+      const res = await getApi(id)
       if (res) {
         Object.assign(form, res.data)
         openModal.value = true
@@ -91,14 +106,15 @@ const usePermissionStore = defineStore('permission', () => {
       console.error('Error fetching data:', error)
     }
   }
+
   const updateAndAdd = async () => {
     loading.value = true
     try {
       if (form._id) {
-        const res = await updatePermissionApi(form, form._id)
+        const res = await updateApi({ ...form, companyId: form.companyId?._id }, form._id)
         if (res) message.success('Cập nhật thành công!')
       } else {
-        const res = await createPermissionApi(form)
+        const res = await createApi({ ...form, companyId: form.companyId?._id })
         if (res) message.success('Thêm thành công!')
       }
       refreshInput()
@@ -120,11 +136,11 @@ const usePermissionStore = defineStore('permission', () => {
     dataMeta,
     getData,
     valueSearch,
-    load,
     deleteByID,
+    isActive,
     getByID,
     handleOpenModal
   }
 })
 
-export default usePermissionStore
+export default useJobStore

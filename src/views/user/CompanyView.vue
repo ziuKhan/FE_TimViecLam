@@ -4,9 +4,9 @@ import CardJob from '../../components/user/CardJob.vue'
 import { ref, watchEffect } from 'vue';
 import type { ICompany, IJob } from '../../types/backend';
 import Loading from '../../components/Loading.vue';
-import { paginateJobsApi } from '../../services/job.service';
 import { linkUploads } from '../../constant/api';
 import companyService from '../../services/company.service';
+import jobService from '../../services/job.service';
 
 const route = useRoute()
 
@@ -17,9 +17,9 @@ const load = ref<boolean>(false)
 const getData = async () => {
   load.value = false
   const id = route.params.id as string;
-  const params = `?current=1&pageSize=20&isActive=true&company._id=${id}`
+  const params = `?current=1&pageSize=20&isActive=true&companyId=${id}&populate=companyId`
   try {
-    const [companies, jobs] = await Promise.all([companyService.getApi(id), paginateJobsApi(params)]);
+    const [companies, jobs] = await Promise.all([companyService.getApi(id), jobService.paginateApi(params)]);
     dataCompany.value = companies.data
     dataJobs.value = jobs.result
     load.value = true
@@ -87,8 +87,9 @@ watchEffect(() => {
         <h2 class="py-3 text-2xl font-bold">{{ dataJobs.length }} việc làm đang tuyển dụng</h2>
         <div class="max-h-full overflow-y-auto">
           <template v-for="data in dataJobs" :key="data.id">
-            <CardJob class="mb-5" :_id="data._id" :name="data.name" :address="data.location" :logo="data.company?.logo"
-              :salary="data.salary?.toString()" :nameCompany="data.company?.name" :company_id="data.company?._id">
+            <CardJob class="mb-5" :_id="data._id" :name="data.name" :address="data.location"
+              :logo="data.companyId?.logo" :salary="data.salary?.toString()" :nameCompany="data.companyId?.name"
+              :company_id="data.companyId?._id">
             </CardJob>
           </template>
 

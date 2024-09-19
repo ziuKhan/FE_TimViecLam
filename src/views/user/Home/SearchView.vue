@@ -2,13 +2,7 @@
 import CardJob from '../../../components/user/CardJob.vue';
 import Search from '../../../components/user/search/Search.vue';
 import { ref, watch, watchEffect } from 'vue';
-import type { IJob, IPaginate } from '../../../types/backend';
-import { paginateJobsApi } from '../../../services/job.service';
-import { useRoute } from 'vue-router';
 import { useSearchStore } from '../../../stores/user/searchStore';
-import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
-import { createVNode } from 'vue';
-import { Modal } from 'ant-design-vue';
 import FilterSearch from '../../../components/user/modal/FilterSearch.vue';
 
 
@@ -56,9 +50,9 @@ const handleOk = () => {
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full mx-auto">
                     <template v-for="data in store.dataJobs" :key="data._id">
-                        <CardJob :_id="data._id" :name="data.name" :address="data.location" :logo="data.company?.logo"
-                            :salary="data.salary?.toString()" :nameCompany="data.company?.name"
-                            :company_id="data.company?._id"></CardJob>
+                        <CardJob :_id="data._id" :name="data.name" :address="data.location" :logo="data.companyId?.logo"
+                            :salary="data.salary?.toString()" :nameCompany="data.companyId?.name"
+                            :company_id="data.companyId?._id"></CardJob>
                     </template>
                 </div>
                 <div class="w-full flex justify-center mt-5">
