@@ -98,11 +98,11 @@ const router = createRouter({
         {
           path: 'job',
           component: () => import('../views/admin/Jobs/JobView.vue')
+        },
+        {
+          path: 'subscriber',
+          component: () => import('../views/admin/Subscribers/SubscriberView.vue')
         }
-        // ,{
-        //   path: 'subscriber',
-        //   component: () => import('../views/admin/Subscriber/SubscriberView.vue')
-        // }
       ]
     },
     {

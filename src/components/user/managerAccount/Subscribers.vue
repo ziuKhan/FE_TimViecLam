@@ -17,10 +17,10 @@
 
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue';
-import { createSubscriberApi, getSubscriberApi } from '../../../services/subscriber.service';
 import { useAuthStore } from '../../../stores/AuthStore';
 import { SKILLS_LIST } from '../../../until/until';
 import { message } from 'ant-design-vue';
+import subscriberService from '../../../services/subscriber.service';
 
 const storeAuth = useAuthStore()
 const formModel = ref({
@@ -31,7 +31,7 @@ const formModel = ref({
 
 const getSkills = async () => {
     debugger
-    const res = await getSubscriberApi(storeAuth.user?.email);
+    const res = await subscriberService.getByEmailApi(storeAuth.user?.email);
     if (res.data) {
         formModel.value.skills = res.data.skills
     }
@@ -43,7 +43,7 @@ const onFinish = async (values: any) => {
         name: storeAuth.user?.name,
         email: storeAuth.user?.email
     }
-    const res = await createSubscriberApi(data);
+    const res = await subscriberService.createOrUpdateApi(data);
     if (res.data) {
         message.success('Đăng ký thành công')
         getSkills()

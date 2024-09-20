@@ -53,20 +53,11 @@
                     Công việc
                 </a-menu-item>
             </RouterLink>
-            <a-sub-menu key="sub2">
-                <template #title>
-                    <span>
-                        <user-outlined />
-                        <span>Quản lý nhận Mail</span>
-                    </span>
-                </template>
-                <RouterLink to="/admin/subscriber">
-                    <a-menu-item key="8">
-                        Người đăng ký
-                    </a-menu-item>
-                </RouterLink>
-            </a-sub-menu>
-
+            <RouterLink to="/admin/subscriber">
+                <a-menu-item key="8">
+                    Đăng ký nhận mail
+                </a-menu-item>
+            </RouterLink>
 
         </a-menu>
     </a-layout-sider>
