@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-import { reactive, computed, onMounted, watchEffect, ref, provide } from 'vue'
+import { reactive, computed, onMounted, watchEffect, ref, provide, watch } from 'vue'
 import { UserOutlined, LockOutlined } from '@ant-design/icons-vue'
-import { accountApi, loginApi, refreshApi } from '../../../services/auth.service'
+import { accountApi, loginApi, loginByGoogleApi, refreshApi } from '../../../services/auth.service'
 import { notification } from 'ant-design-vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '../../../stores/AuthStore'
 import tokenService from '../../../constant/token.service'
-
+import Loading from '../../../components/Loading.vue';
 
 interface IFormState {
   username: string
@@ -18,8 +18,8 @@ const formState = reactive<IFormState>({
   password: '',
   remember: false
 })
-
-const loading = ref<boolean>(false)
+const route = useRoute()
+const loading = ref<boolean>(true)
 const openNotificationWithIcon = () => {
   notification['success']({
     message: 'Thông báo',
@@ -28,6 +28,8 @@ const openNotificationWithIcon = () => {
 }
 const storeAuth = useAuthStore()
 const router = useRouter()
+
+
 const onFinish = async (values: IFormState) => {
   try {
     const { username, password } = values
@@ -35,7 +37,6 @@ const onFinish = async (values: IFormState) => {
     const response = await loginApi(username, password)
     if (response.data) {
       const { access_token } = response.data
-
       // Lưu access_token vào bộ nhớ trình duyệt
       tokenService.createToken(access_token, formState.remember)
       storeAuth.getUser()
@@ -54,18 +55,47 @@ const onFinish = async (values: IFormState) => {
 const disabled = computed(() => {
   return !(formState.username && formState.password)
 })
+const onLoginByGoogle = async () => {
+  window.location.href = 'http://localhost:8080/api/v1/auth/google';
+};
+const googleCallback = async (access_token: any) => {
+  try {
+    loading.value = true
+    tokenService.createToken(access_token, formState.remember);
+    await storeAuth.getUser();
+    openNotificationWithIcon();
+    router.push('/');
+    // window.location.reload(); 
+  } catch (error) {
+    console.error('Lỗi do try catch bắt:', error);
+  }
+};
 
 onMounted(() => {
   const user = tokenService.getToken()?.token
   if (user && user !== 'undefined') {
     router.push('/')
   }
+
+  const token = route.params.id // Lấy token từ URL
+  if (token) {
+    googleCallback(token)
+  }
+  setTimeout(() => {
+    loading.value = false
+  }, 500)
 })
 </script>
 
 
+
+
+
+
 <template>
-  <div class="container__login ">
+  <Loading v-if="loading"></Loading>
+
+  <div class="container__login " v-else>
     <div class="container__login_title">
       Chào mừng bạn đến với <img src="../../../assets/image/icon/logo-itviec-black.png" alt="" />
     </div>
@@ -80,7 +110,8 @@ onMounted(() => {
         của ITviec liên quan đến thông tin riêng tư của bạn.
       </div>
 
-      <a-button danger class="login__btn_google"><img src="../../../assets/image/icon/icons8_google.svg" alt="" /> Đăng
+      <a-button danger class="login__btn_google" @click="onLoginByGoogle()"><img
+          src="../../../assets/image/icon/icons8_google.svg" alt="" /> Đăng
         nhập
         với Google</a-button>
 

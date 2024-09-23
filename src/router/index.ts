@@ -31,10 +31,10 @@ const router = createRouter({
           component: () => import('../views/user/CompanyView.vue')
         },
         {
-          path: 'login',
+          path: 'login/:id?',
           name: 'login',
-
           component: () => import('../views/user/Auth/LoginView.vue')
+         
         },
         {
           path: 'register',

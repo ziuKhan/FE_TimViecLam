@@ -15,6 +15,16 @@ export const loginApi = async (username: string, password: string): Promise<any>
   }
 }
 
+
+export const loginByGoogleApi = async (): Promise<any> => {
+  try {
+    const res = await apiClient.get(`${moduleName}/google`)
+    return res
+  } catch (err: any) {
+    handleApiError(err)
+  }
+}
+
 export const refreshApi = async (): Promise<any> => {
   try {
     const res = await apiClient.get(`${moduleName}/refresh`)
