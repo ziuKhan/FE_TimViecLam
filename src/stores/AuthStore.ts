@@ -10,7 +10,6 @@ export const useAuthStore = defineStore('auth', () => {
   const user = ref<IUser | null>()
 
   const getUser = async () => {
-    debugger
     const token = tokenService.getToken()?.token
     if (token && !user.value) {
       try {
@@ -23,6 +22,14 @@ export const useAuthStore = defineStore('auth', () => {
       }
     }
   }
+
+  const fetchUser = async () => {
+    if (!user.value) {
+      await getUser()
+    }
+    return user.value
+  }
+
 
   const isAuth = computed<boolean>(() => {
     return !!user.value
@@ -42,5 +49,5 @@ export const useAuthStore = defineStore('auth', () => {
     await getUser()
   })
 
-  return { logout, isAuth, user, getUser }
+  return { logout, isAuth, user, getUser,fetchUser }
 })

@@ -19,7 +19,8 @@ const formState = reactive<IFormState>({
   remember: false
 })
 const route = useRoute()
-const loading = ref<boolean>(true)
+const loading = ref<boolean>(false)
+const load = ref<boolean>(true)
 const openNotificationWithIcon = () => {
   notification['success']({
     message: 'Thông báo',
@@ -60,12 +61,11 @@ const onLoginByGoogle = async () => {
 };
 const googleCallback = async (access_token: any) => {
   try {
-    loading.value = true
+    load.value = true
     tokenService.createToken(access_token, formState.remember);
     await storeAuth.getUser();
     openNotificationWithIcon();
     router.push('/');
-    // window.location.reload(); 
   } catch (error) {
     console.error('Lỗi do try catch bắt:', error);
   }
@@ -82,8 +82,8 @@ onMounted(() => {
     googleCallback(token)
   }
   setTimeout(() => {
-    loading.value = false
-  }, 500)
+    load.value = false
+  }, 200)
 })
 </script>
 
@@ -93,7 +93,7 @@ onMounted(() => {
 
 
 <template>
-  <Loading v-if="loading"></Loading>
+  <Loading v-if="load"></Loading>
 
   <div class="container__login " v-else>
     <div class="container__login_title">
@@ -147,12 +147,9 @@ onMounted(() => {
         </a-form-item>
 
         <a-form-item>
-
           <a-button :disabled="disabled" type="primary" html-type="submit" class="login-form-button" :loading="loading">
             Đăng nhập ngay
           </a-button>
-
-
           hoặc
           <RouterLink to="/register" class="font-medium">đăng ký ngay!</RouterLink>
         </a-form-item>

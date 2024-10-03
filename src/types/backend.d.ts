@@ -165,3 +165,18 @@ export interface IPaginate {
   total?: number
   keyword?: string
 }
+
+export interface INotification {
+  _id?: string
+  title?: string
+  message?: string
+  type?: string
+  url?: string
+  userId?: string
+  isRead?: string
+  createdBy?: string
+  isDeleted?: boolean
+  deletedAt?: boolean | null
+  createdAt?: string
+  updatedAt?: string
+}

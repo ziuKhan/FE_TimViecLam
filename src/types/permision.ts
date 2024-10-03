@@ -7,7 +7,8 @@ export const ALL_MODULES = [
   'RESUMES',
   'ROLES',
   'USERS',
-  'SUBSCRIBERS'
+  'SUBSCRIBERS',
+  'NOTIFICATIONS'
 ]
 
 export const ALL_METHODS = ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'HEAD', 'OPTIONS']

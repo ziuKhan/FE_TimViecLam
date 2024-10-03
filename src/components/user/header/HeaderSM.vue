@@ -6,6 +6,7 @@ import ManagerAccount from '../modal/ManagerAccount.vue';
 const openUser = ref<boolean>(false);
 const openMenu = ref<boolean>(false);
 const open = ref<boolean>(false);
+const openNotification = ref<boolean>(false);
 
 const afterOpenChange = (bool: boolean) => {
   console.log('open', bool);
@@ -33,11 +34,16 @@ const handleLogout = () => {
     </RouterLink>
 
     <RouterLink v-if="!storeAuth.isAuth" to="/login" class="text-white">Đăng nhập</RouterLink>
-    <div v-else class="flex gap-x-1" @click="openUser = true">
+
+    <div v-else class="flex gap-x-1 relative" @click="openUser = true">
       <div class="border border-white rounded-full w-8 h-8">
         <img class="h-full w-full object-contain" src="../../../assets/image/icon/icons8_google.svg" alt="">
       </div>
       <img class="h-9/12" src="../../../assets/image/icon/icons8_chevron_down_1.svg" alt="">
+      <span
+        class="absolute -top-[7px]  right-10 w-5 h-5 text-[14px] font-medium rounded-full bg-[#c82222] text-white text-xs text-center">
+        0
+      </span>
     </div>
   </header>
 
@@ -61,7 +67,9 @@ const handleLogout = () => {
     width="250" placement="right" @after-open-change="afterOpenChange">
 
     <div class="flex flex-col">
+      <span to="" @click="openNotification = true" class="header__nav_link pl-3 py-4">4 Thông báo</span>
       <span to="" @click="open = true" class="header__nav_link pl-3 py-4"> Hồ sơ và CV</span>
+
       <a-modal v-model:open="open" width="800px" title="Quản lý tài khoản" :maskClosable=false
         :okButtonProps="{ style: { display: 'none' } }" :cancelButtonProps="{ style: { display: 'none' } }">
         <ManagerAccount />
@@ -72,7 +80,12 @@ const handleLogout = () => {
 
     </div>
   </a-drawer>
+  <a-drawer v-model:open="openNotification" class="custom-class" root-class-name="root-class-name"
+    :root-style="{ color: 'white' }" style="color: white ; background:#121212; font-size: 17px; font-weight: 400;"
+    width="100%" placement="right" @after-open-change="afterOpenChange" title="Thông báo">
 
+
+  </a-drawer>
 
 
 </template>

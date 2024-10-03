@@ -25,7 +25,7 @@ const getData = async () => {
     load.value = false
     const id = route.params.id as string
     try {
-        debugger
+
         const result = await jobService.getApi(id)
         result.data.startDate = formatDistanceToNow(parseISO(result.data.startDate), { addSuffix: true, locale: vi })
         data.value = result.data
@@ -46,12 +46,10 @@ const handleOk = async () => {
                 companyId: data.value?.companyId?._id
             }
             try {
-
                 const res = await resumeService.createApi(dataCreate)
                 if (res) {
                     message.success('Rải CV thành công')
                     loadButton.value = true
-
                 }
             }
             catch (error) {

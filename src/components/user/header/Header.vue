@@ -8,6 +8,7 @@ import { useAuthStore } from '../../../stores/AuthStore';
 const isSticky = ref<boolean>(false)
 const collapsed = ref<boolean>(false)
 const open = ref<boolean>(false)
+const openNotification = ref<boolean>(false)
 
 const handleScroll = (): void => {
   const header = document.querySelector('.header')
@@ -22,7 +23,10 @@ const handleScroll = (): void => {
     }
   }
 }
+
+
 const storeAuth = useAuthStore()
+const storeHeader = useHeaderStore()
 console.log('check header', storeAuth.user)
 const handleLogout = () => {
   storeAuth.logout()
@@ -75,10 +79,30 @@ onUnmounted(() => {
         <RouterLink to="adax" class="header__nav_link"> Blog </RouterLink>
       </nav>
       <div class="header__user">
-        <RouterLink to="/customer/login" class="header__user_link link_distance">Nhà Tuyển Dụng</RouterLink>
-        <RouterLink v-if="!storeAuth.isAuth" to="/login" class="header__user_link link_distance">Đăng Nhập/Đăng ký
-        </RouterLink>
 
+        <RouterLink to="/customer/login" class="header__user_link link_distance">Nhà Tuyển Dụng</RouterLink>
+        <span v-if="storeAuth.isAuth" @click="openNotification = true"
+          class="header__user_link rounded-full bg-[#f3f3f3f6] p-[5px] relative cursor-pointer"><img
+            src="../../../assets/image/icon/icons8_notification.svg" alt="" class="w-6 h-6">
+          <span v-if="storeHeader.totalNotification > 0"
+            class="absolute -top-2  left-5 w-5 h-5 text-[14px] font-medium rounded-full bg-[#c82222] text-white text-xs text-center">
+            {{ storeHeader.totalNotification }}
+          </span>
+        </span>
+        <a-modal v-model:open="openNotification" title="Thông báo" :cancelButtonProps="{ style: { display: 'none' } }"
+          :okButtonProps="{ style: { display: 'none' } }" width="550px">
+          <template v-for="item in storeHeader.dataNotification" :key="item">
+            <div class="w-full min-h-20 hover:bg-zinc-200 rounded-lg cursor-pointer p-2">
+              <h3 class="w-full text-base font-semibold mb-[3px]">{{ item?.title }}</h3>
+              <p class=" mb-1 text-sm">{{ item?.message }}</p>
+              <p class="text-[13px] font-[500] text-blue-800">{{ item?.createdAt }}</p>
+            </div>
+          </template>
+        </a-modal>
+
+        <RouterLink v-if="!storeAuth.isAuth" to="/login" class="header__user_link link_distance">Đăng Nhập/Đăng ký
+
+        </RouterLink>
         <span v-else to="/login" class="header__user_link link_distance header__nav_link link__user_name">
           <img src="../../../assets/image/icon/icons8_male_user.svg" alt="" />
           {{ storeAuth.user?.name }}
@@ -91,6 +115,7 @@ onUnmounted(() => {
             <a-modal v-model:open="open" width="1000px" title="Quản lý tài khoản" :maskClosable=false
               :okButtonProps="{ style: { display: 'none' } }" :cancelButtonProps="{ style: { display: 'none' } }">
               <ManagerAccount />
+
             </a-modal>
 
             <RouterLink v-if="typeof storeAuth.user?.role === 'object' && storeAuth.user.role.name !== 'NORMAL_USER'"
@@ -109,12 +134,23 @@ onUnmounted(() => {
     </div>
   </header>
 </template>
+<style>
+.ant-modal-body,
+.ant-modal-content {
+  padding: 2px !important;
+  /* padding-bottom: 2px !important; */
+}
 
+.ant-modal-header {
+  padding: 20px 20px 0 20px !important;
+}
+</style>
 <style scoped lang="scss">
 /* .activeLink {
   color: #ffffff !important;
   font-weight: 600;
 } */
+
 
 .header {
   padding: 0 30px;
