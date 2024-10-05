@@ -58,7 +58,11 @@
                     Đăng ký nhận mail
                 </a-menu-item>
             </RouterLink>
-
+            <RouterLink to="/admin/notification">
+                <a-menu-item key="9">
+                    Thông báo
+                </a-menu-item>
+            </RouterLink>
         </a-menu>
     </a-layout-sider>
 </template>
@@ -102,6 +106,9 @@ watch(
                 break;
             case '/admin/subscriber':
                 selectedKeys.value = ['8'];
+                break;
+            case '/admin/notification':
+                selectedKeys.value = ['9'];
                 break;
             default:
                 selectedKeys.value = ['1'];

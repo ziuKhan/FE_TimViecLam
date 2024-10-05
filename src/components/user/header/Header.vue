@@ -5,6 +5,9 @@ import { useHeaderStore } from '../../../stores/user/headerStore'
 import { refreshApi } from '../../../services/auth.service';
 import ManagerAccount from '../modal/ManagerAccount.vue';
 import { useAuthStore } from '../../../stores/AuthStore';
+import { linkUploads } from '../../../constant/api';
+import notificationService from '../../../services/notification.service';
+import dayjs from 'dayjs';
 const isSticky = ref<boolean>(false)
 const collapsed = ref<boolean>(false)
 const open = ref<boolean>(false)
@@ -27,11 +30,16 @@ const handleScroll = (): void => {
 
 const storeAuth = useAuthStore()
 const storeHeader = useHeaderStore()
-console.log('check header', storeAuth.user)
 const handleLogout = () => {
   storeAuth.logout()
 }
+const handleNotification = async (_id: any, url: any) => {
 
+  const res = await notificationService.updateApi({ isRead: true }, _id);
+  if (res) {
+    window.location.href = url
+  }
+}
 
 onMounted(() => {
   window.addEventListener('scroll', handleScroll)
@@ -40,6 +48,9 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
 })
+
+
+
 </script>
 
 
@@ -91,31 +102,47 @@ onUnmounted(() => {
         </span>
         <a-modal v-model:open="openNotification" title="Thông báo" :cancelButtonProps="{ style: { display: 'none' } }"
           :okButtonProps="{ style: { display: 'none' } }" width="550px">
-          <template v-for="item in storeHeader.dataNotification" :key="item">
-            <div class="w-full min-h-20 hover:bg-zinc-200 rounded-lg cursor-pointer p-2">
-              <h3 class="w-full text-base font-semibold mb-[3px]">{{ item?.title }}</h3>
-              <p class=" mb-1 text-sm">{{ item?.message }}</p>
-              <p class="text-[13px] font-[500] text-blue-800">{{ item?.createdAt }}</p>
-            </div>
-          </template>
+          <div class="max-h-[400px] overflow-auto ">
+            <template v-for="item in storeHeader.dataNotification" :key="item">
+              <div @click="handleNotification(item?._id, item?.url)"
+                :class="['flex w-full px-1 hover:bg-zinc-200 rounded-lg', !item?.isRead ? 'bg-gray-200' : '']">
+                <div class="w-1/12 flex justify-center">
+                  <img class="w-full object-contain  rounded-lg"
+                    :src="linkUploads('user/' + item?.createdBy?._id.avatar)" alt="" />
+                </div>
+                <div class="w-11/12 min-h-20  cursor-pointer p-2">
+                  <h3 :class="['w-full text-base mb-[3px]', !item?.isRead ? 'font-bold' : 'font-semibold']">
+                    {{ item?.title }}</h3>
+                  <p class=" mb-1 text-sm">{{ item?.message }}</p>
+                  <p class="text-[13px] mb-1 font-[400] text-blue-800">
+                    {{ dayjs(item?.createdAt).format('DD/MM/YYYY [lúc] HH:mm') }}</p>
+                </div>
+                <div v-if="!item?.isRead" class="w-7 flex justify-center items-center"><img
+                    class="w-full object-contain" src="../../../assets/image/icon/icons8_new.svg" alt=""></div>
+              </div>
+
+            </template>
+          </div>
         </a-modal>
 
         <RouterLink v-if="!storeAuth.isAuth" to="/login" class="header__user_link link_distance">Đăng Nhập/Đăng ký
 
         </RouterLink>
         <span v-else to="/login" class="header__user_link link_distance header__nav_link link__user_name">
-          <img src="../../../assets/image/icon/icons8_male_user.svg" alt="" />
+          <img class="w-9 h-9 object-contain mr-1 rounded-full border border-solid border-gray-300"
+            :src="linkUploads('user/' + storeAuth.user?.avatar)" alt="" />
           {{ storeAuth.user?.name }}
           <div class="icon-wrapper">
             <img class="icon-default" src="../../../assets/image/icon/icons8_chevron_down_1.svg" alt="" />
             <img class="icon-hover" src="../../../assets/image/icon/icons8_chevron_down_white.svg" alt="" />
           </div>
+
+
           <div class="header__sub">
             <span @click="open = true" class="header__sub_list">Quản lý tài khoản</span>
             <a-modal v-model:open="open" width="1000px" title="Quản lý tài khoản" :maskClosable=false
               :okButtonProps="{ style: { display: 'none' } }" :cancelButtonProps="{ style: { display: 'none' } }">
               <ManagerAccount />
-
             </a-modal>
 
             <RouterLink v-if="typeof storeAuth.user?.role === 'object' && storeAuth.user.role.name !== 'NORMAL_USER'"

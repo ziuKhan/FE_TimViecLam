@@ -7,17 +7,15 @@ import FormSearch from '../../../components/user/search/FormSearch.vue'
 import type { ICompany, IJob } from '../../../types/backend'
 import companyService from '../../../services/company.service'
 import jobService from '../../../services/job.service'
+import dayjs from 'dayjs'
 
 const dataCompany = ref<ICompany[]>([])
 const dataJobs = ref<IJob[]>([])
 const load = ref<boolean>(false)
+
 const getData = async () => {
   load.value = false
-  const params = '?current=1&pageSize=9&sort=-createdAt&isActive=true'
-  const paramJob = '?current=1&pageSize=9&populate=companyId&sort=-createdAt&isActive=true'
-  const [companies, jobs] = await Promise.all([companyService.paginateApi(params), jobService.paginateApi(paramJob)])
-
-
+  const [companies, jobs] = await Promise.all([companyService.paginateApi('?current=1&pageSize=9&sort=-createdAt&isActive=true'), jobService.paginateApi('?current=1&pageSize=9&populate=companyId&sort=-createdAt&isActive=true')])
   dataCompany.value = companies.result
   dataJobs.value = jobs.result
   load.value = true

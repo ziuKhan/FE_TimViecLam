@@ -5,6 +5,7 @@ export interface IUser {
   password?: string
   gender?: string
   address?: string
+  avatar?: string
   isActive?: boolean
   role?:
     | {
@@ -173,8 +174,17 @@ export interface INotification {
   type?: string
   url?: string
   userId?: string
-  isRead?: string
-  createdBy?: string
+  isRead?: false
+  url: string
+  createdBy?: {
+      _id: {
+          _id: string
+          name: string
+          email: string
+          avatar: string
+      }
+      email: string
+  }
   isDeleted?: boolean
   deletedAt?: boolean | null
   createdAt?: string

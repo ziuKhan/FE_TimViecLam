@@ -14,13 +14,9 @@ export const useHeaderStore = defineStore('header', () => {
   const AuthStore = useAuthStore()
 
   const getData = async () => {
-    debugger
     const user = await AuthStore.fetchUser();
-
     if (!user || !user._id) return; 
-    debugger
-    const [res,number] = await Promise.all([notificationService.paginateApi(`?current=1&pageSize=10&userId=${user._id}`), notificationService.paginateApi(`?current=1&pageSize=10&userId=${AuthStore.user?._id}&isRead=false`)]);
-  
+    const [res,number] = await Promise.all([notificationService.paginateApi(`?current=1&pageSize=10&sort=-createdAt`), notificationService.paginateApi(`?current=1&pageSize=10&isRead=false`)]);
     if (res) {
       dataNotification.value = res.result
       totalNotification.value = number.result.length

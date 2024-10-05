@@ -72,7 +72,7 @@ const router = createRouter({
       component: AdminLayout,
       children: [
         {
-          path: '', // Đây là route mặc định khi vào /admin
+          path: '',
           component: () => import('../views/admin/IndexView.vue')
         },
         {
@@ -102,6 +102,10 @@ const router = createRouter({
         {
           path: 'subscriber',
           component: () => import('../views/admin/Subscribers/SubscriberView.vue')
+        },
+        {
+          path: 'notification',
+          component: () => import('../views/admin/Notifications/NotificationView.vue')
         }
       ]
     },

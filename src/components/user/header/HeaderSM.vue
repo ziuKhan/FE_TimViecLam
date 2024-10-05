@@ -3,6 +3,7 @@ import { ref, watchEffect } from 'vue';
 import { useHeaderStore } from '../../../stores/user/headerStore';
 import { useAuthStore } from '../../../stores/AuthStore';
 import ManagerAccount from '../modal/ManagerAccount.vue';
+import { linkUploads } from '../../../constant/api';
 const openUser = ref<boolean>(false);
 const openMenu = ref<boolean>(false);
 const open = ref<boolean>(false);
@@ -37,7 +38,8 @@ const handleLogout = () => {
 
     <div v-else class="flex gap-x-1 relative" @click="openUser = true">
       <div class="border border-white rounded-full w-8 h-8">
-        <img class="h-full w-full object-contain" src="../../../assets/image/icon/icons8_google.svg" alt="">
+        <img class="h-full w-full object-contain" :src="linkUploads('user/' + storeAuth.user?.avatar)" alt="" />
+
       </div>
       <img class="h-9/12" src="../../../assets/image/icon/icons8_chevron_down_1.svg" alt="">
       <span

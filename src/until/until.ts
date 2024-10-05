@@ -24,6 +24,15 @@ export const LEVELS_LIST = [
   { label: 'SENIOR', value: 'NEST.JS' }
 ]
 
+export const TYPES_NOTIFICATION_LIST = [
+  { label: 'SYSTEM', value: 'SYSTEM' },
+  { label: 'PROMOTION', value: 'PROMOTION' },
+  { label: 'REMINDER', value: 'REMINDER' },   // Thông báo nhắc nhở
+  { label: 'WARNING', value: 'WARNING' },     // Thông báo cảnh báo
+  { label: 'NEWS', value: 'NEWS' },           // Thông báo tin tức
+  { label: 'UPDATE', value: 'UPDATE' }        // Thông báo cập nhật
+]
+
 import router from '@/router' // Import router để điều hướng
 
 // Hàm xử lý lỗi chung
