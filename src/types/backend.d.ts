@@ -27,24 +27,27 @@ export interface IUser {
   updatedAt?: string
 }
 
+export interface IUserbyAccount {
+  _id: string;
+  email: string;
+  name: string;
+  avatar: string;
+  role: {
+    _id: string;
+    name: string;
+  };
+  permissions: {
+    _id: string;
+    name: string;
+    apiPath: string;
+    method: string;
+    module: string;
+  }[];
+}
+
 export interface IAccount {
-  access_token?: string
-  user: {
-    _id: string
-    email: string
-    name: string
-    role: {
-      _id: string
-      name: string
-    }
-    permissions: {
-      _id: string
-      name: string
-      apiPath: string
-      method: string
-      module: string
-    }[]
-  }
+  access_token?: string;
+  user: IUserbyAccount;
 }
 
 export interface ICompany {

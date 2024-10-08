@@ -17,12 +17,12 @@
 
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue';
-import { useAuthStore } from '../../../stores/AuthStore';
 import { SKILLS_LIST } from '../../../until/until';
 import { message } from 'ant-design-vue';
 import subscriberService from '../../../services/subscriber.service';
+import accountService from '../../../constant/account.service';
 
-const storeAuth = useAuthStore()
+const { account } = accountService.getAccount();
 const formModel = ref({
     skills: []
 });
@@ -31,7 +31,7 @@ const formModel = ref({
 
 const getSkills = async () => {
     debugger
-    const res = await subscriberService.getByEmailApi(storeAuth.user?.email);
+    const res = await subscriberService.getByEmailApi(account?.email);
     if (res.data) {
         formModel.value.skills = res.data.skills
     }
@@ -40,8 +40,8 @@ const getSkills = async () => {
 const onFinish = async (values: any) => {
     const data = {
         skills: values.skills,
-        name: storeAuth.user?.name,
-        email: storeAuth.user?.email
+        name: account?.name,
+        email: account?.email
     }
     const res = await subscriberService.createOrUpdateApi(data);
     if (res.data) {

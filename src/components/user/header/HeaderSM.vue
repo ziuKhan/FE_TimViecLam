@@ -4,6 +4,7 @@ import { useHeaderStore } from '../../../stores/user/headerStore';
 import { useAuthStore } from '../../../stores/AuthStore';
 import ManagerAccount from '../modal/ManagerAccount.vue';
 import { linkUploads } from '../../../constant/api';
+import accountService from '../../../constant/account.service';
 const openUser = ref<boolean>(false);
 const openMenu = ref<boolean>(false);
 const open = ref<boolean>(false);
@@ -15,7 +16,7 @@ const afterOpenChange = (bool: boolean) => {
 
 
 const storeAuth = useAuthStore()
-
+const { account, storage } = accountService.getAccount();
 const handleLogout = () => {
   storeAuth.logout()
 }
@@ -34,11 +35,11 @@ const handleLogout = () => {
       <img class="h-full w-full object-contain" src="../../../assets/image/icon/logo-itviec.png" alt="">
     </RouterLink>
 
-    <RouterLink v-if="!storeAuth.isAuth" to="/login" class="text-white">Đăng nhập</RouterLink>
+    <RouterLink v-if="!account" to="/login" class="text-white">Đăng nhập</RouterLink>
 
     <div v-else class="flex gap-x-1 relative" @click="openUser = true">
       <div class="border border-white rounded-full w-8 h-8">
-        <img class="h-full w-full object-contain" :src="linkUploads('user/' + storeAuth.user?.avatar)" alt="" />
+        <img class="h-full w-full object-contain" :src="linkUploads('user/' + account?.avatar)" alt="" />
 
       </div>
       <img class="h-9/12" src="../../../assets/image/icon/icons8_chevron_down_1.svg" alt="">

@@ -27,10 +27,16 @@ export const loginByGoogleApi = async (): Promise<any> => {
 
 export const refreshApi = async (): Promise<any> => {
   try {
-    const res = await apiClient.get(`${moduleName}/refresh`)
-    return res.data
-  } catch (err: any) {}
-}
+    const res = await apiClient.get(`${moduleName}/refresh`, {
+      withCredentials: true,
+    });
+    return res.data;
+  } catch (err: any) {
+    console.error("Error refreshing API:", err);
+    throw err; // Ném lỗi để xử lý sau này
+  }
+};
+
 
 export const registerApi = async (user: any): Promise<any> => {
   try {

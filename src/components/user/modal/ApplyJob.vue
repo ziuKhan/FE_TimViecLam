@@ -1,20 +1,17 @@
 <script setup lang="ts">
-import { useAuthStore } from '../../../stores/AuthStore';
 import { message } from 'ant-design-vue';
 import { UploadOutlined } from '@ant-design/icons-vue';
 import type { UploadChangeParam } from 'ant-design-vue';
 import { ref, watch } from 'vue';
 import { uploadApi } from '../../../services/upload.service';
 import type { UploadRequestOption } from 'ant-design-vue/es/vc-upload/interface';
+import accountService from '../../../constant/account.service';
 
 defineProps({
   nameJob: String,
   nameCompany: String
 })
 
-
-
-const storeAuth = useAuthStore()
 
 const fileList = ref([]);
 const urlFile = defineModel('urlFile', { required: true })
@@ -40,18 +37,19 @@ const handleUpload = async (options: UploadRequestOption) => {
     onError && onError(err);
   }
 };
+const { account, storage } = accountService.getAccount();
 
 </script>
 
 <template>
 
-  <div v-if="storeAuth.isAuth" class="w-full  mb-2 mt-5">
+  <div v-if="account" class="w-full  mb-2 mt-5">
     <div class="mb-3 text-base">Bạn đang ứng tuyển công việc <span class="font-bold">{{ nameJob }}</span> tại <span
         class="font-bold">{{ nameCompany }}.</span> </div>
     <a-form name="basic" autocomplete="off" layout="vertical">
 
       <a-form-item label="Email" :rules="[{ required: true, message: 'Vui lòng nhập Email!' }]">
-        <a-input disabled :value="storeAuth.user?.email" class="mb-3"></a-input>
+        <a-input disabled :value="account?.email" class="mb-3"></a-input>
       </a-form-item>
 
 

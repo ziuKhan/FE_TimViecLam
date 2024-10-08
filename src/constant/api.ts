@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { refreshApi } from '../services/auth.service' // Import hàm refresh
 import TokenService from './token.service'
+import accountService from './account.service'
 
 export const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL + '/api/v1',
@@ -34,11 +35,13 @@ apiClient.interceptors.response.use(
       originalConfig._retry = true
 
       try {
+        debugger
         const res = await refreshApi()
         const { access_token } = res.data // Lấy accessToken từ response
 
         // Lưu token mới vào local storage
         TokenService.updateToken(access_token)
+        accountService.updateAccount()
 
         // Thêm token mới vào header Authorization
         originalConfig.headers['Authorization'] = `Bearer ${access_token}`
@@ -46,6 +49,10 @@ apiClient.interceptors.response.use(
         // Thực hiện lại request ban đầu
         return apiClient(originalConfig)
       } catch (refreshError) {
+        // Xu lys khi token loi
+        TokenService.removeToken()
+        accountService.removeAccount()
+
         return Promise.reject(refreshError)
       }
     }

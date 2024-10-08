@@ -4,9 +4,9 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons-vue'
 import { accountApi, loginApi, loginByGoogleApi, refreshApi } from '../../../services/auth.service'
 import { notification } from 'ant-design-vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useAuthStore } from '../../../stores/AuthStore'
 import tokenService from '../../../constant/token.service'
 import Loading from '../../../components/Loading.vue';
+import accountService from '../../../constant/account.service'
 
 interface IFormState {
   username: string
@@ -27,7 +27,6 @@ const openNotificationWithIcon = () => {
     description: 'Đăng nhập thành công.'
   })
 }
-const storeAuth = useAuthStore()
 const router = useRouter()
 
 
@@ -38,9 +37,11 @@ const onFinish = async (values: IFormState) => {
     const response = await loginApi(username, password)
     if (response.data) {
       const { access_token } = response.data
-      // Lưu access_token vào bộ nhớ trình duyệt
       tokenService.createToken(access_token, formState.remember)
-      storeAuth.getUser()
+
+      await accountService.createAccount(formState.remember)
+
+
       openNotificationWithIcon()
       router.back()
       window.location.reload();
@@ -62,8 +63,10 @@ const onLoginByGoogle = async () => {
 const googleCallback = async (access_token: any) => {
   try {
     load.value = true
+
     tokenService.createToken(access_token, formState.remember);
-    await storeAuth.getUser();
+    await accountService.createAccount(formState.remember)
+
     openNotificationWithIcon();
     router.push('/');
   } catch (error) {

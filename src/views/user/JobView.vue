@@ -8,10 +8,10 @@ import { vi } from 'date-fns/locale';
 import Loading from '../../components/Loading.vue';
 import { formatSalary } from '../../until/until';
 import ApplyJob from '../../components/user/modal/ApplyJob.vue';
-import { useAuthStore } from '../../stores/AuthStore';
 import { message } from 'ant-design-vue';
 import resumeService from '../../services/resume.service';
 import jobService from '../../services/job.service';
+import accountService from '../../constant/account.service';
 
 const route = useRoute()
 const load = ref<Boolean>(false)
@@ -19,8 +19,9 @@ const data = ref<IJob>()
 
 const open = ref<Boolean>(false)
 const router = useRouter()
-const storeAuth = useAuthStore()
 const loadButton = ref<Boolean>(true)
+const { account, storage } = accountService.getAccount();
+
 const getData = async () => {
     load.value = false
     const id = route.params.id as string
@@ -37,7 +38,7 @@ const getData = async () => {
 const urlFile = ref<string>('')
 
 const handleOk = async () => {
-    if (storeAuth.isAuth) {
+    if (account) {
         if (urlFile.value) {
             loadButton.value = false
             const dataCreate = {
@@ -93,9 +94,9 @@ onMounted(() => {
                         class="w-full bg-[#ed1b2f] rounded-md text-white font-semibold text-base py-2 mt-4 hover:bg-red-700">Ứng
                         tuyển</button>
                     <a-modal v-model:open="open" width="600px" title="Ứng tuyển JOB" @ok="handleOk"
-                        :okText="storeAuth.isAuth ? `Xác nhận` : `Đăng nhập ngay`" cancelText="Huỷ bỏ"
-                        :maskClosable="false" :loading="loadButton" :cancelButtonProps="{ style: { display: 'none' } }"
-                        :okButtonProps="{ style: { background: '#ed1b2f' }, disabled: storeAuth.isAuth ? urlFile === '' : false }">
+                        :okText="account ? `Xác nhận` : `Đăng nhập ngay`" cancelText="Huỷ bỏ" :maskClosable="false"
+                        :loading="loadButton" :cancelButtonProps="{ style: { display: 'none' } }"
+                        :okButtonProps="{ style: { background: '#ed1b2f' }, disabled: account ? urlFile === '' : false }">
                         <hr />
                         <ApplyJob :nameJob="data?.name" :nameCompany="data?.companyId?.name"
                             v-model:urlFile="urlFile" />

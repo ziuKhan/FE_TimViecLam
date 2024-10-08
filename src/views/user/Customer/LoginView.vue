@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue';
 import Loading from '../../../components/Loading.vue';
-import { useAuthStore } from '../../../stores/AuthStore';
 import { useRoute, useRouter } from 'vue-router';
 import { loginApi } from '../../../services/auth.service';
 import { notification } from 'ant-design-vue';
@@ -30,7 +29,6 @@ const openNotificationWithIcon = () => {
         description: 'Đăng nhập thành công.'
     })
 }
-const storeAuth = useAuthStore()
 const router = useRouter()
 const route = useRoute()
 
@@ -42,7 +40,6 @@ const onFinish = async (values: IFormState) => {
         if (response.data) {
             const { access_token } = response.data
             tokenService.createToken(access_token, formState.remember)
-            storeAuth.getUser()
             openNotificationWithIcon()
             router.push({ path: '/' })
             window.location.reload();

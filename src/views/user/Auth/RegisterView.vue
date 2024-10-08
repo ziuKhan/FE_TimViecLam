@@ -35,7 +35,6 @@ const onFinish = async (values: IFormState) => {
       router.push('/login')
 
       openNotificationWithIcon()
-
     }
   } catch (error) {
     console.error('Lỗi do try catch bắt:', error)

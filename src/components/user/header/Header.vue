@@ -8,6 +8,7 @@ import { useAuthStore } from '../../../stores/AuthStore';
 import { linkUploads } from '../../../constant/api';
 import notificationService from '../../../services/notification.service';
 import dayjs from 'dayjs';
+import accountService from '../../../constant/account.service';
 const isSticky = ref<boolean>(false)
 const collapsed = ref<boolean>(false)
 const open = ref<boolean>(false)
@@ -40,7 +41,7 @@ const handleNotification = async (_id: any, url: any) => {
     window.location.href = url
   }
 }
-
+const { account, storage } = accountService.getAccount();
 onMounted(() => {
   window.addEventListener('scroll', handleScroll)
 })
@@ -92,7 +93,7 @@ onUnmounted(() => {
       <div class="header__user">
 
         <RouterLink to="/customer/login" class="header__user_link link_distance">Nhà Tuyển Dụng</RouterLink>
-        <span v-if="storeAuth.isAuth" @click="openNotification = true"
+        <span v-if="account" @click="openNotification = true"
           class="header__user_link rounded-full bg-[#f3f3f3f6] p-[5px] relative cursor-pointer"><img
             src="../../../assets/image/icon/icons8_notification.svg" alt="" class="w-6 h-6">
           <span v-if="storeHeader.totalNotification > 0"
@@ -101,7 +102,7 @@ onUnmounted(() => {
           </span>
         </span>
         <a-modal v-model:open="openNotification" title="Thông báo" :cancelButtonProps="{ style: { display: 'none' } }"
-          :okButtonProps="{ style: { display: 'none' } }" width="550px">
+          :okButtonProps="{ style: { display: 'none' } }" width="550px" class="custom-modal">
           <div class="max-h-[400px] overflow-auto ">
             <template v-for="item in storeHeader.dataNotification" :key="item">
               <div @click="handleNotification(item?._id, item?.url)"
@@ -125,13 +126,15 @@ onUnmounted(() => {
           </div>
         </a-modal>
 
-        <RouterLink v-if="!storeAuth.isAuth" to="/login" class="header__user_link link_distance">Đăng Nhập/Đăng ký
+        <RouterLink v-if="!account" to="/login" class="header__user_link link_distance">Đăng
+          Nhập/Đăng ký
 
         </RouterLink>
         <span v-else to="/login" class="header__user_link link_distance header__nav_link link__user_name">
           <img class="w-9 h-9 object-contain mr-1 rounded-full border border-solid border-gray-300"
-            :src="linkUploads('user/' + storeAuth.user?.avatar)" alt="" />
-          {{ storeAuth.user?.name }}
+            :src="linkUploads('user/' + account.avatar)" alt="" />
+          {{ console.log(account) }}
+          {{ account.name }}
           <div class="icon-wrapper">
             <img class="icon-default" src="../../../assets/image/icon/icons8_chevron_down_1.svg" alt="" />
             <img class="icon-hover" src="../../../assets/image/icon/icons8_chevron_down_white.svg" alt="" />
@@ -145,8 +148,7 @@ onUnmounted(() => {
               <ManagerAccount />
             </a-modal>
 
-            <RouterLink v-if="typeof storeAuth.user?.role === 'object' && storeAuth.user.role.name !== 'NORMAL_USER'"
-              class="header__sub_list" to="/admin"> quản
+            <RouterLink v-if="account?.role?.name !== 'NORMAL_USER'" class="header__sub_list" to="/admin"> quản
               trị</RouterLink>
             <span @click="handleLogout()" class="header__sub_list">Đăng xuất</span>
           </div>
@@ -162,16 +164,17 @@ onUnmounted(() => {
   </header>
 </template>
 <style>
-.ant-modal-body,
-.ant-modal-content {
+.custom-modal .ant-modal-body,
+.custom-modal .ant-modal-content {
   padding: 2px !important;
   /* padding-bottom: 2px !important; */
 }
 
-.ant-modal-header {
+.custom-modal .ant-modal-header {
   padding: 20px 20px 0 20px !important;
 }
 </style>
+
 <style scoped lang="scss">
 /* .activeLink {
   color: #ffffff !important;
