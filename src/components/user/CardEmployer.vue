@@ -1,7 +1,7 @@
 <template>
   <RouterLink :to="`/company/${id}`" class="card__employer">
     <div class="card__first">
-      <div class="first__logoBrand"><img :src="linkUploads('company/' + logo)" alt="" /></div>
+      <div class="first__logoBrand"> <img loading="lazy" :src="linkUploads('company/' + logo)" alt="" /></div>
     </div>
     <div class="card__second">
       <div class="card__name">{{ name }}</div>
@@ -10,7 +10,7 @@
       <div class="card__address">{{ address }}</div>
       <div class="card__job">
         {{ jobs }} việc làm
-        <img src="../../assets/image/icon/icons8_chevron_right.svg" alt="" />
+        <img loading="lazy" src="../../assets/image/icon/icons8_chevron_right.svg" alt="" />
       </div>
     </div>
   </RouterLink>

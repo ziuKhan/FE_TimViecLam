@@ -1,24 +1,3 @@
-<template>
-    <a-table :columns="columns" :data-source="dataResume" :loading="load" :pagination=dataMeta
-        @change="handleTableChange">
-        <template #bodyCell="{ column, text }">
-            <template v-if="column.dataIndex === 'url'">
-                <a class="text-blue-600" target="_blank" :href="linkUploads('cv/' + text)">Chi tiết</a>
-            </template>
-            <template v-else-if="column.dataIndex === 'createdAt'">
-                {{ dayjs(text).format('DD/MM/YYYY [lúc] HH:mm:ss') }}
-            </template>
-            <template v-else-if="column.title === 'STT'">
-                {{ dataResume.indexOf(text) + 1 }}
-            </template>
-            <template v-else-if="column.dataIndex === 'status'">
-                <span class="text-red-600 font-medium">{{ text }}</span>
-            </template>
-        </template>
-    </a-table>
-</template>
-
-
 <script lang="ts" setup>
 import { onMounted, ref, render, watch, watchEffect } from 'vue';
 import type { IPaginate, IResume } from '../../../types/backend';
@@ -86,6 +65,43 @@ const columns = [
         dataIndex: 'url',
     },
 ];
-
+const renderColorMethod = (method: string) => {
+    switch (method) {
+        case 'PENDING':
+            return 'orange'; // Màu cam thường biểu thị sự chờ đợi
+        case 'REVIEWING':
+            return 'blue'; // Màu xanh biển thường biểu thị trạng thái đang xử lý hoặc xem xét
+        case 'APPROVED':
+            return 'green'; // Màu xanh lá cây biểu thị sự chấp nhận/thành công
+        case 'REJECTED':
+            return 'red'; // Màu đỏ thường biểu thị sự từ chối hoặc thất bại
+        default:
+            return 'gray'; // Màu xám cho các trạng thái không xác định
+    }
+}
 
 </script>
+<template>
+    <a-table :columns="columns" :data-source="dataResume" :loading="load" :pagination=dataMeta
+        @change="handleTableChange">
+        <template #bodyCell="{ column, text }">
+            <template v-if="column.dataIndex === 'url'">
+                <a class="text-blue-600" target="_blank" :href="linkUploads('cv/' + text)">Chi tiết</a>
+            </template>
+            <template v-else-if="column.dataIndex === 'createdAt'">
+                {{ dayjs(text).format('DD/MM/YYYY [lúc] HH:mm:ss') }}
+            </template>
+            <template v-else-if="column.title === 'STT'">
+                {{ dataResume.indexOf(text) + 1 }}
+            </template>
+            <template v-else-if="column.dataIndex === 'status'">
+                <span>
+                    <a-tag :color="renderColorMethod(text)" class="font-medium">
+                        {{ text.toUpperCase() }}
+                    </a-tag>
+                </span>
+            </template>
+
+        </template>
+    </a-table>
+</template>

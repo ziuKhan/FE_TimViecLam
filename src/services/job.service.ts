@@ -33,7 +33,7 @@ class Job {
 
   updateApi = async (data: any, id: string): Promise<any> => {
     try {
-      debugger
+       
       const response = await apiClient.patch(moduleName + '/' + id, data)
       return response.data
     } catch (err: any) {

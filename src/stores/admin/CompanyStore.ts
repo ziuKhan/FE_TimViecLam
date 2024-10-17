@@ -97,7 +97,7 @@ const useCompanyStore = defineStore('company', () => {
   const updateAndAdd = async () => {
     loading.value = true
     try {
-      debugger
+       
       if (form._id) {
         const res = await updateApi(form, form._id)
         if (res) message.success('Cập nhật thành công!')

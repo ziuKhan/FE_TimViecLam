@@ -26,7 +26,7 @@ const handleOk = () => {
 
 
 <template>
-    <a-modal {{ debugger }} :title="store.form._id ? 'Cập nhật Role' : 'Tạo mới Role'"
+    <a-modal {{ }} :title="store.form._id ? 'Cập nhật Role' : 'Tạo mới Role'"
         :okText="store.form._id ? 'Cập nhật' : 'Thêm mới'" :width="850" v-model:open="store.openModal"
         :maskClosable="false" :cancelButtonProps="{ style: { display: 'none' } }" @ok="handleOk"
         :confirm-loading="store.loading">

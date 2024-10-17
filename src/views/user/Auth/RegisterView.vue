@@ -57,12 +57,13 @@ onMounted(() => {
 <template>
   <div class="container__login">
     <div class="container__login_title">
-      Chào mừng bạn đến với <img src="../../../assets/image/icon/logo-itviec-black.png" alt="" />
+      Chào mừng bạn đến với <img loading="lazy" src="../../../assets/image/icon/logo-itviec-black.png" alt="" />
     </div>
 
     <div class="leftSide w-full lg:w-6/12 lg:pr-32">
       <div class="leftSide__title">Đăng ký tài khoản</div>
-      <a-button danger class="login__btn_google"><img src="../../../assets/image/icon/icons8_google.svg" alt="" /> Đăng
+      <a-button danger class="login__btn_google"> <img loading="lazy" src="../../../assets/image/icon/icons8_google.svg"
+          alt="" /> Đăng
         ký với
         Google</a-button>
 
@@ -128,7 +129,7 @@ onMounted(() => {
     </div>
 
     <div class="rightSide hidden lg:flex">
-      <img src="../../../assets/image/icon/robby-login.png" alt="" />
+      <img loading="lazy" src="../../../assets/image/icon/robby-login.png" alt="" />
     </div>
   </div>
 </template>

@@ -3,6 +3,7 @@ import { ref, reactive, watch } from 'vue'
 import { message } from 'ant-design-vue'
 import resumeService from '../../services/resume.service'
 import type { IPaginate, IResume } from '../../types/backend'
+import notificationService from '../../services/notification.service'
 
 const useResumeStore = defineStore('resume', () => {
   const { getApi, createApi, updateApi, deleteApi, paginateApi } = resumeService
@@ -26,6 +27,7 @@ const useResumeStore = defineStore('resume', () => {
     email: '',
     userId: '',
     url: '',
+    description: '',
     status: '',
     companyId: '',
     jobId: ''
@@ -56,12 +58,20 @@ const useResumeStore = defineStore('resume', () => {
   const updateAndAdd = async () => {
     loading.value = true
     try {
-      debugger
+       
       if (form._id) {
-        const res = await updateApi(
+        debugger
+      const [res, resNotification] = await Promise.all([updateApi(
           { ...form, companyId: form.companyId?._id, jobId: form.jobId?._id },
           form._id
-        )
+        ), notificationService.createByUserApi({
+          title: 'Thông báo',
+          message: `Hồ sơ xin việc của bạn đã cập nhật trang thái ${form.status}`,
+          type: 'RESUME',
+          userId: form.userId,
+          isRead: false,
+          url: '/admin/resumes'
+        }) ]) 
         if (res) message.success('Cập nhật thành công!')
       } else {
         const res = await createApi(form)

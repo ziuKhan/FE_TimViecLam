@@ -61,11 +61,12 @@ onMounted(() => {
         </a-breadcrumb>
         <div class="p-6 bg-white min-h-[360px] rounded-[10px]">
             <div class="flex justify-between">
-                <a-input-search placeholder="Vui lòng nhập thông tin cần tìm kiếm" enter-button="Tìm kiếm"
+                <a-input-search v-permission="'GET /api/v1/subscribers'"
+                    placeholder="Vui lòng nhập thông tin cần tìm kiếm" enter-button="Tìm kiếm"
                     v-model:value="store.valueSearch" @search="store.getData(store.valueSearch)" class="w-2/3" />
 
                 <button class="bg-[#21aa55] hover:bg-green-500 text-white rounded-[7px] px-5 font-medium "
-                    @click="store.handleOpenModal()">Thêm
+                    @click="store.handleOpenModal()" v-permission="'POST /api/v1/subscribers'">Thêm
                     mới</button>
             </div>
 
@@ -89,14 +90,16 @@ onMounted(() => {
                         <template v-else-if="column.dataIndex === '_id'">
                             <button type="button"
                                 class="mr-2  bg-[#1669dcec] hover:bg-[#498ff1] rounded-[5px] px-[10px] py-1 h-8 "
-                                @click="store.getByID(text)">
-                                <img class=" h-5/6" src="../../../assets/image/icon/icons8_settings.svg" alt="">
+                                @click="store.getByID(text)" v-permission="'PATCH /api/v1/subscribers/:id'">
+                                <img loading="lazy" class=" h-5/6" src="../../../assets/image/icon/icons8_settings.svg"
+                                    alt="">
                             </button>
                             <a-popconfirm title="Bạn có chắc muốn xoá?" ok-text="Có" cancel-text="Không"
-                                :loading="store.loading" @confirm="store.deleteByID(text)" @cancel="">
+                                :loading="store.loading" @confirm="store.deleteByID(text)" @cancel=""
+                                v-permission="'DELETE /api/v1/subscribers/:id'">
                                 <button type="button"
                                     class=" bg-red-500 hover:bg-red-400 rounded-[5px] px-[10px] ] py-1 h-8 ">
-                                    <img class="h-5/6" src="../../../assets/image/icon/icons8_remove.svg"
+                                    <img loading="lazy" class="h-5/6" src="../../../assets/image/icon/icons8_remove.svg"
                                         alt=""></button>
                             </a-popconfirm>
                         </template>

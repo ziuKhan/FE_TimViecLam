@@ -79,10 +79,9 @@ const renderColorMethod = (method: string) => {
             <a-breadcrumb-item>Quản lý hồ sơ xin việc</a-breadcrumb-item>
         </a-breadcrumb>
         <div class="p-6 bg-white min-h-[360px] rounded-[10px]">
-            <div class="flex justify-between">
+            <div class="flex justify-between" v-permission="'GET /api/v1/resumes'">
                 <a-input-search placeholder="Vui lòng nhập thông tin cần tìm kiếm" enter-button="Tìm kiếm"
                     v-model:value="store.valueSearch" @search="store.getData(store.valueSearch)" class="w-1/3" />
-
                 <div>
                     <span class="mr-1 text-base">Hiển thị theo trạng thái: </span>
                     <a-select v-model:value="store.isStatus" class="w-[200px]">
@@ -118,18 +117,21 @@ const renderColorMethod = (method: string) => {
 
                         <template v-else-if="column.dataIndex === '_id'">
                             <div class="flex items-center">
-                                <a-button class="mr-2" @click="store.getByID(text, true)">Chi tiêt</a-button>
-                                <button type="button"
+                                <a-button v-permission="'GET /api/v1/resumes/:id'" class="mr-2"
+                                    @click="store.getByID(text, true)">Chi tiêt</a-button>
+                                <button type="button" v-permission="'PATCH /api/v1/resumes/:id'"
                                     class="mr-2  bg-[#1669dcec] hover:bg-[#498ff1] rounded-[5px] px-[10px] py-1 h-8 "
                                     @click="store.getByID(text)">
-                                    <img class=" h-5/6" src="../../../assets/image/icon/icons8_settings.svg" alt="">
+                                    <img loading="lazy" class=" h-5/6"
+                                        src="../../../assets/image/icon/icons8_settings.svg" alt="">
                                 </button>
                                 <a-popconfirm title="Bạn có chắc muốn xoá?" ok-text="Có" cancel-text="Không"
-                                    :loading="store.loading" @confirm="store.deleteByID(text)" @cancel="">
+                                    :loading="store.loading" @confirm="store.deleteByID(text)" @cancel=""
+                                    v-permission="'DELETE /api/v1/resumes/:id'">
                                     <button type="button"
                                         class=" bg-red-500 hover:bg-red-400 rounded-[5px] px-[10px] ] py-1 h-8 ">
-                                        <img class="h-5/6" src="../../../assets/image/icon/icons8_remove.svg"
-                                            alt=""></button>
+                                        <img loading="lazy" class="h-5/6"
+                                            src="../../../assets/image/icon/icons8_remove.svg" alt=""></button>
                                 </a-popconfirm>
                             </div>
 

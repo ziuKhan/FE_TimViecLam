@@ -40,7 +40,7 @@ watchEffect(() => {
     <header class="theme_blackred w-full min-h-56 py-8">
       <div class="w-11/12 mx-auto flex gap-x-6">
         <div class="min-w-32  max-h-32 max-w-32 lg:min-w-40 lg:max-w-40 lg:max-h-40  bg-white rounded-md p-2">
-          <img class="h-full object-contain" :src="linkUploads('company/' + dataCompany.logo)" alt="" />
+          <img loading="lazy" class="h-full object-contain" :src="linkUploads('company/' + dataCompany.logo)" alt="" />
         </div>
         <div class="text-white w-7/12">
           <div class="text-3xl font-bold mb-3">
@@ -48,12 +48,12 @@ watchEffect(() => {
           </div>
           <div class="text-sm font-normal flex gap-y-3 lg:gap-0  lg:flex-nowrap flex-wrap">
             <div class="mr-5 flex gap-x-2 w-full lg:w-auto">
-              <img src="../../assets/image/icon/icons8_address.svg" alt="" />
+              <img loading="lazy" src="../../assets/image/icon/icons8_address.svg" alt="" />
               {{ dataCompany.address }}
 
             </div>
             <RouterLink to="#job" class="flex gap-x-2 hover:underline">
-              <img src="../../assets/image/icon/icons8_suitcase.svg" alt="" />
+              <img loading="lazy" src="../../assets/image/icon/icons8_suitcase.svg" alt="" />
               {{ dataJobs.length }} Việc làm đang tuyển dụng
             </RouterLink>
           </div>

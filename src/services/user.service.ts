@@ -32,7 +32,7 @@ class User {
 
   createApi = async (data: any): Promise<any> => {
     try {
-      debugger
+       
 
       const response = await apiClient.post(moduleName, data)
       return response.data
@@ -43,7 +43,7 @@ class User {
 
   updateApi = async (data: any, id: string): Promise<any> => {
     try {
-      debugger
+       
 
       const response = await apiClient.patch(moduleName + '/' + id, data)
       return response.data

@@ -9,16 +9,23 @@ import accountService from '../../../constant/account.service';
 
 defineProps({
   nameJob: String,
-  nameCompany: String
+  nameCompany: String,
+  description: String
 })
 
 
 const fileList = ref([]);
 const urlFile = defineModel('urlFile', { required: true })
-
+const description = defineModel('description', { required: true })
 watch(fileList, () => {
   if (fileList.value.length === 0) {
     urlFile.value = '';
+  }
+});
+
+watch(description, () => {
+  if (description.value === '') {
+    description.value = '';
   }
 });
 
@@ -37,6 +44,7 @@ const handleUpload = async (options: UploadRequestOption) => {
     onError && onError(err);
   }
 };
+
 const { account, storage } = accountService.getAccount();
 
 </script>
@@ -65,6 +73,10 @@ const { account, storage } = accountService.getAccount();
         </a-upload>
       </a-form-item>
 
+
+      <a-form-item label="Lời nhắn">
+        <a-textarea v-model:value="description" placeholder="Vui lòng nhập lời nhắn" allow-clear />
+      </a-form-item>
 
 
 

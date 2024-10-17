@@ -233,8 +233,8 @@ const handleUpload = async (options: UploadRequestOption) => {
 
                     <div class="w-full bg-[#431D20] rounded-xl h-[100px] p-6 flex mb-[16px]">
                         <div class="w-[33px] h-full">
-                            <img class=" h-full object-contain" src="../../../assets/image/icon/icons8_phone.svg"
-                                alt="">
+                            <img loading="lazy" class=" h-full object-contain"
+                                src="../../../assets/image/icon/icons8_phone.svg" alt="">
                         </div>
                         <div class="text-white ml-5 flex flex-wrap ">
                             <div class="w-full text-base">Hotline Hồ Chí Minh</div>
@@ -244,8 +244,8 @@ const handleUpload = async (options: UploadRequestOption) => {
 
                     <div class="w-full bg-[#431D20] rounded-xl h-[100px] p-6 flex mb-[16px]">
                         <div class="w-[33px] h-full">
-                            <img class=" h-full object-contain" src="../../../assets/image/icon/icons8_phone.svg"
-                                alt="">
+                            <img loading="lazy" class=" h-full object-contain"
+                                src="../../../assets/image/icon/icons8_phone.svg" alt="">
                         </div>
                         <div class="text-white ml-5 flex flex-wrap ">
                             <div class="w-full text-base">Hotline Hà Nội </div>
@@ -256,8 +256,8 @@ const handleUpload = async (options: UploadRequestOption) => {
 
                     <div class="w-full bg-[#431D20] rounded-xl h-[100px] p-6 flex mb-[16px]">
                         <div class="w-[33px] h-full">
-                            <img class=" h-full object-contain" src="../../../assets/image/icon/icons8_time_red.svg"
-                                alt="">
+                            <img loading="lazy" class=" h-full object-contain"
+                                src="../../../assets/image/icon/icons8_time_red.svg" alt="">
                         </div>
                         <div class="text-white ml-5 flex flex-wrap ">
                             <div class="w-full text-base">Thời gian làm việc</div>

@@ -45,7 +45,7 @@ const usePermissionStore = defineStore('permission', () => {
   const getData = async (search?: string) => {
     load.value = true
     try {
-      const params = `?current=${dataMeta.value?.current}&pageSize=${dataMeta.value?.pageSize}&sort=-createdAt${search ? '&name=/' + search + '/' : ''}`
+      const params = `?current=${dataMeta.value?.current}&pageSize=${dataMeta.value?.pageSize}&sort=-createdAt${search ? '&module=/' + search + '/' : ''}`
       const res = await paginatePermissionApi(params)
       if (res) {
         data.value = res.result

@@ -66,7 +66,7 @@ onMounted(() => {
         </a-breadcrumb>
         <div class="p-6 bg-white min-h-[360px] rounded-[10px]">
             <div class="flex justify-between">
-                <div class="w-3/4 flex">
+                <div class="w-3/4 flex" v-permission="'GET /api/v1/companies'">
                     <a-input-search placeholder="Vui lòng nhập thông tin cần tìm kiếm" enter-button="Tìm kiếm"
                         v-model:value="store.valueSearch" @search="store.getData(store.valueSearch)" />
                     <div class="ml-5 flex items-center">
@@ -75,9 +75,8 @@ onMounted(() => {
                     </div>
                 </div>
 
-                <button class="bg-[#21aa55] hover:bg-green-500 text-white rounded-[7px] px-5 font-medium "
-                    @click="store.handleOpenModal()">Thêm
-                    mới</button>
+                <button class="bg-[#21aa55] hover:bg-green-500 text-white rounded-[7px] px-5 font-medium h-[32px]"
+                    @click="store.handleOpenModal()" v-permission="'POST /api/v1/companies'">Thêm mới</button>
             </div>
 
             <div class="mt-3 border rounded-[10px]">
@@ -92,20 +91,23 @@ onMounted(() => {
                         </template>
 
                         <template v-else-if="column.dataIndex === 'logo'">
-                            <img class="h-12 w-12 object-contain" :src="linkUploads('company/' + text)" alt="#">
+                            <img loading="lazy" class="h-12 w-12 object-contain" :src="linkUploads('company/' + text)"
+                                alt="#">
                         </template>
 
                         <template v-else-if="column.dataIndex === '_id'">
                             <button type="button"
                                 class="mr-2  bg-[#1669dcec] hover:bg-[#498ff1] rounded-[5px] px-[10px] py-1 h-8 "
-                                @click="store.getByID(text)">
-                                <img class=" h-5/6" src="../../../assets/image/icon/icons8_settings.svg" alt="">
+                                @click="store.getByID(text)" v-permission="'PATCH /api/v1/companies/:id'">
+                                <img loading="lazy" class=" h-5/6" src="../../../assets/image/icon/icons8_settings.svg"
+                                    alt="">
                             </button>
                             <a-popconfirm title="Bạn có chắc muốn xoá?" ok-text="Có" cancel-text="Không"
                                 :loading="store.loading" @confirm="store.deleteByID(text)" @cancel="">
                                 <button type="button"
-                                    class=" bg-red-500 hover:bg-red-400 rounded-[5px] px-[10px] ] py-1 h-8 ">
-                                    <img class="h-5/6" src="../../../assets/image/icon/icons8_remove.svg"
+                                    class=" bg-red-500 hover:bg-red-400 rounded-[5px] px-[10px] ] py-1 h-8 "
+                                    v-permission="'DELETE /api/v1/companies/:id'">
+                                    <img loading="lazy" class="h-5/6" src="../../../assets/image/icon/icons8_remove.svg"
                                         alt=""></button>
                             </a-popconfirm>
                         </template>

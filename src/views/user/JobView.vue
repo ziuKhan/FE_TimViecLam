@@ -12,21 +12,22 @@ import { message } from 'ant-design-vue';
 import resumeService from '../../services/resume.service';
 import jobService from '../../services/job.service';
 import accountService from '../../constant/account.service';
+import CardJob from '../../components/user/CardJob.vue';
 
 const route = useRoute()
 const load = ref<Boolean>(false)
 const data = ref<IJob>()
+const dataJob = ref<IJob[]>([])
 
 const open = ref<Boolean>(false)
 const router = useRouter()
 const loadButton = ref<Boolean>(true)
 const { account, storage } = accountService.getAccount();
-
+const pageSize = ref(9)
 const getData = async () => {
     load.value = false
     const id = route.params.id as string
     try {
-
         const result = await jobService.getApi(id)
         result.data.startDate = formatDistanceToNow(parseISO(result.data.startDate), { addSuffix: true, locale: vi })
         data.value = result.data
@@ -35,17 +36,30 @@ const getData = async () => {
         console.error('Error fetching data:', error)
     }
 }
+const getJob = async () => {
+    try {
+        const result = await jobService.paginateApi(`?current=1&pageSize=${pageSize.value}&populate=companyId&sort=-createdAt&isActive=true&level=${data.value?.level}`)
+        dataJob.value = result.result
+    } catch (error) {
+        console.error('Error fetching data:', error)
+    }
+}
+
 const urlFile = ref<string>('')
+const description = ref<string>('')
 
 const handleOk = async () => {
     if (account) {
         if (urlFile.value) {
             loadButton.value = false
+
             const dataCreate = {
                 url: urlFile.value,
+                description: description.value,
                 jobId: data.value?._id,
                 companyId: data.value?.companyId?._id
             }
+
             try {
                 const res = await resumeService.createApi(dataCreate)
                 if (res) {
@@ -67,8 +81,14 @@ const handleOk = async () => {
 };
 
 
-onMounted(() => {
-    getData()
+const onChangePageSize = () => {
+    pageSize.value += 6;
+    getJob()
+}
+
+onMounted(async () => {
+    await getData()
+    getJob()
 })
 
 </script>
@@ -77,9 +97,9 @@ onMounted(() => {
 <template>
     <Loading v-if="!load"></Loading>
 
-    <div v-else class="theme_gray_no_border relative">
+    <div v-else class="theme_gray_no_border relative py-10">
 
-        <div class="w-11/12 mx-auto flex gap-y-4 lg:gap-0 py-8 flex-wrap lg:flex-nowrap">
+        <div class="w-11/12 mx-auto flex gap-y-4 lg:gap-0  flex-wrap lg:flex-nowrap">
             <div class="w-full lg:w-8/12 lg:mr-5">
                 <div class="bg-white px-5 py-3 rounded-xl rounded-b-none sticky top-[65px] z-10 shadow-custom">
                     <h1 class="font-bold text-[20px] lg:text-[25px] mt-4">{{ data?.name }} - <span
@@ -87,7 +107,7 @@ onMounted(() => {
                     </h1>
                     <p class="text-base lg:text-lg font-light">HCL Vietnam Company Limited </p>
                     <div class="text-[#0AB305] flex gap-x-2 items-center font-bold text-base">
-                        <img class="max-w-6 " src="../../assets/image/icon/icons8_us_dollar.svg" alt="">
+                        <img loading="lazy" class="max-w-6 " src="../../assets/image/icon/icons8_us_dollar.svg" alt="">
                         {{ formatSalary(data?.salary) }}
                     </div>
                     <button @click="open = true"
@@ -98,21 +118,21 @@ onMounted(() => {
                         :loading="loadButton" :cancelButtonProps="{ style: { display: 'none' } }"
                         :okButtonProps="{ style: { background: '#ed1b2f' }, disabled: account ? urlFile === '' : false }">
                         <hr />
-                        <ApplyJob :nameJob="data?.name" :nameCompany="data?.companyId?.name"
-                            v-model:urlFile="urlFile" />
+                        <ApplyJob :nameJob="data?.name" :nameCompany="data?.companyId?.name" v-model:urlFile="urlFile"
+                            v-model:description="description" />
                     </a-modal>
 
                 </div>
 
                 <div
                     class="bg-white px-5 py-3 rounded-xl rounded-t-none drop-shadow-lg shadow-gray-500 text-sm lg:text-base font-normal pb-10">
-                    <div class="flex gap-1 mb-2"> <img class="max-w-5"
+                    <div class="flex gap-1 mb-2"> <img loading="lazy" class="max-w-5"
                             src="../../assets/image/icon/icons8_address_2.svg" alt=""> {{ data?.location }}
                     </div>
-                    <div class="flex gap-1 mb-2"> <img class="max-w-5" src="../../assets/image/icon/icons8_office.svg"
-                            alt="">Tại văn phòng</div>
-                    <div class="flex gap-1 mb-2"> <img class="max-w-5" src="../../assets/image/icon/icons8_time.svg"
-                            alt="">{{ data?.startDate }}</div>
+                    <div class="flex gap-1 mb-2"> <img loading="lazy" class="max-w-5"
+                            src="../../assets/image/icon/icons8_office.svg" alt="">Tại văn phòng</div>
+                    <div class="flex gap-1 mb-2"> <img loading="lazy" class="max-w-5"
+                            src="../../assets/image/icon/icons8_time.svg" alt="">{{ data?.startDate }}</div>
                     <div class="flex flex-wrap gap-2 lg:text-base text-sm font-light mt-3">Kỹ năng:
                         <template v-for="skill in data?.skills" :key="data">
                             <RouterLink to=""
@@ -136,9 +156,9 @@ onMounted(() => {
             <div class="w-full lg:w-4/12 ">
                 <div class="bg-white px-5 py-3 rounded-xl  drop-shadow-lg shadow-gray-500 sticky top-[65px] z-10">
                     <div class="flex gap-x-3">
-                        <div class="max-w-32 h-32 p-2 rounded-md border border-solid border-gray-300"><img
-                                class="h-full object-contain" :src="linkUploads('company/' + data?.companyId?.logo)"
-                                alt="">
+                        <div class="max-w-32 h-32 p-2 rounded-md border border-solid border-gray-300"> <img
+                                loading="lazy" class="h-full object-contain"
+                                :src="linkUploads('company/' + data?.companyId?.logo)" alt="">
                         </div>
                         <div>
                             <h2 class="text-lg font-bold">{{ data?.companyId?.name }}</h2>
@@ -150,6 +170,25 @@ onMounted(() => {
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="w-11/12 mx-auto mt-8  p-20px-5 py-3 flex justify-center flex-wrap ">
+            <h2 class="text-left border-b-2 border-red-800 text-2xl font-semibold w-full">Công việc tương tự</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full mx-auto">
+                <template v-for="data in dataJob" :key="data._id">
+                    <CardJob :_id="data._id" :name="data.name" :address="data.location" :logo="data.companyId?.logo"
+                        :salary="data.salary?.toString()" :nameCompany="data.companyId?.name"
+                        :company_id="data.companyId?._id">
+                    </CardJob>
+                </template>
+            </div>
+            <button @click="onChangePageSize()"
+                class="w-2/5 bg-white mt-4  rounded-lg px-5 py-2 shadow-lg hover:border-red-500 border-2 hover:bg-red-100 hover:text-red-600">Xem
+                thêm
+                công
+                việc</button>
+
+
         </div>
     </div>
 </template>

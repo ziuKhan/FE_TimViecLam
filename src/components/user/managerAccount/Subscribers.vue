@@ -30,7 +30,6 @@ const formModel = ref({
 
 
 const getSkills = async () => {
-    debugger
     const res = await subscriberService.getByEmailApi(account?.email);
     if (res.data) {
         formModel.value.skills = res.data.skills

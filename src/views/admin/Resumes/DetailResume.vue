@@ -42,6 +42,9 @@
                         </a-select-option>
                     </a-select>
                 </a-col>
+                <a-col :span="24">
+                    Thư giới thiệu: {{ store.form.description }}
+                </a-col>
                 <a-col :span="24" class="text-base font-bold mt-5">
                     THÔNG TIN CÔNG TY
                 </a-col>

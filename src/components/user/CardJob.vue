@@ -20,7 +20,7 @@ defineProps({
     <div
         class="w-full rounded-md bg-white h-28 border border-solid border-gray-300 hover:bg-zinc-100 hover:border-zinc-300 flex gap-2 p-3 group">
         <div class="min-w-20 max-w-20 h-20 bg-white p-2">
-            <img class="w-full h-full object-contain" :src="linkUploads('company/' + logo)" alt="">
+            <img loading="lazy" class="w-full h-full object-contain" :src="linkUploads('company/' + logo)" alt="">
         </div>
 
         <div class="w-full flex flex-col overflow-hidden">

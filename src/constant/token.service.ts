@@ -19,12 +19,11 @@ class TokenService {
   }
 
   updateToken(newToken: string) {
-    const { token, storage } = this.getToken()
-
+    const { storage } = this.getToken()
     if (storage === 'local') {
-      return localStorage.setItem('access_token', newToken)
+      localStorage.setItem('access_token', newToken)
     } else if (storage === 'session') {
-      return sessionStorage.setItem('access_token', newToken)
+      sessionStorage.setItem('access_token', newToken)
     }
   }
 

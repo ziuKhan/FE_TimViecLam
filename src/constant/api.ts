@@ -2,6 +2,7 @@ import axios from 'axios'
 import { refreshApi } from '../services/auth.service' // Import hàm refresh
 import TokenService from './token.service'
 import accountService from './account.service'
+import { useAuthStore } from '../stores/AuthStore'
 
 export const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL + '/api/v1',
@@ -9,56 +10,45 @@ export const apiClient = axios.create({
     'Content-Type': 'application/json'
   },
   withCredentials: true,
-  timeout: 1000 * 60 * 30 * 3
 })
 
-// Interceptor request để thêm header Authorization
+// Add a request interceptor
 apiClient.interceptors.request.use(
   (config) => {
-    const token = TokenService.getToken()?.token
-    if (token && token !== 'undefined') {
-      config.headers['Authorization'] = `Bearer ${token}`
+    const token = TokenService.getToken().token;
+    if (token) {
+      config.headers['Authorization'] = 'Bearer ' + token;
     }
-    return config
+    return config;
   },
   (error) => {
-    return Promise.reject(error)
+    return Promise.reject(error);
   }
-)
+);
 
+// Add a response interceptor
 apiClient.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    return response;
+  },
   async (error) => {
-    const originalConfig = error.config
-    // Nếu lỗi là 401 (Unauthorized) và chưa thực hiện refresh
-    if (error.response?.status === 401 && !originalConfig._retry) {
-      originalConfig._retry = true
-
+    
+    const originalRequest = error.config;
+    if (error.response.status === 401 && !originalRequest._retry) {
+      
+      const store = useAuthStore();
+      originalRequest._retry = true;
       try {
-        debugger
-        const res = await refreshApi()
-        const { access_token } = res.data // Lấy accessToken từ response
-
-        // Lưu token mới vào local storage
-        TokenService.updateToken(access_token)
-        accountService.updateAccount()
-
-        // Thêm token mới vào header Authorization
-        originalConfig.headers['Authorization'] = `Bearer ${access_token}`
-
-        // Thực hiện lại request ban đầu
-        return apiClient(originalConfig)
-      } catch (refreshError) {
-        // Xu lys khi token loi
-        TokenService.removeToken()
-        accountService.removeAccount()
-
-        return Promise.reject(refreshError)
+        const access_token = await store.refreshToken();
+        apiClient.defaults.headers.common['Authorization'] = 'Bearer ' + access_token;
+        return apiClient(originalRequest);
+      } catch (_error) {
+        store.logout();
+        return Promise.reject(_error);
       }
     }
-
-    return Promise.reject(error)
+    return Promise.reject(error);
   }
-)
+);
 
 export const linkUploads = (id: string) => `${import.meta.env.VITE_API_URL}/images/${id}`

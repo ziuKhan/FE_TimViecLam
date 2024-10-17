@@ -29,6 +29,14 @@ class Notification {
       handleApiError(err)
     }
   }
+  createByUserApi = async (data: any): Promise<any> => {
+    try {
+      const response = await apiClient.post(moduleName + '/user', data)
+      return response.data
+    } catch (err: any) {
+      handleApiError(err)
+    }
+  }
 
   updateApi = async (data: any, id: string): Promise<any> => {
     try {

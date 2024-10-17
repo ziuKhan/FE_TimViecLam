@@ -59,7 +59,7 @@ onUnmounted(() => {
   <header class="header theme_blackred">
     <div class="header__logo">
       <RouterLink to="/">
-        <img class="logo_itviec" src="../../../assets/image/icon/logo-itviec.png " alt="#" :style="{
+        <img loading="lazy" class="logo_itviec" src="../../../assets/image/icon/logo-itviec.png " alt="#" :style="{
           width: collapsed ? '80px' : '108px',
           height: collapsed ? '30px' : '40px'
         }" />
@@ -70,8 +70,10 @@ onUnmounted(() => {
         <RouterLink to="/category" class="header__nav_link">
           Việc Làm IT
           <div class="icon-wrapper">
-            <img class="icon-default" src="../../../assets/image/icon/icons8_chevron_down_1.svg" alt="" />
-            <img class="icon-hover" src="../../../assets/image/icon/icons8_chevron_down_white.svg" alt="" />
+            <img loading="lazy" class="icon-default" src="../../../assets/image/icon/icons8_chevron_down_1.svg"
+              alt="" />
+            <img loading="lazy" class="icon-hover" src="../../../assets/image/icon/icons8_chevron_down_white.svg"
+              alt="" />
           </div>
 
           <div class="header__sub">
@@ -84,8 +86,10 @@ onUnmounted(() => {
         <RouterLink to="adax" class="header__nav_link">
           Top Công ty IT
           <div class="icon-wrapper">
-            <img class="icon-default" src="../../../assets/image/icon/icons8_chevron_down_1.svg" alt="" />
-            <img class="icon-hover" src="../../../assets/image/icon/icons8_chevron_down_white.svg" alt="" />
+            <img loading="lazy" class="icon-default" src="../../../assets/image/icon/icons8_chevron_down_1.svg"
+              alt="" />
+            <img loading="lazy" class="icon-hover" src="../../../assets/image/icon/icons8_chevron_down_white.svg"
+              alt="" />
           </div>
         </RouterLink>
         <RouterLink to="adax" class="header__nav_link"> Blog </RouterLink>
@@ -94,7 +98,7 @@ onUnmounted(() => {
 
         <RouterLink to="/customer/login" class="header__user_link link_distance">Nhà Tuyển Dụng</RouterLink>
         <span v-if="account" @click="openNotification = true"
-          class="header__user_link rounded-full bg-[#f3f3f3f6] p-[5px] relative cursor-pointer"><img
+          class="header__user_link rounded-full bg-[#f3f3f3f6] p-[5px] relative cursor-pointer"> <img loading="lazy"
             src="../../../assets/image/icon/icons8_notification.svg" alt="" class="w-6 h-6">
           <span v-if="storeHeader.totalNotification > 0"
             class="absolute -top-2  left-5 w-5 h-5 text-[14px] font-medium rounded-full bg-[#c82222] text-white text-xs text-center">
@@ -108,7 +112,7 @@ onUnmounted(() => {
               <div @click="handleNotification(item?._id, item?.url)"
                 :class="['flex w-full px-1 hover:bg-zinc-200 rounded-lg', !item?.isRead ? 'bg-gray-200' : '']">
                 <div class="w-1/12 flex justify-center">
-                  <img class="w-full object-contain  rounded-lg"
+                  <img loading="lazy" class="w-full object-contain  rounded-lg"
                     :src="linkUploads('user/' + item?.createdBy?._id.avatar)" alt="" />
                 </div>
                 <div class="w-11/12 min-h-20  cursor-pointer p-2">
@@ -118,7 +122,7 @@ onUnmounted(() => {
                   <p class="text-[13px] mb-1 font-[400] text-blue-800">
                     {{ dayjs(item?.createdAt).format('DD/MM/YYYY [lúc] HH:mm') }}</p>
                 </div>
-                <div v-if="!item?.isRead" class="w-7 flex justify-center items-center"><img
+                <div v-if="!item?.isRead" class="w-7 flex justify-center items-center"> <img loading="lazy"
                     class="w-full object-contain" src="../../../assets/image/icon/icons8_new.svg" alt=""></div>
               </div>
 
@@ -131,13 +135,14 @@ onUnmounted(() => {
 
         </RouterLink>
         <span v-else to="/login" class="header__user_link link_distance header__nav_link link__user_name">
-          <img class="w-9 h-9 object-contain mr-1 rounded-full border border-solid border-gray-300"
+          <img loading="lazy" class="w-9 h-9 object-contain mr-1 rounded-full border border-solid border-gray-300"
             :src="linkUploads('user/' + account.avatar)" alt="" />
-          {{ console.log(account) }}
           {{ account.name }}
           <div class="icon-wrapper">
-            <img class="icon-default" src="../../../assets/image/icon/icons8_chevron_down_1.svg" alt="" />
-            <img class="icon-hover" src="../../../assets/image/icon/icons8_chevron_down_white.svg" alt="" />
+            <img loading="lazy" class="icon-default" src="../../../assets/image/icon/icons8_chevron_down_1.svg"
+              alt="" />
+            <img loading="lazy" class="icon-hover" src="../../../assets/image/icon/icons8_chevron_down_white.svg"
+              alt="" />
           </div>
 
 

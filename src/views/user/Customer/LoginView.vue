@@ -58,12 +58,12 @@ const onFinish = async (values: IFormState) => {
     <Loading v-if="!load"></Loading>
     <div v-else>
         <div class="flex">
-            <div class="w-1/2 theme_blackred hidden lg:block"> <img
+            <div class="w-1/2 theme_blackred hidden lg:block"> <img loading="lazy"
                     src="../../../assets/image/company/logo_login_customer.png" alt="">
             </div>
             <div class="w-full lg:w-1/2 ">
                 <div class="w-[90%] lg:w-[65%] mx-auto  my-[16vh]">
-                    <div class="flex gap-x-4 text-base font-bold items-center"><img class="w-[108px]"
+                    <div class="flex gap-x-4 text-base font-bold items-center"> <img loading="lazy" class="w-[108px]"
                             src="../../../assets/image/icon/logo-itviec-black.png" alt="">
                         <span>CUSTOMER ADMIN SITE</span>
                     </div>

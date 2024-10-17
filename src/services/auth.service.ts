@@ -25,15 +25,15 @@ export const loginByGoogleApi = async (): Promise<any> => {
   }
 }
 
-export const refreshApi = async (): Promise<any> => {
+export const refreshApi = async (): Promise<{ success: boolean; data?: any }> => {
   try {
     const res = await apiClient.get(`${moduleName}/refresh`, {
       withCredentials: true,
     });
-    return res.data;
+    return { success: true, data: res.data.data };
   } catch (err: any) {
     console.error("Error refreshing API:", err);
-    throw err; // Ném lỗi để xử lý sau này
+    return { success: false };
   }
 };
 
@@ -67,6 +67,7 @@ export const createCompanyApi = async (data: any): Promise<any> => {
 
 export const logoutApi = async (): Promise<any> => {
   try {
+    debugger
     const res = await apiClient.post(`${moduleName}/logout`)
     return res.data
   } catch (err: any) {

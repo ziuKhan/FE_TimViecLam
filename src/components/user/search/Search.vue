@@ -18,7 +18,7 @@ const store = useSearchStore()
     </select>
     <input type="text" v-model="store.keyword" class="search_form-inp search_form-ctl " id="search_form-inp"
       placeholder="Nhập từ khoá kĩ năng">
-    <button type="button" @click="store.handleSearch()" class="search_form-btn"><img
+    <button type="button" @click="store.handleSearch()" class="search_form-btn"> <img loading="lazy"
         src="../../../assets/image/icon/icons8_search.svg" alt="">Tìm kiếm</button>
   </div>
 </template>

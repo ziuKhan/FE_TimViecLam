@@ -1,7 +1,7 @@
 import { accountApi } from "../services/auth.service";
 import type { IUserbyAccount } from "../types/backend";
 
-interface IGetAccount {
+export interface IGetAccount {
     account: IUserbyAccount | null;
     storage: 'local' | 'session' | null;
   }

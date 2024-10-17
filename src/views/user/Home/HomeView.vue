@@ -36,11 +36,11 @@ onMounted(() => {
     <FormSearch></FormSearch>
     <div class="link__cv theme_gray">
       <RouterLink to="/ad" class="link__cv_link">
-        <img src="../../../assets/image/icon/icons8_new.svg" alt="" />
+        <img loading="lazy" src="../../../assets/image/icon/icons8_new.svg" alt="" />
         <p class="title_bold">Mẫu CV ITviec</p>
 
         Công cụ kiến tạo CV tối ưu dành cho chuyên gia IT - Tạo CV ngay
-        <img src="../../../assets/image/icon/icons8_right.svg" alt="" />
+        <img loading="lazy" src="../../../assets/image/icon/icons8_right.svg" alt="" />
       </RouterLink>
     </div>
 
