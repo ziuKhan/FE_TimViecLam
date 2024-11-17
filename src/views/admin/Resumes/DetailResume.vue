@@ -27,18 +27,20 @@
                 </a-col>
                 <a-col :span="24" class="mt-2  text-base">
                     <span class="mr-2">Trạng thái:</span>
-                    <a-select v-model:value="store.form.status" class="w-[200px]">
-                        <a-select-option selected value="PENDING">
-                            <span class="text-orange-500">PENDING</span>
+                    <a-select v-model:value="store.form.status" class="w-[200px]"
+                        :disabled="store.form.history[2]?.status === 'APPROVED' || store.form.history[2]?.status === 'REJECTED'">
+                        <a-select-option selected value="PENDING"
+                            :disabled="store.form.history[0]?.status === 'PENDING'">
+                            <span class="text-orange-500">ĐANG CHỜ</span>
                         </a-select-option>
-                        <a-select-option value="REVIEWING">
-                            <span class="text-blue-500">REVIEWING</span>
+                        <a-select-option value="REVIEWING" :disabled="store.form.history[1]?.status === 'REVIEWING'">
+                            <span class="text-blue-500">ĐANG XEM XÉT</span>
                         </a-select-option>
                         <a-select-option value="APPROVED">
-                            <span class="text-green-600">APPROVED</span>
+                            <span class="text-green-600">ĐÃ DUYỆT</span>
                         </a-select-option>
                         <a-select-option value="REJECTED">
-                            <span class="text-red-500">REJECTED</span>
+                            <span class="text-red-500">ĐÃ TỪ CHỐI</span>
                         </a-select-option>
                     </a-select>
                 </a-col>
@@ -94,7 +96,7 @@
                             <template v-else-if="column.dataIndex === 'status'">
                                 <span>
                                     <a-tag :color="renderColorMethod(text)" class="font-medium">
-                                        {{ text.toUpperCase() }}
+                                        {{ renderStatus(text) }}
                                     </a-tag>
                                 </span>
                             </template>
@@ -123,7 +125,18 @@ import { linkUploads } from '../../../constant/api';
 import dayjs from 'dayjs';
 import { formatSalary } from '../../../until/until';
 
-
+const renderStatus = (status: string) => {
+    switch (status) {
+        case 'PENDING':
+            return 'ĐANG CHỜ'
+        case 'REVIEWING':
+            return 'ĐANG XEM XÉT'
+        case 'APPROVED':
+            return 'ĐÃ DUYỆT'
+        case 'REJECTED':
+            return 'ĐÃ TỪ CHỐI'
+    }
+}
 const columns = [
     {
         title: 'STT',

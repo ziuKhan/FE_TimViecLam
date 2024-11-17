@@ -4,6 +4,7 @@ import Search from '../../../components/user/search/Search.vue';
 import { ref, watch, watchEffect } from 'vue';
 import { useSearchStore } from '../../../stores/user/searchStore';
 import FilterSearch from '../../../components/user/modal/FilterSearch.vue';
+import Loading from '../../../components/Loading.vue';
 
 
 const store = useSearchStore()
@@ -26,7 +27,9 @@ const handleOk = () => {
 </script>
 
 <template>
-    <div class="theme_gray_no_border">
+    <Loading v-if="!store.load"> </Loading>
+
+    <div class="theme_gray_no_border" v-else>
         <header class="theme_blackred w-full min-h-30 py-8 ">
             <div class="w-11/12 lg:w-10/12 mx-auto">
                 <Search></Search>

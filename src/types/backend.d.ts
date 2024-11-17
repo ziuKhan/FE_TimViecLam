@@ -28,26 +28,27 @@ export interface IUser {
 }
 
 export interface IUserbyAccount {
-  _id: string;
-  email: string;
-  name: string;
-  avatar: string;
+  _id: string
+  email: string
+  name: string
+  avatar: string
+  companyId: string
   role: {
-    _id: string;
-    name: string;
-  };
+    _id: string
+    name: string
+  }
   permissions: {
-    _id: string;
-    name: string;
-    apiPath: string;
-    method: string;
-    module: string;
-  }[];
+    _id: string
+    name: string
+    apiPath: string
+    method: string
+    module: string
+  }[]
 }
 
 export interface IAccount {
-  access_token?: string;
-  user: IUserbyAccount;
+  access_token?: string
+  user: IUserbyAccount
 }
 
 export interface ICompany {
@@ -81,8 +82,8 @@ export interface IJob {
   quantity: number
   level: string
   description: string
-  startDate: Date | null
-  endDate: Date | null
+  startDate: Date
+  endDate: Date
   isActive: boolean
   createdBy?: string
   isDeleted?: boolean
@@ -180,13 +181,13 @@ export interface INotification {
   isRead?: false
   url: string
   createdBy?: {
-      _id: {
-          _id: string
-          name: string
-          email: string
-          avatar: string
-      }
+    _id: {
+      _id: string
+      name: string
       email: string
+      avatar: string
+    }
+    email: string
   }
   isDeleted?: boolean
   deletedAt?: boolean | null

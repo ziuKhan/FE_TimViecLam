@@ -67,7 +67,6 @@ export const createCompanyApi = async (data: any): Promise<any> => {
 
 export const logoutApi = async (): Promise<any> => {
   try {
-    debugger
     const res = await apiClient.post(`${moduleName}/logout`)
     return res.data
   } catch (err: any) {

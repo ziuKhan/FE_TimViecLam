@@ -67,7 +67,18 @@ const renderColorMethod = (method: string) => {
             return 'gray'; // Màu xám cho các trạng thái không xác định
     }
 }
-
+const renderStatus = (status: string) => {
+    switch (status) {
+        case 'PENDING':
+            return 'ĐANG CHỜ'
+        case 'REVIEWING':
+            return 'ĐANG XEM XÉT'
+        case 'APPROVED':
+            return 'ĐÃ DUYỆT'
+        case 'REJECTED':
+            return 'ĐÃ TỪ CHỐI'
+    }
+}
 </script>
 <template>
     <a-layout-header :style="{ background: '#fff', padding: '0 20px' }" class="p-0 text-lg font-medium">Trang quản lý
@@ -85,10 +96,10 @@ const renderColorMethod = (method: string) => {
                 <div>
                     <span class="mr-1 text-base">Hiển thị theo trạng thái: </span>
                     <a-select v-model:value="store.isStatus" class="w-[200px]">
-                        <a-select-option selected value="PENDING">PENDING</a-select-option>
-                        <a-select-option value="REVIEWING">REVIEWING</a-select-option>
-                        <a-select-option value="APPROVED">APPROVED</a-select-option>
-                        <a-select-option value="REJECTED">REJECTED</a-select-option>
+                        <a-select-option selected value="PENDING">ĐANG CHỜ</a-select-option>
+                        <a-select-option value="REVIEWING">ĐANG XEM XÉT</a-select-option>
+                        <a-select-option value="APPROVED">ĐÃ DUYỆT</a-select-option>
+                        <a-select-option value="REJECTED">ĐÃ TỪ CHỐI</a-select-option>
                     </a-select>
                 </div>
             </div>
@@ -110,7 +121,7 @@ const renderColorMethod = (method: string) => {
                         <template v-else-if="column.dataIndex === 'status'">
                             <span>
                                 <a-tag :color="renderColorMethod(text)" class="font-medium">
-                                    {{ text.toUpperCase() }}
+                                    {{ renderStatus(text) }}
                                 </a-tag>
                             </span>
                         </template>
@@ -119,12 +130,12 @@ const renderColorMethod = (method: string) => {
                             <div class="flex items-center">
                                 <a-button v-permission="'GET /api/v1/resumes/:id'" class="mr-2"
                                     @click="store.getByID(text, true)">Chi tiêt</a-button>
-                                <button type="button" v-permission="'PATCH /api/v1/resumes/:id'"
+                                <!-- <button type="button" v-permission="'PATCH /api/v1/resumes/:id'"
                                     class="mr-2  bg-[#1669dcec] hover:bg-[#498ff1] rounded-[5px] px-[10px] py-1 h-8 "
                                     @click="store.getByID(text)">
                                     <img loading="lazy" class=" h-5/6"
                                         src="../../../assets/image/icon/icons8_settings.svg" alt="">
-                                </button>
+                                </button> -->
                                 <a-popconfirm title="Bạn có chắc muốn xoá?" ok-text="Có" cancel-text="Không"
                                     :loading="store.loading" @confirm="store.deleteByID(text)" @cancel=""
                                     v-permission="'DELETE /api/v1/resumes/:id'">

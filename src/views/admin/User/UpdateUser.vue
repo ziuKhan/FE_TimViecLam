@@ -16,10 +16,9 @@ const store = useUserStore()
 const rules: Record<string, Rule[]> = {
     name: [{ required: true, message: 'Vui lòng nhập name' }],
     email: [
-        { required: true, message: 'Vui lòng nhập apiPath' },
+        { required: true, message: 'Vui lòng nhập địa chỉ email' },
         { type: 'email', message: 'vui lòng nhập email hợp lệ' }
     ],
-    age: [{ required: true, message: 'Vui lòng nhập age ' }],
     role: [{ required: true, message: 'Vui lòng nhập role ' }],
     address: [{ required: true, message: 'Vui lòng nhập address ' }],
     gender: [{ required: true, message: 'Vui lòng nhập gender ' }],

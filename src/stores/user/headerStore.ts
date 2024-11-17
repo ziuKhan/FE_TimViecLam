@@ -31,7 +31,6 @@ export const useHeaderStore = defineStore('header', () => {
       items.filter(item => item.type === 'SYSTEM' || item.userId === account._id)
 
     if (res) {
-      debugger
       dataNotification.value = filterNotifications(res.result)
       totalNotification.value = filterNotifications(number.result).length
     }

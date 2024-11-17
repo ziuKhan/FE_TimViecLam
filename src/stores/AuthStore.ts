@@ -8,8 +8,6 @@ import tokenService from '../constant/token.service'
 import accountService from '../constant/account.service'
 
 export const useAuthStore = defineStore('auth', () => {
- 
-
   const logout = async () => {
     try {
       await logoutApi()
@@ -18,7 +16,6 @@ export const useAuthStore = defineStore('auth', () => {
       window.location.reload()
     } catch (error) {
       console.error('Đăng xuất thất bại:', error)
-      // Tùy chọn: bạn vẫn có thể xóa token và tải lại trang ngay cả khi cuộc gọi API thất bại
       tokenService.removeToken()
       accountService.removeAccount()
       window.location.reload()
@@ -27,18 +24,18 @@ export const useAuthStore = defineStore('auth', () => {
 
   const refreshToken = async () => {
     try {
-      const res = await refreshApi();
-      debugger
+      const res = await refreshApi()
+
       if (res.success) {
-        const { access_token } = res.data;
-        tokenService.updateToken(access_token);
-        accountService.updateAccount();
-        return access_token;
+        const { access_token } = res.data
+        tokenService.updateToken(access_token)
+        accountService.updateAccount()
+        return access_token
       }
-      return false;
+      return false
     } catch (error) {
-      console.error('Error refreshing token:', error);
-      return false;
+      console.error('Error refreshing token:', error)
+      return false
     }
   }
 

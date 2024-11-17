@@ -4,10 +4,11 @@ import { message } from 'ant-design-vue'
 import resumeService from '../../services/resume.service'
 import type { IPaginate, IResume } from '../../types/backend'
 import notificationService from '../../services/notification.service'
+import accountService from '../../constant/account.service'
 
 const useResumeStore = defineStore('resume', () => {
   const { getApi, createApi, updateApi, deleteApi, paginateApi } = resumeService
-
+  const { account } = accountService.getAccount()
   const openModal = ref<boolean>(false)
   const openDrawer = ref<boolean>(false)
 
@@ -30,7 +31,14 @@ const useResumeStore = defineStore('resume', () => {
     description: '',
     status: '',
     companyId: '',
-    jobId: ''
+    jobId: '',
+    history: [
+      {
+        status: '',
+        updatedAt: '',
+        updatedBy: { _id: '', email: '' }
+      }
+    ]
   })
 
   const refreshInput = () => {
@@ -57,21 +65,20 @@ const useResumeStore = defineStore('resume', () => {
 
   const updateAndAdd = async () => {
     loading.value = true
+    debugger
     try {
-       
       if (form._id) {
-        debugger
-      const [res, resNotification] = await Promise.all([updateApi(
-          { ...form, companyId: form.companyId?._id, jobId: form.jobId?._id },
-          form._id
-        ), notificationService.createByUserApi({
-          title: 'Thông báo',
-          message: `Hồ sơ xin việc của bạn đã cập nhật trang thái ${form.status}`,
-          type: 'RESUME',
-          userId: form.userId,
-          isRead: false,
-          url: '/admin/resumes'
-        }) ]) 
+        const [res, resNotification] = await Promise.all([
+          updateApi({ ...form, companyId: form.companyId?._id, jobId: form.jobId?._id }, form._id),
+          notificationService.createByUserApi({
+            title: 'Thông báo',
+            message: `Hồ sơ xin việc của bạn đã cập nhật trang thái ${form.status}`,
+            type: 'RESUME',
+            userId: form.userId,
+            isRead: false,
+            url: '/admin/resumes'
+          })
+        ])
         if (res) message.success('Cập nhật thành công!')
       } else {
         const res = await createApi(form)
@@ -100,7 +107,7 @@ const useResumeStore = defineStore('resume', () => {
   const getData = async (search?: string) => {
     loading.value = true
     try {
-      const params = `?current=${dataMeta.value?.current}&pageSize=${dataMeta.value?.pageSize}&status=${isStatus.value}&sort=-createdAt${search ? '&email=/' + search + '/' : ''}`
+      const params = `?current=${dataMeta.value?.current}&pageSize=${dataMeta.value?.pageSize}&status=${isStatus.value}&sort=-createdAt${search ? '&email=/' + search + '/' : ''}${account?.role.name === 'HR_USER' ? '&companyId=' + account.companyId : ''}`
       const res = await paginateApi(params)
       if (res) {
         data.value = res.result

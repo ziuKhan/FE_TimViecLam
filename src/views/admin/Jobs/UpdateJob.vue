@@ -20,8 +20,8 @@ watch(value1, (newValue) => {
         store.form.endDate = newValue[1]?.toDate();
     }
     else {
-        store.form.startDate = null;
-        store.form.endDate = null;
+        store.form.startDate = new Date();
+        store.form.endDate = new Date();
     }
 });
 

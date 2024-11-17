@@ -3,10 +3,11 @@ import { ref, reactive, watch } from 'vue'
 import type { IJob, IPaginate } from '../../types/backend'
 import { message } from 'ant-design-vue'
 import jobService from '../../services/job.service'
+import accountService from '../../constant/account.service'
 
 const useJobStore = defineStore('job', () => {
   const { getApi, createApi, updateApi, deleteApi, paginateApi } = jobService
-
+  const { account } = accountService.getAccount()
   const openModal = ref<boolean>(false)
   const dataMeta = ref<IPaginate>({
     current: 1,
@@ -29,8 +30,8 @@ const useJobStore = defineStore('job', () => {
       _id: ''
     },
     description: '',
-    startDate: null,
-    endDate: null,
+    startDate: new Date(),
+    endDate: new Date(),
     isActive: true
   })
 
@@ -64,7 +65,7 @@ const useJobStore = defineStore('job', () => {
   const getData = async (search?: string) => {
     loading.value = true
     try {
-      const params = `?current=${dataMeta.value?.current}&pageSize=${dataMeta.value?.pageSize}&isActive=${isActive.value}&sort=-createdAt${search ? '&name=/' + search + '/' : ''}`
+      const params = `?current=${dataMeta.value?.current}&pageSize=${dataMeta.value?.pageSize}&isActive=${isActive.value}&sort=-createdAt${search ? '&name=/' + search + '/' : ''}${account?.role.name === 'HR_USER' ? '&companyId=' + account.companyId : ''}`
       const res = await paginateApi(params)
       if (res) {
         data.value = res.result

@@ -127,7 +127,7 @@ onMounted(() => {
                                 <a-popconfirm title="Bạn có chắc muốn xoá?" ok-text="Có" cancel-text="Không"
                                     :loading="store.loading" @confirm="store.deleteByID(text)" @cancel=""
                                     v-permission="'DELETE /api/v1/jobs/:id'">
-                                    <button type="button"
+                                    <button type="button" v-permission="''"
                                         class=" bg-red-500 hover:bg-red-400 rounded-[5px] px-[10px] ] py-1 h-8 ">
                                         <img loading="lazy" class="h-5/6"
                                             src="../../../assets/image/icon/icons8_remove.svg" alt=""></button>

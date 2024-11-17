@@ -16,16 +16,17 @@ export const useSearchStore = defineStore('search', () => {
   const valueMax = ref<number>()
   const value = ref<[number, any]>([0, valueMax.value])
   const state = ref([])
+  const skills = ref<string[]>([])
   const getData = async () => {
     load.value = false
     const queryString = route.fullPath.split('?')[1] || ''
 
-    const skillsParam = route.query.skills
-      ? route.query.skills.toString().replace(/\//g, '')
+    const skillsParam = route.query.name
+      ? route.query.name.toString().replace(/\//g, '')
       : route.query.location
         ? route.query.location.toString().replace(/\//g, '')
         : ''
-    const paramString = `&populate=companyId&isActive=true&current=${current.value}&pageSize=9&sort=-createdAt`
+    const paramString = `&populate=companyId&isActive=true&current=${current.value}&pageSize=9&sort=-createdAt&endDate=${new Date(Date.now() - 86400000).toISOString()}`
     const jobs = await jobService.paginateApi(`?${queryString}${paramString}`)
     dataJobs.value = jobs.result
     paginateJobs.value = { ...jobs.meta, keyword: skillsParam }
@@ -36,7 +37,7 @@ export const useSearchStore = defineStore('search', () => {
     let params = new URLSearchParams()
     params.set('location', `/${location.value}/`)
     if (keyword.value) {
-      params.set('skills', `/${keyword.value.toUpperCase()}/`)
+      params.set('name', `/${keyword.value}/i`)
     }
     router.push(`/search?${params}`)
   }
@@ -50,18 +51,21 @@ export const useSearchStore = defineStore('search', () => {
     let params = new URLSearchParams()
     params.set('location', `/${location.value}/`)
     if (keyword.value) {
-      params.set('skills', `/${keyword.value.toUpperCase()}/`)
+      params.set('name', `/${keyword.value}/i`)
     }
 
     if (value.value[0] > value.value[1]) {
       value.value = [value.value[1], value.value[0]]
     }
 
-    params.set('gte', value.value[0].toString())
-    params.set('lte', value.value[1].toString())
+    params.set('gte', value.value[0]?.toString())
+    params.set('lte', value.value[1]?.toString())
 
     if (state.value.length > 0) {
       params.set('level', state.value.join(','))
+    }
+    if (skills.value.length > 0) {
+      params.set('skills', skills.value.map((skill) => `/${skill}/i`).join(','))
     }
     router.push(`/search?${params.toString()}`)
   }
@@ -92,6 +96,7 @@ export const useSearchStore = defineStore('search', () => {
     value,
     state,
     handleFilter,
-    valueMax
+    valueMax,
+    skills
   }
 })

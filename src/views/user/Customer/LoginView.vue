@@ -107,7 +107,7 @@ const onFinish = async (values: IFormState) => {
                         </div>
 
                         <a-button type="button" html-type="submit" :loading="loading"
-                            class="w-full mt-8 h-[40px] lg:h-[50px] bg-red-600 text-white rounded-[4px] hover:bg-red-700">Đăng
+                            class="w-full mt-8 h-[40px] lg:h-[50px] text-lg bg-red-600 text-white rounded-[4px] hover:bg-red-700">Đăng
                             nhập</a-button>
                     </a-form>
                     <div class="text-[16px] mt-3 font-light text-center">

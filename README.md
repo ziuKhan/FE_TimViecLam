@@ -31,16 +31,19 @@ Dự án này vẫn đang được hoàn thiện. Tôi đang tích cực làm vi
 ## Cài đặt
 
 1. Clone repository:
+
    ```
    git clone https://github.com/ndkag/DA4_VueJS_TimViecLam.git
    ```
 
 2. Di chuyển vào thư mục dự án:
+
    ```
    cd DA4_VueJS_TimViecLam
    ```
 
 3. Cài đặt các dependencies:
+
    ```
    npm install
    ```
@@ -71,10 +74,6 @@ DA4_VueJS_TimViecLam/
 └── vite.config.ts
 ```
 
-
 ## Tác giả
 
 Nguyễn Duy Khang - duykhang02vnn@gmail.com
-
-
-

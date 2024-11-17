@@ -13,6 +13,7 @@ import resumeService from '../../services/resume.service';
 import jobService from '../../services/job.service';
 import accountService from '../../constant/account.service';
 import CardJob from '../../components/user/CardJob.vue';
+import { format } from "date-fns";
 
 const route = useRoute()
 const load = ref<Boolean>(false)
@@ -29,7 +30,6 @@ const getData = async () => {
     const id = route.params.id as string
     try {
         const result = await jobService.getApi(id)
-        result.data.startDate = formatDistanceToNow(parseISO(result.data.startDate), { addSuffix: true, locale: vi })
         data.value = result.data
         load.value = true
     } catch (error) {
@@ -125,21 +125,40 @@ onMounted(async () => {
                 </div>
 
                 <div
-                    class="bg-white px-5 py-3 rounded-xl rounded-t-none drop-shadow-lg shadow-gray-500 text-sm lg:text-base font-normal pb-10">
-                    <div class="flex gap-1 mb-2"> <img loading="lazy" class="max-w-5"
-                            src="../../assets/image/icon/icons8_address_2.svg" alt=""> {{ data?.location }}
+                    class="flex flex-wrap bg-white px-5 py-3 rounded-xl rounded-t-none drop-shadow-lg shadow-gray-500 text-sm lg:text-base font-normal pb-10">
+                    <div class="w-1/2">
+                        <div class="flex gap-1 mb-2"> <img loading="lazy" class="max-w-5"
+                                src="../../assets/image/icon/icons8_address_2.svg" alt=""> {{ data?.location }}
+                        </div>
+                        <div class="flex gap-1 mb-2"> <img loading="lazy" class="max-w-5"
+                                src="../../assets/image/icon/icons8_office.svg" alt="">Tại văn phòng</div>
+                        <div class="flex gap-1 mb-2"> <img loading="lazy" class="max-w-5"
+                                src="../../assets/image/icon/icons8_time.svg" alt="">{{ data?.createdAt ?
+                                    formatDistanceToNow(new Date(data.createdAt), { addSuffix: true, locale: vi }) : 'N/A' }}
+                        </div>
+
                     </div>
-                    <div class="flex gap-1 mb-2"> <img loading="lazy" class="max-w-5"
-                            src="../../assets/image/icon/icons8_office.svg" alt="">Tại văn phòng</div>
-                    <div class="flex gap-1 mb-2"> <img loading="lazy" class="max-w-5"
-                            src="../../assets/image/icon/icons8_time.svg" alt="">{{ data?.startDate }}</div>
+                    <div class="w-1/2">
+                        <div class="flex gap-1 mb-2"> <img loading="lazy" class="max-w-5"
+                                src="../../assets/image/icon/icons8_start.svg" alt="">Ngày bắt đầu: {{
+                                    data?.startDate ? format(new Date(data.startDate), 'dd/MM/yyyy ') : 'N/A' }}
+                        </div>
+
+                        <div class="flex gap-1 mb-2"> <img loading="lazy" class="max-w-5"
+                                src="../../assets/image/icon/icons8_end_1.svg" alt="">Ngày Kết thúc: {{
+                                    data?.endDate ? format(new Date(data.endDate), 'dd/MM/yyyy ') : 'N/A' }}
+                        </div>
+                        <div class="flex gap-1 mb-2"> <img loading="lazy" class="max-w-5"
+                                src="../../assets/image/icon/icons8_user.svg" alt="">Số lượng: {{
+                                    data?.quantity }}
+                        </div>
+                    </div>
                     <div class="flex flex-wrap gap-2 lg:text-base text-sm font-light mt-3">Kỹ năng:
-                        <template v-for="skill in data?.skills" :key="data">
+                        <template v-for="skill in data?.skills" :key="skill">
                             <RouterLink to=""
                                 class="border border-solid border-gray-300 px-2 py-1 rounded-full text-[13px] lg:text-[14px] font-normal mr-2 hover:border-gray-500">
                                 {{ skill }}</RouterLink>
                         </template>
-
                     </div>
                 </div>
 

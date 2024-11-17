@@ -6,9 +6,6 @@ export interface IGetAccount {
     storage: 'local' | 'session' | null;
   }
 class AccountService {
-
-
-      
     getAccount():IGetAccount  {
       const account_local = localStorage.getItem('account')
       if (account_local) {

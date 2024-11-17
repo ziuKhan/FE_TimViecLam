@@ -1,15 +1,17 @@
 <script lang="ts" setup>
 
-import { onMounted, watchEffect } from 'vue';
-import type { IPaginate } from '../../../types/backend';
+import { onMounted, ref, watchEffect } from 'vue';
+import type { IPaginate, IRole } from '../../../types/backend';
 
 import dayjs from 'dayjs';
 import UpdateUser from './UpdateUser.vue';
 import useUserStore from '../../../stores/admin/UserStore';
-
+import roleService from '../../../services/role.service';
 
 const store = useUserStore()
-
+const handleRole = (value: string) => {
+    store.getData(store.valueSearch)
+}
 const columns = [
     {
         title: 'STT',
@@ -31,7 +33,7 @@ const columns = [
         dataIndex: 'isActive',
     },
     {
-        title: 'Quyền',
+        title: 'Vai trò',
         dataIndex: ["role", "name"],
     },
     {
@@ -54,10 +56,20 @@ const handleTableChange = (pagination: IPaginate) => {
     store.getData();
 };
 
+const dataRoles = ref<IRole[]>()
 
+const getDataRoles = async () => {
+    try {
+        const role = await roleService.paginateApi('?current=1&pageSize=200')
+        dataRoles.value = role.result
+    } catch (e) {
+        console.log(e)
+    }
+}
 
 onMounted(() => {
     store.getData()
+    getDataRoles()
 })
 
 
@@ -76,11 +88,19 @@ onMounted(() => {
 
                 <div class="w-3/4 flex" v-permission="'GET /api/v1/users'">
                     <a-input-search placeholder="Vui lòng nhập thông tin cần tìm kiếm" enter-button="Tìm kiếm"
-                        v-model:value="store.valueSearch" @search="store.getData(store.valueSearch)" />
+                        v-model:value="store.valueSearch" @search="store.getData(store.valueSearch)" class="w-3/6" />
+                    <a-select v-model:value="store.keySearchRole" class="w-1/5 ml-5" placeholder="Chọn role"
+                        @change="handleRole">
+                        <a-select-option :value="''">Tất cả vai trò</a-select-option>
+                        <template v-for="role in dataRoles" :key="role._id">
+                            <a-select-option :value="role._id">{{ role.name }}</a-select-option>
+                        </template>
+                    </a-select>
                     <div class="ml-5 flex items-center">
                         <span class="mr-3 font-medium">Active</span>
                         <a-switch v-model:checked="store.isActive" />
                     </div>
+
                 </div>
                 <button class="bg-[#21aa55] hover:bg-green-500 text-white rounded-[7px] px-5 font-medium "
                     @click="store.handleOpenModal()" v-permission="'POST /api/v1/users'">Thêm

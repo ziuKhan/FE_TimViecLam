@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/user/Home/HomeView.vue'
 import UserLayout from '../views/user/UserLayout.vue'
 import AdminLayout from '../views/admin/AdminLayout.vue'
+import accountService from '../constant/account.service'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,8 +33,17 @@ const router = createRouter({
         {
           path: 'login/:id?',
           name: 'login',
-          component: () => import('../views/user/Auth/LoginView.vue')
-         
+          component: () => import('../views/user/Auth/LoginView.vue'),
+          beforeEnter: (to, from, next) => {
+            const { account } = accountService.getAccount()
+            if (
+              account &&
+              (account.role.name === 'SUPER_ADMIN' || account.role.name === 'NORMAL_ADMIN')
+            ) {
+              return next({ path: '/admin' })
+            }
+            next()
+          }
         },
         {
           path: 'register',
@@ -69,6 +79,20 @@ const router = createRouter({
     {
       path: '/admin',
       component: AdminLayout,
+      beforeEnter: (to, from, next) => {
+        const { account } = accountService.getAccount()
+        if (!account) {
+          return next({ name: 'login' })
+        }
+        if (
+          account.role.name !== 'SUPER_ADMIN' &&
+          account.role.name !== 'NORMAL_ADMIN' &&
+          account.role.name !== 'HR_USER'
+        ) {
+          return next({ name: 'login' })
+        }
+        next()
+      },
       children: [
         {
           path: '',

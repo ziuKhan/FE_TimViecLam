@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { reactive, ref, watch } from 'vue';
 import { useSearchStore } from '../../../stores/user/searchStore';
 
 const store = useSearchStore()
@@ -16,8 +16,9 @@ const store = useSearchStore()
       <option value="HOCHIMINH">TP Hồ Chí Minh</option>
       <option value="DANANG">Đà Nẵng</option>
     </select>
-    <input type="text" v-model="store.keyword" class="search_form-inp search_form-ctl " id="search_form-inp"
-      placeholder="Nhập từ khoá kĩ năng">
+    <input type="text" v-model="store.keyword" @keyup.enter="store.handleSearch()"
+      class="search_form-inp search_form-ctl " id="search_form-inp" placeholder="Nhập từ khoá kĩ năng">
+
     <button type="button" @click="store.handleSearch()" class="search_form-btn"> <img loading="lazy"
         src="../../../assets/image/icon/icons8_search.svg" alt="">Tìm kiếm</button>
   </div>

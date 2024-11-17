@@ -8,7 +8,7 @@ const useUserStore = defineStore('user', () => {
   const { getApi, createApi, updateApi, deleteApi, paginateApi } = userService
 
   const openModal = ref<boolean>(false)
-
+  const keySearchRole = ref<string>('')
   const dataMeta = ref<IPaginate>({
     current: 1,
     pageSize: 6,
@@ -76,7 +76,7 @@ const useUserStore = defineStore('user', () => {
   const getData = async (search?: string) => {
     loading.value = true
     try {
-      const params = `?current=${dataMeta.value?.current}&pageSize=${dataMeta.value?.pageSize}&populate=role&isActive=${isActive.value}&sort=-createdAt${search ? '&name=/' + search + '/' : ''}`
+      const params = `?current=${dataMeta.value?.current}&pageSize=${dataMeta.value?.pageSize}&populate=role&isActive=${isActive.value}&sort=-createdAt${search ? '&name=/' + search + '/' : ''}${keySearchRole.value ? '&role=' + keySearchRole.value + '' : ''}`
       const res = await paginateApi(params)
       if (res) {
         data.value = res.result
@@ -120,8 +120,10 @@ const useUserStore = defineStore('user', () => {
         if (res) message.success('Thêm thành công!')
       }
       refreshInput()
-      openModal.value = false
+      // openModal.value = false
       loading.value = false
+      openModal.value = false
+
       getData()
     } catch (error) {
       loading.value = false
@@ -164,7 +166,8 @@ const useUserStore = defineStore('user', () => {
     deleteByID,
     getByID,
     handleOpenModal,
-    isActive
+    isActive,
+    keySearchRole
   }
 })
 
