@@ -7,6 +7,7 @@ export const apiClient = axios.create({
   headers: {
     'Content-Type': 'application/json'
   },
+  timeout: 10000,
   withCredentials: true
 })
 
@@ -42,6 +43,9 @@ apiClient.interceptors.response.use(
         store.logout()
         return Promise.reject(_error)
       }
+    }
+    if (error.code === 'ECONNABORTED') {
+      console.error('Request timeout.')
     }
     return Promise.reject(error)
   }

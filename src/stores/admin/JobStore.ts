@@ -36,7 +36,6 @@ const useJobStore = defineStore('job', () => {
   })
 
   const loading = ref<boolean>(false)
-
   const refreshInput = () => {
     form._id = ''
     form.name = ''
@@ -45,7 +44,7 @@ const useJobStore = defineStore('job', () => {
     form.salary = 0
     form.quantity = 0
     form.companyId = {
-      _id: ''
+      _id: account?.role.name === 'HR_USER' ? account?.companyId : ''
     }
     form.level = ''
     form.description = ''

@@ -11,6 +11,7 @@ import { LEVELS_LIST, SKILLS_LIST } from '../../../until/until';
 import type { Dayjs } from 'dayjs';
 import companyService from '../../../services/company.service';
 import dayjs from 'dayjs';
+import accountService from '../../../constant/account.service';
 
 
 const value1 = ref<Dayjs[] | undefined>([]);
@@ -28,8 +29,9 @@ watch(value1, (newValue) => {
 const store = useJobStore()
 
 const formRef = ref<any>(null);
-const rangePickerRef = ref<any>(null);
+const { account } = accountService.getAccount();
 
+const rangePickerRef = ref<any>(null);
 const handleOk = () => {
     formRef.value.validate().then(() => {
         if (!store.form.startDate || !store.form.endDate) {
@@ -100,14 +102,14 @@ onMounted(() => {
 
         <a-form :model="store.form" ref="formRef" layout="vertical" class=" py-3">
             <a-row :gutter="16">
-                <a-col :span="22">
+                <a-col :span="21">
                     <a-form-item label="Tên" name="name"
                         :rules="[{ required: true, message: 'Vui lòng nhập địa chỉ!' }]">
                         <a-input v-model:value="store.form.name" placeholder="Vui lòng nhập name" />
                     </a-form-item>
                 </a-col>
-                <a-col :span="2">
-                    <a-form-item label="Active" name="isActive">
+                <a-col :span="3">
+                    <a-form-item label="Trạng thái" name="isActive">
                         <a-switch v-model:checked="store.form.isActive" />
                     </a-form-item>
                 </a-col>
@@ -154,10 +156,10 @@ onMounted(() => {
                 </a-col>
 
 
-                <a-col :span="24">
+                <a-col :span="24"
+                    :style="{ display: account?.role.name === 'HR_USER' ? account?.companyId ? 'none' : 'block' : 'block' }">
                     <a-form-item label="Công ty" name="companyId"
                         :rules="[{ required: true, message: 'Vui lòng nhập công ty!' }]">
-
                         <a-select v-model:value="store.form.companyId._id" allowClear style="width: 100%"
                             placeholder="Vui lòng công ty..." :options="dataCompany" @change="handleSelectChangeCompany"
                             mode="multiple">

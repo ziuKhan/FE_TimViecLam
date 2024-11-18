@@ -78,10 +78,11 @@ onMounted(() => {
             <div class="flex justify-between">
 
                 <div class="w-3/4 flex" v-permission="'GET /api/v1/jobs'">
-                    <a-input-search placeholder="Vui lòng nhập thông tin cần tìm kiếm" enter-button="Tìm kiếm"
-                        v-model:value="store.valueSearch" @search="store.getData(store.valueSearch)" />
+                    <a-input-search class="w-1/2" placeholder="Vui lòng nhập thông tin cần tìm kiếm"
+                        enter-button="Tìm kiếm" v-model:value="store.valueSearch"
+                        @search="store.getData(store.valueSearch)" />
                     <div class="ml-5 flex items-center">
-                        <span class="mr-3 font-medium">Active</span>
+                        <span class="mr-3 font-medium">Trạng thái</span>
                         <a-switch v-model:checked="store.isActive" />
                     </div>
                 </div>
@@ -101,7 +102,7 @@ onMounted(() => {
 
                         <template v-else-if="column.dataIndex === 'isActive'">
                             <span :class="text ? 'text-green-600' : 'text-red-500'">
-                                Active
+                                {{ text ? 'Hoạt động' : 'Không hoạt động' }}
                             </span>
                         </template>
                         <template v-else-if="column.dataIndex === 'skills'">
