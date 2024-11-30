@@ -111,8 +111,8 @@ onUnmounted(() => {
             <template v-for="item in storeHeader.dataNotification" :key="item">
               <div @click="handleNotification(item?._id, item?.url)"
                 :class="['flex w-full px-1 hover:bg-zinc-200 rounded-lg', !item?.isRead ? 'bg-gray-200' : '']">
-                <div class="w-1/12 flex justify-center">
-                  <img loading="lazy" class="w-full object-contain  rounded-lg"
+                <div class="w-1/12 flex justify-center items-center">
+                  <img loading="lazy" class=" max-w-[40px] max-h-[40px] object-contain  rounded-full"
                     :src="linkUploads('user/' + item?.createdBy?._id.avatar)" alt="" />
                 </div>
                 <div class="w-11/12 min-h-20  cursor-pointer p-2">

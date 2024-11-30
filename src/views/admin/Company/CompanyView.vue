@@ -46,9 +46,6 @@ const handleTableChange = (pagination: IPaginate) => {
     store.getData();
 };
 
-
-
-
 onMounted(() => {
     store.getData()
 })

@@ -1,12 +1,13 @@
 import { defineStore } from 'pinia'
 import { ref, reactive, watch } from 'vue'
-import type { ICompany, IPaginate } from '../../types/backend'
+import type { IAccount, ICompany, IPaginate, IUserbyAccount } from '../../types/backend'
 import { message } from 'ant-design-vue'
 import companyService from '../../services/company.service'
+import accountService from '../../constant/account.service'
 
 const useCompanyStore = defineStore('company', () => {
   const { getApi, createApi, updateApi, deleteApi, paginateApi } = companyService
-
+  const account: IUserbyAccount | null = accountService.getAccount().account
   const openModal = ref<boolean>(false)
   const dataMeta = ref<IPaginate>({
     current: 1,
@@ -52,7 +53,7 @@ const useCompanyStore = defineStore('company', () => {
   const getData = async (search?: string) => {
     loading.value = true
     try {
-      const params = `?current=${dataMeta.value?.current}&pageSize=${dataMeta.value?.pageSize}&isActive=${isActive.value}&sort=-createdAt${search ? '&name=/' + search + '/' : ''}`
+      const params = `?current=${dataMeta.value?.current}&pageSize=${dataMeta.value?.pageSize}&isActive=${isActive.value}&sort=-createdAt${search ? '&name=/' + search + '/' : ''}${account?.companyId ? '&_id=' + account?.companyId : ''}`
       const res = await paginateApi(params)
       if (res) {
         data.value = res.result
@@ -97,7 +98,6 @@ const useCompanyStore = defineStore('company', () => {
   const updateAndAdd = async () => {
     loading.value = true
     try {
-       
       if (form._id) {
         const res = await updateApi(form, form._id)
         if (res) message.success('Cập nhật thành công!')

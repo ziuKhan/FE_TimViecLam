@@ -1,83 +1,90 @@
 <template>
     <a-layout-sider v-model:collapsed="collapsed" collapsible>
-        <div class="logo__itviec w-3/5 mx-auto my-5">
-            <RouterLink to="/"> <img loading="lazy" src="../../assets/image/icon/logo-itviec.png" alt=""
-                    class="w-full object-contain"></RouterLink>
+        <div class="sticky top-5 left-0">
+            <div class="logo__itviec w-3/5 mx-auto my-5">
+                <RouterLink to="/"> <img loading="lazy" src="../../assets/image/icon/logo-itviec.png" alt=""
+                        class="w-full object-contain"></RouterLink>
+            </div>
+            <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="inline">
+                <RouterLink to="/admin">
+                    <a-menu-item key="1">
+                        <pie-chart-outlined />
+                        <span>Trang chủ</span>
+                    </a-menu-item>
+                </RouterLink>
+
+                <a-sub-menu key="sub1" v-if="account?.account?.role.name === 'SUPER_ADMIN'">
+                    <template #title>
+                        <span>
+                            <user-outlined />
+                            <span>Quản lý người dùng</span>
+                        </span>
+                    </template>
+                    <RouterLink to="/admin/user">
+                        <a-menu-item key="2">
+                            <span>Tài khoản</span>
+                        </a-menu-item>
+                    </RouterLink>
+                    <RouterLink to="/admin/permission">
+                        <a-menu-item key="3">
+                            Quyền
+                        </a-menu-item>
+                    </RouterLink>
+                    <RouterLink to="/admin/role">
+                        <a-menu-item key="4">
+                            Vai trò
+                        </a-menu-item>
+                    </RouterLink>
+
+
+                </a-sub-menu>
+
+                <RouterLink to="/admin/company"
+                    v-if="coTheQuanLyCongTy && (account?.account?.role.name === 'SUPER_ADMIN' || account?.account?.role.name === 'NORMAL_ADMIN')">
+                    <a-menu-item key="5">
+                        <GoldOutlined />
+                        Công ty
+                    </a-menu-item>
+                </RouterLink>
+                <RouterLink to="/admin/resume" v-if="coTheQuanLyHoSo">
+                    <a-menu-item key="6">
+                        <FileOutlined />
+                        Hồ sơ ứng tuyển
+                    </a-menu-item>
+                </RouterLink>
+                <RouterLink to="/admin/job" v-if="coTheQuanLyCongViec">
+                    <a-menu-item key="7">
+                        <ShoppingOutlined />
+                        Công việc
+                    </a-menu-item>
+                </RouterLink>
+                <RouterLink to="/admin/subscriber"
+                    v-if="account?.account?.role.name === 'SUPER_ADMIN' || account?.account?.role.name === 'NORMAL_ADMIN'">
+                    <a-menu-item key="8">
+                        <MailOutlined />
+                        Đăng ký nhận mail
+                    </a-menu-item>
+                </RouterLink>
+                <RouterLink to="/admin/notification"
+                    v-if="account?.account?.role.name === 'SUPER_ADMIN' || account?.account?.role.name === 'NORMAL_ADMIN'">
+                    <a-menu-item key="9">
+                        <NotificationOutlined />
+                        Thông báo
+                    </a-menu-item>
+                </RouterLink>
+                <RouterLink to="/admin/personal_information" v-if="account?.account?.role.name === 'HR_USER'">
+                    <a-menu-item key="10">
+                        <AuditOutlined />
+                        Công ty
+                    </a-menu-item>
+                </RouterLink>
+                <a-menu-item key="11" @click="store.logout">
+                    <LogoutOutlined />
+                    Đăng xuất
+                </a-menu-item>
+            </a-menu>
         </div>
 
-        <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="inline">
-            <RouterLink to="/admin">
-                <a-menu-item key="1">
-                    <pie-chart-outlined />
-                    <span>Trang chủ</span>
-                </a-menu-item>
-            </RouterLink>
-
-
-            <a-sub-menu key="sub1" v-if="account?.account?.role.name === 'SUPER_ADMIN'">
-                <template #title>
-                    <span>
-                        <user-outlined />
-                        <span>Quản lý người dùng</span>
-                    </span>
-                </template>
-                <RouterLink to="/admin/user">
-                    <a-menu-item key="2">
-                        <span>Tài khoản</span>
-                    </a-menu-item>
-                </RouterLink>
-                <RouterLink to="/admin/permission">
-                    <a-menu-item key="3">
-                        Quyền
-                    </a-menu-item>
-                </RouterLink>
-                <RouterLink to="/admin/role">
-                    <a-menu-item key="4">
-                        Vai trò
-                    </a-menu-item>
-                </RouterLink>
-
-
-            </a-sub-menu>
-
-            <RouterLink to="/admin/company" v-if="coTheQuanLyCongTy">
-                <a-menu-item key="5">
-                    <GoldOutlined />
-                    Công ty
-                </a-menu-item>
-            </RouterLink>
-            <RouterLink to="/admin/resume" v-if="coTheQuanLyHoSo">
-                <a-menu-item key="6">
-                    <FileOutlined />
-                    Hồ sơ ứng tuyển
-                </a-menu-item>
-            </RouterLink>
-            <RouterLink to="/admin/job" v-if="coTheQuanLyCongViec">
-                <a-menu-item key="7">
-                    <ShoppingOutlined />
-                    Công việc
-                </a-menu-item>
-            </RouterLink>
-            <RouterLink to="/admin/subscriber"
-                v-if="account?.account?.role.name === 'SUPER_ADMIN' || account?.account?.role.name === 'NORMAL_ADMIN'">
-                <a-menu-item key="8">
-                    <MailOutlined />
-                    Đăng ký nhận mail
-                </a-menu-item>
-            </RouterLink>
-            <RouterLink to="/admin/notification"
-                v-if="account?.account?.role.name === 'SUPER_ADMIN' || account?.account?.role.name === 'NORMAL_ADMIN'">
-                <a-menu-item key="9">
-                    <NotificationOutlined />
-                    Thông báo
-                </a-menu-item>
-            </RouterLink>
-
-            <a-menu-item key="10" @click="store.logout">
-                <LogoutOutlined />
-                Đăng xuất
-            </a-menu-item>
-        </a-menu>
     </a-layout-sider>
 </template>
 
@@ -91,7 +98,7 @@ import {
     GoldOutlined,
     NotificationOutlined,
     ShoppingOutlined,
-    MailOutlined,
+    MailOutlined, AuditOutlined,
     LogoutOutlined
 } from '@ant-design/icons-vue';
 import { computed, ref, watch } from 'vue';
@@ -141,6 +148,9 @@ watch(
             case '/admin/notification':
                 selectedKeys.value = ['9'];
                 break;
+            case '/admin/personal_information':
+                selectedKeys.value = ['10'];
+                break;
             default:
                 selectedKeys.value = ['1'];
                 break;
@@ -156,6 +166,7 @@ const coTheQuanLyCongTy = computed(() =>
     checkPermission('POST /api/v1/companies') ||
     checkPermission('GET /api/v1/companies')
 );
+
 const coTheQuanLyHoSo = computed(() =>
     checkPermission('GET /api/v1/resumes/:id') ||
     checkPermission('DELETE /api/v1/resumes/:id') ||

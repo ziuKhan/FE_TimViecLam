@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
 import useCompanyStore from '../../../stores/admin/CompanyStore';
 import CKEditor from '../../../components/CKEditor.vue';
@@ -41,13 +41,15 @@ const handleOk = () => {
         message.error('Vui lòng kiểm tra lại các trường đã nhập!');
     });
 };
+const openModal = ref(store.openModal);
+
 
 
 </script>
 
 
 <template>
-    <a-modal {{ }} :title="store.form._id ? 'Cập nhật Role' : 'Tạo mới Role'"
+    <a-modal {{ }} :title="store.form._id ? 'Cập nhật công ty' : 'Tạo mới công ty'"
         :okText="store.form._id ? 'Cập nhật' : 'Thêm mới'" :width="850" v-model:open="store.openModal"
         :maskClosable="false" :cancelButtonProps="{ style: { display: 'none' } }" @ok="handleOk"
         :confirm-loading="store.loading">
@@ -64,7 +66,8 @@ const handleOk = () => {
                     <a-form-item label="Vui lòng tải logo lên" name="logo"
                         :rules="[{ required: true, message: 'Vui lòng tải logo công ty lên!' }]">
                         <a-upload maxCount="1" name="file" v-model:file-list="fileList"
-                            accept="image/png,image/svg+xml,image/x-icon" :custom-request="handleUpload" class="w-full">
+                            accept="image/png,image/svg+xml,image/x-icon,image/webp" :custom-request="handleUpload"
+                            class="w-full">
                             <a-button>
                                 <upload-outlined></upload-outlined>
                                 Tải logo công ty

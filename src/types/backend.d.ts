@@ -194,3 +194,8 @@ export interface INotification {
   createdAt?: string
   updatedAt?: string
 }
+interface IApiResponse {
+  statusCode: number
+  message: string
+  data: any
+}

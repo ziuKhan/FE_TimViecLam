@@ -127,7 +127,9 @@ onMounted(() => {
                     <a-form-item label="Lương" name="salary"
                         :rules="[{ required: true, message: 'Vui lòng nhập lương!' }]">
                         <a-input-number v-model:value="store.form.salary" placeholder="Vui lòng nhập lương"
-                            class="w-full" min="1" />
+                            class="w-full" min="1"
+                            :formatter="(value: string) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
+                            :parser="(value: string) => value.replace(/\$\s?|(,*)/g, '')" />
                     </a-form-item>
                 </a-col>
                 <a-col :span="12">

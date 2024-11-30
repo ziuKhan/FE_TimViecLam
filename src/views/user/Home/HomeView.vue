@@ -16,8 +16,8 @@ const load = ref<boolean>(false)
 const getData = async () => {
   load.value = false
   const [companies, jobs] = await Promise.all([companyService.paginateApi('?current=1&pageSize=9&sort=-createdAt&isActive=true'), jobService.paginateApi('?current=1&pageSize=9&populate=companyId&sort=-createdAt&isActive=true')])
-  dataCompany.value = companies.result
-  dataJobs.value = jobs.result
+  dataCompany.value = companies?.result
+  dataJobs.value = jobs?.result
   load.value = true
 }
 

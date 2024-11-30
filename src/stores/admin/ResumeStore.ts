@@ -99,7 +99,7 @@ const useResumeStore = defineStore('resume', () => {
     openModal.value = true
   }
 
-  const isStatus = ref<string>('PENDING')
+  const isStatus = ref<string>('')
   watch(isStatus, () => {
     getData()
   })

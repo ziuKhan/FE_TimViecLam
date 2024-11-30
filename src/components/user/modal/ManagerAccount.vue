@@ -10,6 +10,9 @@
         <a-tab-pane key="3" tab="Đổi mật khẩu">
             <ChangePassword />
         </a-tab-pane>
+        <a-tab-pane key="4" tab="Thông tin tài khoản">
+            <AccountInfo />
+        </a-tab-pane>
     </a-tabs>
 
 </template>
@@ -19,5 +22,6 @@ import { ref } from 'vue';
 import Resume from '../managerAccount/Resume.vue';
 import Subscribers from '../managerAccount/Subscribers.vue';
 import ChangePassword from '../managerAccount/ChangePassword.vue';
+import AccountInfo from '../managerAccount/AccountInfo.vue';
 const activeKey = ref('1');
 </script>

@@ -96,7 +96,8 @@ const renderStatus = (status: string) => {
                 <div>
                     <span class="mr-1 text-base">Hiển thị theo trạng thái: </span>
                     <a-select v-model:value="store.isStatus" class="w-[200px]">
-                        <a-select-option selected value="PENDING">ĐANG CHỜ</a-select-option>
+                        <a-select-option selected value="">Tất cả</a-select-option>
+                        <a-select-option value="PENDING">ĐANG CHỜ</a-select-option>
                         <a-select-option value="REVIEWING">ĐANG XEM XÉT</a-select-option>
                         <a-select-option value="APPROVED">ĐÃ DUYỆT</a-select-option>
                         <a-select-option value="REJECTED">ĐÃ TỪ CHỐI</a-select-option>

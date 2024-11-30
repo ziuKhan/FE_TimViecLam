@@ -87,12 +87,17 @@ watch(() => store.form._id, () => {
     getData();
 })
 
+// Function to count selected permissions
+const getSelectedCount = (items: any[]) => {
+    return items.filter(item => checkedPermissions.value[item._id]).length;
+};
 
 </script>
 
 <template>
     <a-collapse v-model:activeKey="activeKey">
-        <a-collapse-panel v-for="(items, module) in groupedData" :key="module" :header="module">
+        <a-collapse-panel v-for="(items, module) in groupedData" :key="module" :header="module"
+            :extra="`${items.length} quyền, ${getSelectedCount(items)} đã chọn`">
             <a-row :gutter="16">
                 <a-col v-for="item in items" :key="item._id" :span="12" class="py-2">
                     <a-card style="width: 100%">
