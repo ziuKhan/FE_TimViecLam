@@ -42,45 +42,60 @@
                 <RouterLink to="/admin/company"
                     v-if="coTheQuanLyCongTy && (account?.account?.role.name === 'SUPER_ADMIN' || account?.account?.role.name === 'NORMAL_ADMIN')">
                     <a-menu-item key="5">
-                        <GoldOutlined />
-                        Công ty
+                        <span>
+                            <GoldOutlined />
+                            <span>Công ty</span>
+                        </span>
+
                     </a-menu-item>
                 </RouterLink>
                 <RouterLink to="/admin/resume" v-if="coTheQuanLyHoSo">
                     <a-menu-item key="6">
-                        <FileOutlined />
-                        Hồ sơ ứng tuyển
+                        <span>
+                            <FileOutlined />
+                            <span>Hồ sơ ứng tuyển</span>
+                        </span>
                     </a-menu-item>
                 </RouterLink>
                 <RouterLink to="/admin/job" v-if="coTheQuanLyCongViec">
                     <a-menu-item key="7">
-                        <ShoppingOutlined />
-                        Công việc
+                        <span>
+                            <ShoppingOutlined />
+                            <span>Công việc</span>
+                        </span>
                     </a-menu-item>
                 </RouterLink>
                 <RouterLink to="/admin/subscriber"
                     v-if="account?.account?.role.name === 'SUPER_ADMIN' || account?.account?.role.name === 'NORMAL_ADMIN'">
                     <a-menu-item key="8">
-                        <MailOutlined />
-                        Đăng ký nhận mail
+                        <span>
+                            <MailOutlined />
+                            <span>Đăng ký nhận mail</span>
+                        </span>
                     </a-menu-item>
                 </RouterLink>
                 <RouterLink to="/admin/notification"
                     v-if="account?.account?.role.name === 'SUPER_ADMIN' || account?.account?.role.name === 'NORMAL_ADMIN'">
                     <a-menu-item key="9">
-                        <NotificationOutlined />
-                        Thông báo
+                        <span>
+                            <NotificationOutlined />
+                            <span>Thông báo</span>
+                        </span>
                     </a-menu-item>
                 </RouterLink>
                 <RouterLink to="/admin/personal_information" v-if="account?.account?.role.name === 'HR_USER'">
                     <a-menu-item key="10">
-                        <AuditOutlined />
-                        Công ty
+                        <span>
+                            <AuditOutlined />
+                            <span>Công ty</span>
+                        </span>
                     </a-menu-item>
                 </RouterLink>
                 <a-menu-item key="11" @click="store.logout">
-                    <LogoutOutlined />
-                    Đăng xuất
+                    <span>
+                        <LogoutOutlined />
+                        <span>Đăng xuất</span>
+                    </span>
                 </a-menu-item>
             </a-menu>
         </div>

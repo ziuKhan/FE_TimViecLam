@@ -78,7 +78,7 @@ onMounted(() => {
 </script>
 <template>
     <a-layout-header :style="{ background: '#fff', padding: '0 20px' }" class="p-0 text-lg font-medium">Trang quản lý
-        phân quyền</a-layout-header>
+        quyền</a-layout-header>
     <a-layout-content style="margin: 0 16px">
 
         <a-breadcrumb style="margin: 16px 0">

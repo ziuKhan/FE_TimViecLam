@@ -59,15 +59,16 @@ onMounted(() => {
 
         <a-breadcrumb style="margin: 16px 0">
             <a-breadcrumb-item>Trang chủ</a-breadcrumb-item>
-            <a-breadcrumb-item>Quản công ty</a-breadcrumb-item>
+            <a-breadcrumb-item>Quản lý công ty</a-breadcrumb-item>
         </a-breadcrumb>
         <div class="p-6 bg-white min-h-[360px] rounded-[10px]">
             <div class="flex justify-between">
                 <div class="w-3/4 flex" v-permission="'GET /api/v1/companies'">
-                    <a-input-search placeholder="Vui lòng nhập thông tin cần tìm kiếm" enter-button="Tìm kiếm"
-                        v-model:value="store.valueSearch" @search="store.getData(store.valueSearch)" />
+                    <a-input-search class="w-1/2" placeholder="Vui lòng nhập thông tin cần tìm kiếm"
+                        enter-button="Tìm kiếm" v-model:value="store.valueSearch"
+                        @search="store.getData(store.valueSearch)" />
                     <div class="ml-5 flex items-center">
-                        <span class="mr-3 font-medium">Active</span>
+                        <span class="mr-3 font-medium w-full">Trạng thái</span>
                         <a-switch v-model:checked="store.isActive" />
                     </div>
                 </div>

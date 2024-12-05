@@ -53,12 +53,12 @@ onMounted(() => {
 </script>
 <template>
     <a-layout-header :style="{ background: '#fff', padding: '0 20px' }" class="p-0 text-lg font-medium">Trang quản lý
-        quyền</a-layout-header>
+        vai trò</a-layout-header>
     <a-layout-content style="margin: 0 16px">
 
         <a-breadcrumb style="margin: 16px 0">
             <a-breadcrumb-item>Trang chủ</a-breadcrumb-item>
-            <a-breadcrumb-item>Quản lý quyền</a-breadcrumb-item>
+            <a-breadcrumb-item>Quản lý vai trò</a-breadcrumb-item>
         </a-breadcrumb>
         <div class="p-6 bg-white min-h-[360px] rounded-[10px]">
             <div class="flex justify-between">

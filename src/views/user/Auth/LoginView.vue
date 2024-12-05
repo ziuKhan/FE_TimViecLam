@@ -58,7 +58,7 @@ const disabled = computed(() => {
   return !(formState.username && formState.password)
 })
 const onLoginByGoogle = async () => {
-  window.location.href = 'http://localhost:8080/api/v1/auth/google';
+  window.location.href = import.meta.env.VITE_API_URL + '/api/v1/auth/google';
 };
 const googleCallback = async (access_token: any) => {
   try {
@@ -66,7 +66,6 @@ const googleCallback = async (access_token: any) => {
 
     tokenService.createToken(access_token, formState.remember);
     await accountService.createAccount(formState.remember)
-
     openNotificationWithIcon();
     router.push('/');
   } catch (error) {
@@ -122,7 +121,7 @@ onMounted(() => {
         <div class="or">hoặc</div>
         <a-form-item label="Email" name="username" class="login-form-username" :rules="[
           { required: true, message: 'Vui lòng điền email!' },
-          { type: 'email', message: 'Email phải là email!' }
+          { type: 'email', message: 'Yêu cầu nhập đúng định dạng email!' }
         ]">
           <a-input v-model:value="formState.username" size="large" placeholder="Vui lòng nhập email">
             <template #prefix>
@@ -133,7 +132,7 @@ onMounted(() => {
 
         <a-form-item label="Mật khẩu" name="password" :rules="[
           { required: true, message: 'Vui lòng điền mật khẩu!' },
-          { type: 'string', min: 6, message: 'Mật bạn phải là 6 kiểu!' }
+          { type: 'string', min: 6, message: 'Mật khẩu của bạn phải là 6 kí tự!' }
         ]">
           <a-input-password v-model:value="formState.password" size="large" placeholder="Vui lòng nhập mật khẩu">
             <template #prefix>

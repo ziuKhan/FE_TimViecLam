@@ -1,25 +1,25 @@
 <template>
-    <a-drawer :title="store.form._id ? 'Cập nhật Permission' : 'Tạo  Tạo mới Permission'" :width="650"
-        :open="store.openModal" :body-style="{ paddingBottom: '80px' }" :footer-style="{ textAlign: 'right' }"
-        @close="store.openModal = false" :maskClosable="false">
+    <a-drawer :title="store.form._id ? 'Cập nhật quyền' : 'Tạo mới quyền'" :width="650" :open="store.openModal"
+        :body-style="{ paddingBottom: '80px' }" :footer-style="{ textAlign: 'right' }" @close="store.openModal = false"
+        :maskClosable="false">
 
         <a-form :model="store.form" :rules="rules" ref="formRef" layout="vertical" class="px-20 py-3">
             <a-row :gutter="16">
                 <a-col :span="24">
-                    <a-form-item label="Name" name="name">
-                        <a-input v-model:value="store.form.name" placeholder="Vui lòng nhập name" />
+                    <a-form-item label="Tên" name="name">
+                        <a-input v-model:value="store.form.name" placeholder="Vui lòng nhập tên" />
                     </a-form-item>
                 </a-col>
                 <a-col :span="24">
-                    <a-form-item label="ApiPath" name="apiPath">
-                        <a-input v-model:value="store.form.apiPath" placeholder="Vui lòng nhập apiPath" />
+                    <a-form-item label="Đường dẫn" name="apiPath">
+                        <a-input v-model:value="store.form.apiPath" placeholder="Vui lòng nhập đường dẫn" />
                     </a-form-item>
                 </a-col>
             </a-row>
             <a-row :gutter="16">
                 <a-col :span="24">
-                    <a-form-item label="Method" name="method">
-                        <a-select v-model:value="store.form.method" placeholder="Vui lòng nhập method">
+                    <a-form-item label="Phương thức" name="method">
+                        <a-select v-model:value="store.form.method" placeholder="Vui lòng nhập phương thức">
                             <!-- <a-select-option disabled selected value>Vui lòng chọn method</a-select-option> -->
                             <template v-for="item in ALL_METHODS">
                                 <a-select-option :value="item">{{ item }}</a-select-option>
@@ -30,7 +30,6 @@
                 <a-col :span="24">
                     <a-form-item label="Module" name="module">
                         <a-select v-model:value="store.form.module" placeholder="Vui lòng nhập module">
-                            <!-- <a-select-option disabled selected value>Vui lòng chọn module</a-select-option> -->
                             <template v-for="item in ALL_MODULES">
                                 <a-select-option :value="item">{{ item }}</a-select-option>
                             </template>

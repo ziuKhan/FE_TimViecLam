@@ -62,7 +62,7 @@ onMounted(() => {
 
         <a-breadcrumb style="margin: 16px 0">
             <a-breadcrumb-item>Trang chủ</a-breadcrumb-item>
-            <a-breadcrumb-item>Quản thông báo</a-breadcrumb-item>
+            <a-breadcrumb-item>Quản lý thông báo</a-breadcrumb-item>
         </a-breadcrumb>
         <div class="p-6 bg-white min-h-[360px] rounded-[10px]">
             <div class="flex justify-between">

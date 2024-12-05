@@ -120,7 +120,7 @@ onMounted(() => {
 
         <a-form-item>
           <a-button :disabled="disabled" type="primary" html-type="submit" class="login-form-button">
-            Đăng nhập ngay
+            Đăng ký
           </a-button>
           Bạn đã có tài khoản
           <RouterLink to="/login" class="font-bold">đăng nhập ngay!</RouterLink>

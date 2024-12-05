@@ -24,10 +24,9 @@ const handleOk = () => {
 
 
 <template>
-    <a-modal {{ }} :title="store.form._id ? 'Cập nhật Notification' : 'Tạo mới Notification'"
-        :okText="store.form._id ? 'Cập nhật' : 'Thêm mới'" :width="850" v-model:open="store.openModal"
-        :maskClosable="false" :cancelButtonProps="{ style: { display: 'none' } }" @ok="handleOk"
-        :confirm-loading="store.loading">
+    <a-modal :title="store.form._id ? 'Cập nhật thông báo' : 'Tạo mới thông báo'" :okText="store.form._id ? 'Cập nhật' : 'Thêm mới'"
+        :width="850" v-model:open="store.openModal" :maskClosable="false"
+        :cancelButtonProps="{ style: { display: 'none' } }" @ok="handleOk" :confirm-loading="store.loading">
 
         <a-form :model="store.form" ref="formRef" layout="vertical" class=" p-3">
             <a-row :gutter="16">

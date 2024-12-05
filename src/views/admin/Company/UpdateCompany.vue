@@ -62,7 +62,7 @@ const openModal = ref(store.openModal);
                         <a-input v-model:value="store.form.name" placeholder="Vui lòng nhập name" />
                     </a-form-item>
                 </a-col>
-                <a-col :span="7">
+                <a-col :span="6">
                     <a-form-item label="Vui lòng tải logo lên" name="logo"
                         :rules="[{ required: true, message: 'Vui lòng tải logo công ty lên!' }]">
                         <a-upload maxCount="1" name="file" v-model:file-list="fileList"
@@ -75,8 +75,8 @@ const openModal = ref(store.openModal);
                         </a-upload>
                     </a-form-item>
                 </a-col>
-                <a-col :span="2">
-                    <a-form-item label="Active" name="isActive">
+                <a-col :span="3">
+                    <a-form-item label="Trạng thái" name="isActive">
                         <a-switch v-model:checked="store.form.isActive" />
                     </a-form-item>
                 </a-col>
