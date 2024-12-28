@@ -120,10 +120,10 @@
 import { ref, watch } from 'vue';
 import useResumeStore from '../../../stores/admin/ResumeStore';
 import type { IUser } from '../../../types/backend';
-import userService from '../../../services/user.service';
 import { linkUploads } from '../../../constant/api';
 import dayjs from 'dayjs';
 import { formatSalary } from '../../../until/until';
+import apiService from '../../../services/api.service';
 
 const renderStatus = (status: string) => {
     switch (status) {
@@ -176,7 +176,7 @@ const store = useResumeStore()
 const data = ref<IUser>()
 const getUser = async () => {
     try {
-        const res = await userService.getApi(store.form.userId);
+        const res = await apiService.get('users/' + store.form.userId);
         if (res) {
             data.value = res.data;
         }

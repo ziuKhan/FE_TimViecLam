@@ -97,6 +97,7 @@ const useCompanyStore = defineStore('company', () => {
       loading.value = true
       const res = await getApi(id)
       if (res) {
+        delete res.data.fullAddress
         Object.assign(form, res.data)
         openModal.value = true
         loading.value = false

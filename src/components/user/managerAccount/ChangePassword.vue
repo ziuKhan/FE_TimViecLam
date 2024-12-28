@@ -30,7 +30,8 @@
 <script lang="ts" setup>
 import { reactive } from 'vue';
 import { message } from 'ant-design-vue';
-import userService from '../../../services/user.service';
+import apiService from '../../../services/api.service';
+import accountService from '../../../constant/account.service';
 
 
 interface FormState {
@@ -58,7 +59,8 @@ const onFinish = async (values: any) => {
         password: values.password,
         newPassword: values.newPassword,
     }
-    const res = await userService.changePasswordApi(data);
+    const id = accountService.getAccount().account?._id
+    const res = await apiService.add('users/change-password', data);
     if (res.data) {
         message.success('Đổi mật khẩu thành công')
         formState.password = '';

@@ -1,22 +1,21 @@
 import axios from 'axios'
 import TokenService from './token.service'
 import { useAuthStore } from '../stores/AuthStore'
+import accountService from './account.service'
 
 export const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_URL + '/api/v1',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  timeout: 10000,
+  baseURL: import.meta.env.VITE_API_URL + '/api/v1/',
+  headers: TokenService.getToken().header,
+  timeout: 15000,
   withCredentials: true
 })
 
 // Add a request interceptor
 apiClient.interceptors.request.use(
   (config) => {
-    const token = TokenService.getToken().token
+    const token = TokenService.getToken().header
     if (token) {
-      config.headers['Authorization'] = 'Bearer ' + token
+      config.headers['Authorization'] = token['Authorization']
     }
     return config
   },
@@ -40,8 +39,10 @@ apiClient.interceptors.response.use(
         apiClient.defaults.headers.common['Authorization'] = 'Bearer ' + access_token
         return apiClient(originalRequest)
       } catch (_error) {
-        store.logout()
+        await store.logout()
         return Promise.reject(_error)
+      } finally {
+        await accountService.updateAccount()
       }
     }
     if (error.code === 'ECONNABORTED') {

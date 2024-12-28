@@ -1,14 +1,26 @@
+import API from '../services/api.service'
+import accountService from './account.service'
+
 class TokenService {
   getToken() {
     const token_local = localStorage.getItem('access_token')
     if (token_local) {
-      return { token: token_local, storage: 'local' }
+      return {
+        header: {
+          Authorization: 'Bearer ' + token_local,
+          'Content-Type': 'application/json'
+        },
+        storage: 'local'
+      }
     }
     const token_session = sessionStorage.getItem('access_token')
     if (token_session) {
-      return { token: token_session, storage: 'session' }
+      return {
+        header: { Authorization: 'Bearer ' + token_session, 'Content-Type': 'application/json' },
+        storage: 'session'
+      }
     }
-    return { token: '', storage: null }
+    return { header: { 'Content-Type': 'application/json' }, storage: null }
   }
 
   createToken(token: string, isRemember?: boolean) {

@@ -15,7 +15,6 @@ export const loginApi = async (username: string, password: string): Promise<any>
   }
 }
 
-
 export const loginByGoogleApi = async (): Promise<any> => {
   try {
     const res = await apiClient.get(`${moduleName}/google`)
@@ -28,15 +27,14 @@ export const loginByGoogleApi = async (): Promise<any> => {
 export const refreshApi = async (): Promise<{ success: boolean; data?: any }> => {
   try {
     const res = await apiClient.get(`${moduleName}/refresh`, {
-      withCredentials: true,
-    });
-    return { success: true, data: res.data.data };
+      withCredentials: true
+    })
+    return { success: true, data: res.data.data }
   } catch (err: any) {
-    console.error("Error refreshing API:", err);
-    return { success: false };
+    console.error('Error refreshing API:', err)
+    return { success: false }
   }
-};
-
+}
 
 export const registerApi = async (user: any): Promise<any> => {
   try {

@@ -46,7 +46,7 @@ const disabled = computed(() => {
 })
 const router = useRouter()
 onMounted(() => {
-  const user = tokenService.getToken()?.token
+  const user = tokenService.getToken()?.header.Authorization
   if (user && user !== 'undefined') {
     router.push('/')
   }

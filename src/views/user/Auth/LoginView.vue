@@ -2,11 +2,12 @@
 import { reactive, computed, onMounted, watchEffect, ref, provide, watch } from 'vue'
 import { UserOutlined, LockOutlined } from '@ant-design/icons-vue'
 import { accountApi, loginApi, loginByGoogleApi, refreshApi } from '../../../services/auth.service'
-import { notification } from 'ant-design-vue'
+import { message, notification } from 'ant-design-vue'
 import { useRoute, useRouter } from 'vue-router'
 import tokenService from '../../../constant/token.service'
 import Loading from '../../../components/Loading.vue';
 import accountService from '../../../constant/account.service'
+import apiService from '../../../services/api.service'
 
 interface IFormState {
   username: string
@@ -34,7 +35,7 @@ const onFinish = async (values: IFormState) => {
   try {
     const { username, password } = values
     loading.value = true
-    const response = await loginApi(username, password)
+    const response = await apiService.add('auth/login', { username, password })
     if (response.data) {
       const { access_token } = response.data
       tokenService.createToken(access_token, formState.remember)
@@ -46,11 +47,11 @@ const onFinish = async (values: IFormState) => {
       router.back()
       window.location.reload();
     }
-    loading.value = false
-  } catch (error) {
+  } catch (error: any) {
+    message.error(error.response.data.message)
+  } finally {
     loading.value = false
 
-    console.error('Lỗi do try catch bắt:', error)
   }
 }
 
@@ -74,7 +75,7 @@ const googleCallback = async (access_token: any) => {
 };
 
 onMounted(() => {
-  const user = tokenService.getToken()?.token
+  const user = tokenService.getToken()?.header.Authorization
   if (user && user !== 'undefined') {
     router.push('/')
   }

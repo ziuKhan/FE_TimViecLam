@@ -2,11 +2,9 @@ import { defineStore } from 'pinia'
 import { onMounted, reactive, ref, watch } from 'vue'
 import type { IPaginate, IRole, IUser } from '../../types/backend'
 import { message, type FormInstance } from 'ant-design-vue'
-import userService from '../../services/user.service'
+import apiService from '../../services/api.service'
 
 const useUserStore = defineStore('user', () => {
-  const { getApi, createApi, updateApi, deleteApi, paginateApi } = userService
-
   const openModal = ref<boolean>(false)
   const keySearchRole = ref<string>('')
   const dataMeta = ref<IPaginate>({
@@ -77,15 +75,15 @@ const useUserStore = defineStore('user', () => {
     loading.value = true
     try {
       const params = `?current=${dataMeta.value?.current}&pageSize=${dataMeta.value?.pageSize}&populate=role&isActive=${isActive.value}&sort=-createdAt${search ? '&name=/' + search + '/' : ''}${keySearchRole.value ? '&role=' + keySearchRole.value + '' : ''}`
-      const res = await paginateApi(params)
+      const res = await apiService.get('users' + params)
       if (res) {
-        data.value = res.result
-        dataMeta.value = res.meta
-        loading.value = false
+        data.value = res.data.result
+        dataMeta.value = res.data.meta
       }
     } catch (error) {
-      loading.value = false
       console.error('Error fetching data:', error)
+    } finally {
+      loading.value = false
     }
   }
 
@@ -93,7 +91,7 @@ const useUserStore = defineStore('user', () => {
   const deleteByID = async (id: string) => {
     loading.value = true
     try {
-      const res = await deleteApi(id)
+      const res = await apiService.delete('users/' + id)
       if (res) {
         message.success('Xóa thành công!')
         loading.value = false
@@ -113,10 +111,10 @@ const useUserStore = defineStore('user', () => {
     try {
       const filteredForm = filterFormData(form)
       if (form._id) {
-        const res = await updateApi(filteredForm, form._id)
+        const res = await apiService.update(`users/${form._id}`, filteredForm)
         if (res) message.success('Cập nhật thành công!')
       } else {
-        const res = await createApi(form)
+        const res = await apiService.add(`users`, filteredForm)
         if (res) message.success('Thêm thành công!')
       }
       refreshInput()
@@ -125,17 +123,18 @@ const useUserStore = defineStore('user', () => {
       openModal.value = false
 
       getData()
-    } catch (error) {
+    } catch (error: any) {
+      message.error(error.response.data.message)
+    } finally {
       loading.value = false
     }
-    loading.value = false
   }
 
   //chức năng xem chi tiết
   const getByID = async (id: string) => {
     loading.value = true
     try {
-      const res = await getApi(id)
+      const res = await apiService.get('users/' + id)
       if (res) {
         form._id = res.data._id
         form.name = res.data.name || ''
@@ -147,8 +146,8 @@ const useUserStore = defineStore('user', () => {
         form.isActive = res.data.isActive || false
         openModal.value = true
       }
-    } catch (error) {
-      console.error('Error:', error)
+    } catch (error: any) {
+      message.error(error.response.data.message)
     } finally {
       loading.value = false
     }

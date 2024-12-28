@@ -4,30 +4,27 @@ import {
     UserOutlined, UploadOutlined,
     ShoppingOutlined
 } from '@ant-design/icons-vue';
-import userService from '../../../services/user.service';
 import accountService from '../../../constant/account.service';
-import type { ICompany, IUser, IUserbyAccount } from '../../../types/backend';
-import companyService from '../../../services/company.service';
+import type { IUser, IUserbyAccount } from '../../../types/backend';
 import { linkUploads } from '../../../constant/api';
 import { message } from 'ant-design-vue';
-import { uploadApi } from '../../../services/upload.service';
 import type { UploadProps } from 'ant-design-vue';
 import { useAuthStore } from '../../../stores/AuthStore';
+import apiService from '../../../services/api.service';
 
 const isEditUser = ref(false);
 const account: IUserbyAccount | null = accountService.getAccount().account;
 const userInfo = ref<IUser>({});
-const companyInfo = ref<ICompany>({});
 const openModal = ref<boolean>(false);
 const selectedFile = ref<File | null>(null);
 const store = useAuthStore();
 const loadData = async () => {
-    const [userRes, companyRes] = await Promise.all([
-        userService.getApi(account?._id || ''),
-        companyService.getApi(account?.companyId || '')
-    ]);
-    userInfo.value = userRes.data;
-    companyInfo.value = companyRes.data;
+    try {
+        const userRes = await apiService.get('users/public/' + account?._id);
+        userInfo.value = userRes.data;
+    } catch (error: any) {
+        message.error(error.response.data.message)
+    }
 
 }
 
@@ -39,13 +36,13 @@ const updateUser = async (id: string) => {
     formData.append('address', userInfo.value.address || '');
     formData.append('avatar', userInfo.value.avatar || '');
     try {
-        const res = await userService.updateApi(formData, id);
+        const res = await apiService.update('users/public/' + id, formData);
         if (res.data) {
             message.success('Cập nhật thông tin tài khoản thành công');
             isEditUser.value = false
         }
-    } catch (error) {
-        console.log(error);
+    } catch (error: any) {
+        message.error(error.response.data.massage);
     }
 }
 
@@ -60,15 +57,14 @@ const handleConfirmUpload = async () => {
         return;
     }
     try {
-        const res = await uploadApi(selectedFile.value, 'user');
+        const res = await apiService.upload(selectedFile.value, 'user');
         if (res) {
             userInfo.value.avatar = res.data.fileName;
             await updateUser(userInfo.value._id || '');
-            store.refreshToken();
             openModal.value = false;
         }
-    } catch (err) {
-        message.error('Cập nhật ảnh thất bại!');
+    } catch (error: any) {
+        message.error(error.response.data.massage);
     }
 };
 

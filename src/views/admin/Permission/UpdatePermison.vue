@@ -62,11 +62,11 @@ const rules: Record<string, Rule[]> = {
     name: [{ required: true, message: 'Vui lòng nhập name' }],
     apiPath: [
         { required: true, message: 'Vui lòng nhập apiPath' },
-        {
-            pattern: /^\/([a-zA-Z0-9]+(\/:\w+|\/[a-zA-Z0-9]+)*)*$/,
-            // Regex cho định dạng /a/a/a
-            message: 'Định dạng apiPath không hợp lệ. Phải có dạng /a/a/a'
-        }
+        // {
+        //     pattern: /^\/([a-zA-Z0-9]+(\/:\w+|\/[a-zA-Z0-9]+)*)*$/,
+        //     // Regex cho định dạng /a/a/a
+        //     message: 'Định dạng apiPath không hợp lệ. Phải có dạng /a/a/a'
+        // }
     ],
     method: [{ required: true, message: 'Vui lòng nhập method ' }],
     module: [{ required: true, message: 'Vui lòng nhập module ' }],

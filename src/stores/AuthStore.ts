@@ -6,6 +6,7 @@ import { accountApi, logoutApi, refreshApi } from '../services/auth.service'
 import type { IUser } from '../types/backend'
 import tokenService from '../constant/token.service'
 import accountService from '../constant/account.service'
+import apiService from '../services/api.service'
 
 export const useAuthStore = defineStore('auth', () => {
   const logout = async () => {
@@ -24,18 +25,14 @@ export const useAuthStore = defineStore('auth', () => {
 
   const refreshToken = async () => {
     try {
-      const res = await refreshApi()
-
-      if (res.success) {
+      const res = await apiService.get(`auth/refresh`)
+      if (res.data) {
         const { access_token } = res.data
         tokenService.updateToken(access_token)
-        accountService.updateAccount()
         return access_token
       }
-      return false
-    } catch (error) {
-      console.error('Error refreshing token:', error)
-      return false
+    } catch (error: any) {
+      message.error(error.response.data.message)
     }
   }
 

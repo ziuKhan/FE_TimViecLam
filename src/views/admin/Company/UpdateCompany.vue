@@ -102,7 +102,7 @@ onMounted(() => {
         <a-form :model="store.form" ref="formRef" layout="vertical" class=" py-3">
             <a-row :gutter="16">
                 <a-col :span="15">
-                    <a-form-item label="Name (tên)" name="name"
+                    <a-form-item label="Tên công ty" name="name"
                         :rules="[{ required: true, message: 'Vui lòng nhập địa chỉ!' }]">
                         <a-input v-model:value="store.form.name" placeholder="Vui lòng nhập name" />
                     </a-form-item>
