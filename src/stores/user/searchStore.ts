@@ -22,13 +22,17 @@ export const useSearchStore = defineStore('search', () => {
     const queryString = route.fullPath.split('?')[1] || ''
 
     const skillsParam = route.query.name
-      ? route.query.name.toString().replace(/\//g, '')
+      ? route.query.name.toString().replace(/\/(.*?)(\/i)?$/, '$1')
       : route.query.location
         ? route.query.location.toString().replace(/\//g, '')
         : ''
-    const paramString = `&populate=companyId&isActive=true&current=${current.value}&pageSize=9&sort=-createdAt&endDate=${new Date(Date.now() - 86400000).toISOString()}`
+    const paramString = `&populate=companyId&isActive=true&current=${current.value}&pageSize=9&sort=-createdAt`
+    // const paramString = `&populate=companyId&isActive=true&current=${current.value}&pageSize=9&sort=-createdAt&endDate=${new Date(Date.now() - 86400000).toISOString()}`
     const jobs = await jobService.paginateApi(`?${queryString}${paramString}`)
     dataJobs.value = jobs.result
+    keyword.value = route.query.name
+      ? route.query.name.toString().replace(/\/(.*?)(\/i)?$/, '$1')
+      : ''
     paginateJobs.value = { ...jobs.meta, keyword: skillsParam }
     load.value = true
   }

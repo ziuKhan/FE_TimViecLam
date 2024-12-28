@@ -49,8 +49,8 @@ watchEffect(() => {
           <div class="text-sm font-normal flex gap-y-3 lg:gap-0  lg:flex-nowrap flex-wrap">
             <div class="mr-5 flex gap-x-2 w-full lg:w-auto">
               <img loading="lazy" src="../../assets/image/icon/icons8_address.svg" alt="" />
-              {{ dataCompany.address }}
-
+              {{ Array.isArray(dataCompany.address) ? (dataCompany.address.length > 0 ? dataCompany.address.join(', ') :
+                '') : dataCompany.address }}
             </div>
             <RouterLink to="#job" class="flex gap-x-2 hover:underline">
               <img loading="lazy" src="../../assets/image/icon/icons8_suitcase.svg" alt="" />

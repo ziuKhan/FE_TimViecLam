@@ -3,7 +3,8 @@
   <div class="mt-2">
     <div class="w-full flex gap-2  flex-wrap  mb-2 mt-5">
       <div class="font-bold  text-base ">Mức lương: </div>
-      <div class=" font-medium text-base">{{ store.value[0] }}$ - {{ store.value[1] }}$</div>
+      <div class=" font-medium text-base">{{ store.value[0].toLocaleString() }}đ - {{ store.value[1].toLocaleString()
+        }}đ</div>
       <div class="w-full border rounded-full border-blue-200 hover:border-blue-300 px-4">
         <a-slider v-model:value="store.value" range :min="0" :max="store.valueMax" />
       </div>

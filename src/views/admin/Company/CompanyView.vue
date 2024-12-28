@@ -87,7 +87,9 @@ onMounted(() => {
                         <template v-else-if="column.dataIndex === 'createdAt'">
                             {{ dayjs(text).format('DD/MM/YYYY [lúc] HH:mm:ss') }}
                         </template>
-
+                        <template v-else-if="column.dataIndex === 'address'">
+                            {{ Array.isArray(text) ? (text.length > 0 ? text.join(', ') : '') : text }}
+                        </template>
                         <template v-else-if="column.dataIndex === 'logo'">
                             <img loading="lazy" class="h-12 w-12 object-contain" :src="linkUploads('company/' + text)"
                                 alt="#">

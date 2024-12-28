@@ -29,7 +29,14 @@ const useCompanyStore = defineStore('company', () => {
     _id: '',
     logo: '',
     name: '',
-    address: '',
+    province: '',
+    detailedAddress: '',
+    district: '',
+    ward: '',
+    get fullAddress() {
+      return this.detailedAddress + ', ' + this.province + ', ' + this.district + ', ' + this.ward
+    },
+    address: [],
     description: '',
     isActive: false
   })
@@ -39,10 +46,14 @@ const useCompanyStore = defineStore('company', () => {
   const refreshInput = () => {
     form._id = ''
     form.name = ''
-    form.address = ''
     form.description = ''
     form.isActive = false
     form.logo = ''
+    form.province = ''
+    form.address = []
+    form.detailedAddress = ''
+    form.district = ''
+    form.ward = ''
   }
 
   const handleOpenModal = () => {

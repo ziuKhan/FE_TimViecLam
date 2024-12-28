@@ -1,106 +1,99 @@
 <script lang="ts" setup>
-import { onMounted, onUpdated, ref, watch } from 'vue';
+import { onMounted, onUpdated, ref, watch } from 'vue'
 
-import useCompanyStore from '../../../stores/admin/CompanyStore';
-import CKEditor from '../../../components/CKEditor.vue';
-import type { UploadRequestOption } from 'ant-design-vue/es/vc-upload/interface';
-import { uploadApi } from '../../../services/upload.service';
-import { message } from 'ant-design-vue';
-import useJobStore from '../../../stores/admin/JobStore';
-import { LEVELS_LIST, SKILLS_LIST } from '../../../until/until';
-import type { Dayjs } from 'dayjs';
-import companyService from '../../../services/company.service';
-import dayjs from 'dayjs';
-import accountService from '../../../constant/account.service';
+import useCompanyStore from '../../../stores/admin/CompanyStore'
+import CKEditor from '../../../components/CKEditor.vue'
+import type { UploadRequestOption } from 'ant-design-vue/es/vc-upload/interface'
+import { uploadApi } from '../../../services/upload.service'
+import { message } from 'ant-design-vue'
+import useJobStore from '../../../stores/admin/JobStore'
+import { LEVELS_LIST, SKILLS_LIST } from '../../../until/until'
+import type { Dayjs } from 'dayjs'
+import companyService from '../../../services/company.service'
+import dayjs from 'dayjs'
+import accountService from '../../../constant/account.service'
+import type { ILocation } from '../../../types/backend'
+import { getConscious } from '../../../services/location.service'
 
-
-const value1 = ref<Dayjs[] | undefined>([]);
+const value1 = ref<Dayjs[] | undefined>([])
 watch(value1, (newValue) => {
     if (newValue) {
-        store.form.startDate = newValue[0]?.toDate();
-        store.form.endDate = newValue[1]?.toDate();
+        store.form.startDate = newValue[0]?.toDate()
+        store.form.endDate = newValue[1]?.toDate()
+    } else {
+        store.form.startDate = new Date()
+        store.form.endDate = new Date()
     }
-    else {
-        store.form.startDate = new Date();
-        store.form.endDate = new Date();
-    }
-});
+})
 
 const store = useJobStore()
 
-const formRef = ref<any>(null);
-const { account } = accountService.getAccount();
+const formRef = ref<any>(null)
+const { account } = accountService.getAccount()
 
-const rangePickerRef = ref<any>(null);
+const rangePickerRef = ref<any>(null)
 const handleOk = () => {
-    formRef.value.validate().then(() => {
-        if (!store.form.startDate || !store.form.endDate) {
-            message.error('Vui lòng nhập ngày bắt đầu và kết thúc!');
-            rangePickerRef.value.$el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            return;
-        }
-        store.updateAndAdd();
-    }).catch(() => {
-        message.error('Vui lòng kiểm tra lại các trường đã nhập!');
-    });
-};
+    formRef.value
+        .validate()
+        .then(() => {
+            if (!store.form.startDate || !store.form.endDate) {
+                message.error('Vui lòng nhập ngày bắt đầu và kết thúc!')
+                rangePickerRef.value.$el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+                return
+            }
+            store.updateAndAdd()
+        })
+        .catch(() => {
+            message.error('Vui lòng kiểm tra lại các trường đã nhập!')
+        })
+}
 
-const dataCompany = ref<any[]>([]);
+const dataCompany = ref<any[]>([])
 const getCompanies = async () => {
     try {
-        const res = await companyService.paginateApi('?current=1&pageSize=200&isActive=true&sort=-createdAt');
+        const res = await companyService.paginateApi(
+            '?current=1&pageSize=200&isActive=true&sort=-createdAt'
+        )
         if (res) {
             for (let i = 0; i < res.result.length; i++) {
                 dataCompany.value.push({ label: res.result[i].name, value: res.result[i]._id })
             }
         }
-    }
-    catch (err) {
-        console.log(err);
+    } catch (err) {
+        console.log(err)
     }
 }
 
-const handleSelectChangeLevel = (value: any) => {
-    if (value.length > 1) {
-        store.form.level = value[value.length - 1];
-    } else {
-        store.form.level = value;
-    }
-};
-const handleSelectChangeCompany = (value: any) => {
-    if (value.length > 1) {
-        store.form.companyId._id = value[value.length - 1];
-    } else {
-        store.form.companyId._id = value;
-    }
-};
 
-onUpdated(() => {
-    if (store.form._id) {
-        value1.value = [dayjs(store.form.startDate), dayjs(store.form.endDate)];
-    } else {
-        value1.value = undefined;
+const dataLocation = ref<ILocation[]>([])
+const loadDataLocation = async () => {
+    try {
+        const res = await getConscious()
+        if (res) {
+            dataLocation.value = res.data
+        }
+    } catch (error) {
+        console.log(error)
     }
-})
+}
 
 onMounted(() => {
     getCompanies()
+    loadDataLocation()
     if (store.form._id) {
-        value1.value = [dayjs(store.form.startDate), dayjs(store.form.endDate)];
+        value1.value = [dayjs(store.form.startDate), dayjs(store.form.endDate)]
     } else {
-        value1.value = undefined;
+        value1.value = undefined
     }
 })
 </script>
-
 
 <template>
     <a-modal :title="store.form._id ? 'Cập nhật công việc' : 'Tạo mới công việc'"
         :okText="store.form._id ? 'Cập nhật' : 'Thêm mới'" :width="850" v-model:open="store.openModal"
         :maskClosable="false" :cancelButtonProps="{ style: { display: 'none' } }" @ok="handleOk"
         :confirm-loading="store.loading">
-
-        <a-form :model="store.form" ref="formRef" layout="vertical" class=" py-3">
+        <a-form :model="store.form" ref="formRef" layout="vertical" class="py-3">
             <a-row :gutter="16">
                 <a-col :span="21">
                     <a-form-item label="Tên" name="name"
@@ -143,9 +136,8 @@ onMounted(() => {
                 <a-col :span="12">
                     <a-form-item label="Trình độ" name="level"
                         :rules="[{ required: true, message: 'Vui lòng nhập kĩ năng!' }]">
-                        <a-select v-model:value="store.form.level" allowClear mode="tags" style="width: 100%"
-                            placeholder="Vui lòng nhập trình độ..." :options="LEVELS_LIST"
-                            @change="handleSelectChangeLevel">
+                        <a-select v-model:value="store.form.level" allowClear style="width: 100%"
+                            placeholder="Vui lòng nhập trình độ..." :options="LEVELS_LIST" show-search>
                         </a-select>
                     </a-form-item>
                 </a-col>
@@ -157,26 +149,27 @@ onMounted(() => {
                     </a-form-item>
                 </a-col>
 
-
-                <a-col :span="24"
-                    :style="{ display: account?.role.name === 'HR_USER' ? account?.companyId ? 'none' : 'block' : 'block' }">
+                <a-col :span="24" :style="{
+                    display:
+                        account?.role.name === 'HR_USER' ? (account?.companyId ? 'none' : 'block') : 'block'
+                }">
                     <a-form-item label="Công ty" name="companyId"
                         :rules="[{ required: true, message: 'Vui lòng nhập công ty!' }]">
                         <a-select v-model:value="store.form.companyId._id" allowClear style="width: 100%"
-                            placeholder="Vui lòng công ty..." :options="dataCompany" @change="handleSelectChangeCompany"
-                            mode="multiple">
+                            placeholder="Vui lòng công ty..." :options="dataCompany" show-search>
                         </a-select>
                     </a-form-item>
                 </a-col>
 
-
                 <a-col :span="24">
                     <a-form-item label="Địa chỉ" name="location"
                         :rules="[{ required: true, message: 'Vui lòng nhập địa chỉ!' }]">
-                        <a-input v-model:value="store.form.location" placeholder="Vui lòng nhập location" />
+                        <a-select v-model:value="store.form.location" allowClear :options="dataLocation"
+                            :field-names="{ label: 'name', value: 'name' }" show-search
+                            placeholder="Vui lòng nhập location" style="width: 100%">
+                        </a-select>
                     </a-form-item>
                 </a-col>
-
 
                 <a-col :span="24">
                     <a-form-item name="description" :rules="[{ required: true, message: 'Vui lòng nhập mô tả!' }]"
@@ -187,11 +180,8 @@ onMounted(() => {
                 </a-col>
             </a-row>
         </a-form>
-
     </a-modal>
 </template>
-
-
 
 <style>
 .ant-upload,

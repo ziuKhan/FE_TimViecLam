@@ -7,7 +7,6 @@ import FormSearch from '../../../components/user/search/FormSearch.vue'
 import type { ICompany, IJob } from '../../../types/backend'
 import companyService from '../../../services/company.service'
 import jobService from '../../../services/job.service'
-import dayjs from 'dayjs'
 
 const dataCompany = ref<ICompany[]>([])
 const dataJobs = ref<IJob[]>([])
@@ -35,7 +34,7 @@ onMounted(() => {
   <main v-else>
     <FormSearch></FormSearch>
     <div class="link__cv theme_gray">
-      <RouterLink to="/ad" class="link__cv_link">
+      <RouterLink to="" class="link__cv_link">
         <img loading="lazy" src="../../../assets/image/icon/icons8_new.svg" alt="" />
         <p class="title_bold">Mẫu CV ITviec</p>
 
@@ -101,4 +100,4 @@ onMounted(() => {
     text-align: center;
   }
 }
-</style>
+</style>>

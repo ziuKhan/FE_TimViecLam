@@ -8,7 +8,7 @@ class TokenService {
     if (token_session) {
       return { token: token_session, storage: 'session' }
     }
-    return { token: null, storage: null }
+    return { token: '', storage: null }
   }
 
   createToken(token: string, isRemember?: boolean) {

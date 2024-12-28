@@ -54,12 +54,16 @@ export interface IAccount {
 export interface ICompany {
   _id?: string
   name?: string
-  address?: string
+  address?: string[]
   logo?: string
   isActive?: boolean
   description?: string
   createdBy?: string
-
+  province?: string
+  detailedAddress?: string
+  district?: string
+  ward?: string
+  fullAddress?: string
   isDeleted?: boolean
   deletedAt?: boolean | null
   createdAt?: string
@@ -194,8 +198,17 @@ export interface INotification {
   createdAt?: string
   updatedAt?: string
 }
-interface IApiResponse {
+export interface IApiResponse {
   statusCode: number
   message: string
   data: any
+}
+export interface ILocation {
+  id: string
+  name: string
+  name_en: string
+  full_name: string
+  full_name_en: string
+  latitude: string
+  longitude: string
 }

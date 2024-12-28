@@ -2,18 +2,19 @@
 import { ref, onMounted, onUnmounted, watchEffect, onUpdated, inject } from 'vue'
 import type { IAccount } from '../../../types/backend'
 import { useHeaderStore } from '../../../stores/user/headerStore'
-import { refreshApi } from '../../../services/auth.service';
-import ManagerAccount from '../modal/ManagerAccount.vue';
-import { useAuthStore } from '../../../stores/AuthStore';
-import { linkUploads } from '../../../constant/api';
-import notificationService from '../../../services/notification.service';
-import dayjs from 'dayjs';
-import accountService from '../../../constant/account.service';
+import { refreshApi } from '../../../services/auth.service'
+import ManagerAccount from '../modal/ManagerAccount.vue'
+import { useAuthStore } from '../../../stores/AuthStore'
+import { linkUploads } from '../../../constant/api'
+import notificationService from '../../../services/notification.service'
+import dayjs from 'dayjs'
+import accountService from '../../../constant/account.service'
+import { useRoute, useRouter } from 'vue-router'
 const isSticky = ref<boolean>(false)
 const collapsed = ref<boolean>(false)
 const open = ref<boolean>(false)
 const openNotification = ref<boolean>(false)
-
+const router = useRouter()
 const handleScroll = (): void => {
   const header = document.querySelector('.header')
   if (header) {
@@ -28,20 +29,18 @@ const handleScroll = (): void => {
   }
 }
 
-
 const storeAuth = useAuthStore()
 const storeHeader = useHeaderStore()
 const handleLogout = () => {
   storeAuth.logout()
 }
 const handleNotification = async (_id: any, url: any) => {
-
-  const res = await notificationService.updateApi({ isRead: true }, _id);
+  const res = await notificationService.updateApi({ isRead: true }, _id)
   if (res) {
-    window.location.href = url
+    router.go(0)
   }
 }
-const { account, storage } = accountService.getAccount();
+const { account, storage } = accountService.getAccount()
 onMounted(() => {
   window.addEventListener('scroll', handleScroll)
 })
@@ -49,11 +48,7 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
 })
-
-
-
 </script>
-
 
 <template>
   <header class="header theme_blackred">
@@ -83,56 +78,62 @@ onUnmounted(() => {
             <RouterLink class="header__sub_list" to="ada">Việc làm IT theo thành phố</RouterLink>
           </div>
         </RouterLink>
-        <RouterLink to="adax" class="header__nav_link">
-          Top Công ty IT
-          <div class="icon-wrapper">
-            <img loading="lazy" class="icon-default" src="../../../assets/image/icon/icons8_chevron_down_1.svg"
-              alt="" />
-            <img loading="lazy" class="icon-hover" src="../../../assets/image/icon/icons8_chevron_down_white.svg"
-              alt="" />
-          </div>
-        </RouterLink>
-        <RouterLink to="adax" class="header__nav_link"> Blog </RouterLink>
+        <RouterLink to="" class="header__nav_link"> Nhà tuyển dụng </RouterLink>
+        <RouterLink to="" class="header__nav_link"> Blog </RouterLink>
       </nav>
       <div class="header__user">
-
         <RouterLink to="/customer/login" class="header__user_link link_distance">Nhà Tuyển Dụng</RouterLink>
-        <span v-if="account" @click="openNotification = true"
-          class="header__user_link rounded-full bg-[#f3f3f3f6] p-[5px] relative cursor-pointer"> <img loading="lazy"
-            src="../../../assets/image/icon/icons8_notification.svg" alt="" class="w-6 h-6">
-          <span v-if="storeHeader.totalNotification > 0"
-            class="absolute -top-2  left-5 w-5 h-5 text-[14px] font-medium rounded-full bg-[#c82222] text-white text-xs text-center">
-            {{ storeHeader.totalNotification }}
-          </span>
-        </span>
-        <a-modal v-model:open="openNotification" title="Thông báo" :cancelButtonProps="{ style: { display: 'none' } }"
-          :okButtonProps="{ style: { display: 'none' } }" width="550px" class="custom-modal">
-          <div class="max-h-[400px] overflow-auto ">
-            <template v-for="item in storeHeader.dataNotification" :key="item">
-              <div @click="handleNotification(item?._id, item?.url)"
-                :class="['flex w-full px-1 hover:bg-zinc-200 rounded-lg', !item?.isRead ? 'bg-gray-200' : '']">
-                <div class="w-1/12 flex justify-center items-center">
-                  <img loading="lazy" class=" max-w-[40px] max-h-[40px] object-contain  rounded-full"
-                    :src="linkUploads('user/' + item?.createdBy?._id.avatar)" alt="" />
+
+        <a-popover v-model:open="openNotification" trigger="click" placement="bottomRight">
+          <template #content>
+            <div class="max-h-[400px] overflow-auto">
+              <template v-for="item in storeHeader.dataNotification" :key="item">
+                <div @click="handleNotification(item?._id, item?.url)" :class="[
+                  'flex w-full p-[2px] hover:border hover:border-red-500 hover:p-[1px] rounded-lg',
+                  !item?.isRead ? 'bg-gray-200' : ''
+                ]">
+                  <div class="w-1/12 flex justify-center items-center">
+                    <img loading="lazy" class="max-w-[40px] max-h-[40px] object-contain rounded-full"
+                      :src="linkUploads('user/' + item?.createdBy?._id.avatar)" alt="" />
+                  </div>
+                  <div class="w-11/12 min-h-20 cursor-pointer p-2">
+                    <h3 :class="[
+                      'w-full text-base mb-[3px]',
+                      !item?.isRead ? 'font-bold' : 'font-semibold'
+                    ]">
+                      {{ item?.title }}
+                    </h3>
+                    <p class="mb-1 text-sm">{{ item?.message }}</p>
+                    <p class="text-[13px] mb-1 font-[400] text-blue-800">
+                      {{ dayjs(item?.createdAt).format('DD/MM/YYYY [lúc] HH:mm') }}
+                    </p>
+                  </div>
+                  <div v-if="!item?.isRead" class="w-7 flex justify-center items-center">
+                    <img loading="lazy" class="w-full object-contain" src="../../../assets/image/icon/icons8_new.svg"
+                      alt="" />
+                  </div>
                 </div>
-                <div class="w-11/12 min-h-20  cursor-pointer p-2">
-                  <h3 :class="['w-full text-base mb-[3px]', !item?.isRead ? 'font-bold' : 'font-semibold']">
-                    {{ item?.title }}</h3>
-                  <p class=" mb-1 text-sm">{{ item?.message }}</p>
-                  <p class="text-[13px] mb-1 font-[400] text-blue-800">
-                    {{ dayjs(item?.createdAt).format('DD/MM/YYYY [lúc] HH:mm') }}</p>
-                </div>
-                <div v-if="!item?.isRead" class="w-7 flex justify-center items-center"> <img loading="lazy"
-                    class="w-full object-contain" src="../../../assets/image/icon/icons8_new.svg" alt=""></div>
+              </template>
+              <div class="text-center text-red-500 font-semibold hover:font-bold cursor-pointer p-1"
+                @click="storeHeader.changePagination()">
+                Xem thêm
               </div>
+            </div>
+          </template>
+          <template #title>
+            <span>Thông báo</span>
+          </template>
+          <span v-if="account" @click="openNotification = true"
+            class="header__user_link rounded-full bg-[#f3f3f3f6] p-[5px] relative cursor-pointer">
+            <img loading="lazy" src="../../../assets/image/icon/icons8_notification.svg" alt="" class="w-6 h-6" />
+            <span v-if="storeHeader.totalNotification > 0"
+              class="absolute -top-2 left-5 w-5 h-5 text-[14px] font-medium rounded-full bg-[#c82222] text-white text-xs text-center">
+              {{ storeHeader.totalNotification }}
+            </span>
+          </span>
+        </a-popover>
 
-            </template>
-          </div>
-        </a-modal>
-
-        <RouterLink v-if="!account" to="/login" class="header__user_link link_distance">Đăng
-          Nhập/Đăng ký
-
+        <RouterLink v-if="!account" to="/login" class="header__user_link link_distance">Đăng Nhập/Đăng ký
         </RouterLink>
         <span v-else to="/login" class="header__user_link link_distance header__nav_link link__user_name">
           <img loading="lazy" class="w-9 h-9 object-contain mr-1 rounded-full border border-solid border-gray-300"
@@ -145,16 +146,15 @@ onUnmounted(() => {
               alt="" />
           </div>
 
-
           <div class="header__sub">
             <span @click="open = true" class="header__sub_list">Quản lý tài khoản</span>
-            <a-modal v-model:open="open" width="1000px" title="Quản lý tài khoản" :maskClosable=false
+            <a-modal v-model:open="open" width="1000px" title="Quản lý tài khoản" :maskClosable="false"
               :okButtonProps="{ style: { display: 'none' } }" :cancelButtonProps="{ style: { display: 'none' } }">
               <ManagerAccount />
             </a-modal>
 
-            <RouterLink v-if="account?.role?.name !== 'NORMAL_USER'" class="header__sub_list" to="/admin">Quản
-              trị</RouterLink>
+            <RouterLink v-if="account?.role?.name !== 'NORMAL_USER'" class="header__sub_list" to="/admin">Quản trị
+            </RouterLink>
             <span @click="handleLogout()" class="header__sub_list">Đăng xuất</span>
           </div>
         </span>
@@ -185,7 +185,6 @@ onUnmounted(() => {
   color: #ffffff !important;
   font-weight: 600;
 } */
-
 
 .header {
   padding: 0 30px;

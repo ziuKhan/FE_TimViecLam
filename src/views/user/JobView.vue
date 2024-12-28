@@ -24,7 +24,12 @@ const open = ref<Boolean>(false)
 const router = useRouter()
 const loadButton = ref<Boolean>(true)
 const { account, storage } = accountService.getAccount();
-const pageSize = ref(9)
+const meta = ref({
+    current: 1,
+    pageSize: 9,
+    pages: 1,
+    total: 5
+})
 const getData = async () => {
     load.value = false
     const id = route.params.id as string
@@ -38,8 +43,9 @@ const getData = async () => {
 }
 const getJob = async () => {
     try {
-        const result = await jobService.paginateApi(`?current=1&pageSize=${pageSize.value}&populate=companyId&sort=-createdAt&isActive=true&level=${data.value?.level}`)
+        const result = await jobService.paginateApi(`?current=1&pageSize=${meta.value.pageSize}&populate=companyId&sort=-createdAt&isActive=true&level=${data.value?.level}`)
         dataJob.value = result.result
+        meta.value = result.meta
     } catch (error) {
         console.error('Error fetching data:', error)
     }
@@ -82,7 +88,7 @@ const handleOk = async () => {
 
 
 const onChangePageSize = () => {
-    pageSize.value += 6;
+    meta.value.pageSize += 6;
     getJob()
 }
 
@@ -201,7 +207,7 @@ onMounted(async () => {
                     </CardJob>
                 </template>
             </div>
-            <button @click="onChangePageSize()"
+            <button v-if="meta.pageSize < meta.total" @click="onChangePageSize()"
                 class="w-2/5 bg-white mt-4  rounded-lg px-5 py-2 shadow-lg hover:border-red-500 border-2 hover:bg-red-100 hover:text-red-600">Xem
                 thêm
                 công

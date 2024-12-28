@@ -1,13 +1,15 @@
 <template>
   <RouterLink :to="`/company/${id}`" class="card__employer">
     <div class="card__first">
-      <div class="first__logoBrand"> <img loading="lazy" :src="linkUploads('company/' + logo)" alt="" /></div>
+      <div class="first__logoBrand "> <img loading="lazy" :src="linkUploads('company/' + logo)" alt="" />
+      </div>
     </div>
     <div class="card__second">
       <div class="card__name">{{ name }}</div>
     </div>
     <div class="card__third">
-      <div class="card__address">{{ address }}</div>
+      <div class="card__address">{{ Array.isArray(address) ? (address.length > 0 ? address.join(', ') : '') : address }}
+      </div>
       <div class="card__job">
         {{ jobs }} việc làm
         <img loading="lazy" src="../../assets/image/icon/icons8_chevron_right.svg" alt="" />
@@ -21,7 +23,7 @@ import { RouterLink } from 'vue-router'
 import { linkUploads } from '../../constant/api'
 
 defineProps({
-  address: String,
+  address: Array,
   name: String,
   logo: String,
   jobs: Number,

@@ -18,24 +18,33 @@ export const useHeaderStore = defineStore('header', () => {
   socket.value.on('notification', async () => {
     await getData()
   })
+  const meta = ref({
+    current: 1,
+    pageSize: 100,
+    pages: 1,
+    total: 5
+  })
   const getData = async () => {
     const { account } = accountService.getAccount()
     if (!account || !account._id) return
 
     const [res, number] = await Promise.all([
-      notificationService.paginateApi(`?current=1&pageSize=100&sort=-createdAt`),
-      notificationService.paginateApi(`?current=1&pageSize=100&isRead=false`)
+      notificationService.paginateApi(`?current=1&pageSize=${meta.value.pageSize}&sort=-createdAt`),
+      notificationService.paginateApi(`?current=1&pageSize=${meta.value.pageSize}&isRead=false`)
     ])
 
     const filterNotifications = (items: INotification[]) =>
-      items.filter(item => item.type === 'SYSTEM' || item.userId === account._id)
+      items.filter((item) => item.type === 'SYSTEM' || item.userId === account._id)
 
     if (res) {
       dataNotification.value = filterNotifications(res.result)
       totalNotification.value = filterNotifications(number.result).length
     }
   }
-
+  const changePagination = () => {
+    meta.value.pageSize += 20
+    getData()
+  }
   onMounted(async () => {
     await getData()
   })
@@ -46,5 +55,5 @@ export const useHeaderStore = defineStore('header', () => {
     }
   })
 
-  return { dataNotification, totalNotification }
+  return { dataNotification, totalNotification, changePagination }
 })

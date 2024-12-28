@@ -12,9 +12,9 @@ const store = useSearchStore()
   <div class="container__search_form flex-wrap md:flex-nowrap ">
     <select class="search_form-select search_form-ctl min-w-full md:min-w-60" name="" id="" v-model="store.location">
       <option selected value="">Tất cả thành phố</option>
-      <option value="HANOI">Hà Nội</option>
-      <option value="HOCHIMINH">TP Hồ Chí Minh</option>
-      <option value="DANANG">Đà Nẵng</option>
+      <option value="Hà Nội">Hà Nội</option>
+      <option value="Hồ Chí Minh">TP Hồ Chí Minh</option>
+      <option value="Đà Nẵng">Đà Nẵng</option>
     </select>
     <input type="text" v-model="store.keyword" @keyup.enter="store.handleSearch()"
       class="search_form-inp search_form-ctl " id="search_form-inp" placeholder="Nhập từ khoá kĩ năng">

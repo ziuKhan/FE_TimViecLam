@@ -6,10 +6,53 @@ import CKEditor from '../../../components/CKEditor.vue';
 import type { UploadRequestOption } from 'ant-design-vue/es/vc-upload/interface';
 import { uploadApi } from '../../../services/upload.service';
 import { message } from 'ant-design-vue';
+import type { ILocation } from '../../../types/backend';
+import { getConscious, getDistrict, getWard } from '../../../services/location.service';
 
 
 // Sử dụng Permission Store
 const store = useCompanyStore()
+const dataConscious = ref<ILocation[]>([])
+const dataDistrict = ref<ILocation[]>([])
+const dataWard = ref<ILocation[]>([])
+const getDataConscious = async () => {
+    dataDistrict.value = []
+    dataWard.value = []
+    store.form.district = ''
+    store.form.ward = ''
+    try {
+        const res = await getConscious()
+        if (res) {
+            dataConscious.value = res.data
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+const getDataDistrict = async (name: string) => {
+    dataWard.value = []
+    store.form.ward = ''
+    try {
+        const id = dataConscious.value.find(item => item.name === name)?.id
+        const res = await getDistrict(id as string)
+        if (res) {
+            dataDistrict.value = res.data
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+const getDataWard = async (name: string) => {
+    try {
+        const id = dataDistrict.value.find(item => item.name === name)?.id
+        const res = await getWard(id as string)
+        if (res) {
+            dataWard.value = res.data
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 const fileList = ref([]);
 const handleUpload = async (options: UploadRequestOption) => {
@@ -41,8 +84,10 @@ const handleOk = () => {
         message.error('Vui lòng kiểm tra lại các trường đã nhập!');
     });
 };
-const openModal = ref(store.openModal);
+onMounted(() => {
 
+    getDataConscious()
+})
 
 
 </script>
@@ -81,13 +126,55 @@ const openModal = ref(store.openModal);
                     </a-form-item>
                 </a-col>
 
-                <a-col :span="24">
-                    <a-form-item label="Địa chỉ" name="address"
-                        :rules="[{ required: true, message: 'Vui lòng nhập địa chỉ!' }]">
-                        <a-input v-model:value="store.form.address" placeholder="Vui lòng nhập address" />
+                <a-col :span="8">
+                    <a-form-item label="Tỉnh thành" name="province"
+                        :rules="[{ required: true, message: 'Vui lòng nhập quận/huyện!' }]">
+                        <a-select v-model:value="store.form.province" :options="dataConscious"
+                            :field-names="{ label: 'name', value: 'name' }" show-search
+                            @change="(value: string) => getDataDistrict(value)" placeholder="Vui lòng nhập địa chỉ"
+                            style="width: 100%">
+                        </a-select>
                     </a-form-item>
                 </a-col>
+                <a-col :span="8">
+                    <a-form-item label="Quận/Huyện" name="district"
+                        :rules="[{ required: true, message: 'Vui lòng nhập quận/huyện!' }]">
+                        <a-select v-model:value="store.form.district" :options="dataDistrict"
+                            :field-names="{ label: 'name', value: 'name' }" show-search
+                            @change="(value: string) => getDataWard(value)" placeholder="Vui lòng nhập địa chỉ"
+                            style="width: 100%">
+                        </a-select>
 
+                    </a-form-item>
+                </a-col>
+                <a-col :span="8">
+                    <a-form-item label="Phường/Xã" name="ward"
+                        :rules="[{ required: true, message: 'Vui lòng nhập phường/xã!' }]">
+                        <a-select v-model:value="store.form.ward" :options="dataWard"
+                            :field-names="{ label: 'name', value: 'name' }" show-search
+                            placeholder="Vui lòng nhập địa chỉ" style="width: 100%">
+                        </a-select>
+
+                    </a-form-item>
+                </a-col>
+                <a-col :span="12">
+                    <a-form-item label="Tên đường, Toà nhà, Số nhà" name="detailedAddress"
+                        :rules="[{ required: true, message: 'Vui lòng nhập tên đường/ toà nhà/ số nhà!' }]">
+                        <a-input v-model:value="store.form.detailedAddress" placeholder="Vui lòng nhập địa chỉ"
+                            style="width: 100%">
+                        </a-input>
+                    </a-form-item>
+                </a-col>
+                <a-col :span="12">
+                    <a-form-item label="Địa chỉ các văn phòng" name="address"
+                        :rules="[{ required: true, message: 'Vui lòng nhập địa chỉ các văn phòng!' }]">
+                        <a-select v-model:value="store.form.address" :options="dataConscious"
+                            :field-names="{ label: 'name', value: 'name' }" mode="multiple"
+                            placeholder="Vui chọn địa chỉ các văn phòng" style="width: 100%">
+                        </a-select>
+
+                    </a-form-item>
+                </a-col>
                 <a-col :span="24">
                     <a-form-item name="description" :rules="[{ required: true, message: 'Vui lòng nhập mô tả!' }]"
                         class="m-0">
