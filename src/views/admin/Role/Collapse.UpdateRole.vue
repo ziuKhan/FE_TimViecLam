@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue';
-import roleService from '../../../services/role.service';
-import { paginatePermissionApi } from '../../../services/permission.service';
 import useRoleStore from '../../../stores/admin/RoleStore';
+import apiService from '../../../services/api.service';
 
 const store = useRoleStore()
 const activeKey = ref<string[]>(['1']);
@@ -14,7 +13,7 @@ const checkedPermissions = ref<Record<string, boolean>>({});
 const groupedData = ref<Record<string, any[]>>({});
 const getData = async () => {
     try {
-        const res = await paginatePermissionApi('?current=1&pageSize=100');
+        const res = await apiService.get('permissions?current=1&pageSize=100');
 
         const data = res.result;
 

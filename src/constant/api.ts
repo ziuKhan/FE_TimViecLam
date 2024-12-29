@@ -1,7 +1,7 @@
 import axios from 'axios'
-import TokenService from './token.service'
+import TokenService from '../services/token.service'
 import { useAuthStore } from '../stores/AuthStore'
-import accountService from './account.service'
+import accountService from '../services/account.service'
 
 export const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL + '/api/v1/',
@@ -32,6 +32,7 @@ apiClient.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config
     if (error.response.status === 401 && !originalRequest._retry) {
+      debugger
       const store = useAuthStore()
       originalRequest._retry = true
       try {

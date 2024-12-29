@@ -4,10 +4,10 @@ import { onMounted, ref, watch } from 'vue';
 import useCompanyStore from '../../../stores/admin/CompanyStore';
 import CKEditor from '../../../components/CKEditor.vue';
 import type { UploadRequestOption } from 'ant-design-vue/es/vc-upload/interface';
-import { uploadApi } from '../../../services/upload.service';
 import { message } from 'ant-design-vue';
 import type { ILocation } from '../../../types/backend';
 import { getConscious, getDistrict, getWard } from '../../../services/location.service';
+import apiService from '../../../services/api.service';
 
 
 // Sử dụng Permission Store
@@ -58,7 +58,7 @@ const fileList = ref([]);
 const handleUpload = async (options: UploadRequestOption) => {
     const { file, onSuccess, onError } = options;
     try {
-        const res = await uploadApi(file, 'company');
+        const res = await apiService.upload(file, 'company');
         if (res) {
             store.form.logo = res.data.fileName;
             message.success('Upload file thành công!');

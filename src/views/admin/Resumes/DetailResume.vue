@@ -64,7 +64,7 @@
                 </a-col>
                 <a-col :span="12">
                     Kỹ năng:
-                    <template v-for="skill in store.form.jobId.skills">
+                    <template v-for="(skill, index) in store.form.jobId.skills" :key="index">
                         <span class="mr-1">{{ skill }} -</span>
                     </template>
                 </a-col>

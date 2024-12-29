@@ -4,15 +4,13 @@ import {
     UserOutlined, UploadOutlined,
     ShoppingOutlined
 } from '@ant-design/icons-vue';
-import accountService from '../../../constant/account.service';
+import accountService from '../../../services/account.service';
 import type { ICompany, IUser, IUserbyAccount } from '../../../types/backend';
-import companyService from '../../../services/company.service';
 import { linkUploads } from '../../../constant/api';
 import { message } from 'ant-design-vue';
 import { format } from 'date-fns';
 import CKEditor from '../../../components/CKEditor.vue';
 import type { UploadRequestOption } from 'ant-design-vue/es/vc-upload/interface';
-import { uploadApi } from '../../../services/upload.service';
 import type { UploadProps } from 'ant-design-vue';
 import apiService from '../../../services/api.service';
 
@@ -25,7 +23,7 @@ const selectedFile = ref<File | null>(null);
 
 const loadData = async () => {
     const [companyRes] = await Promise.all([
-        companyService.getApi(account?.companyId || '')
+        apiService.get('companies/' + account?.companyId)
     ]);
     companyInfo.value = companyRes.data;
 
@@ -49,20 +47,7 @@ const updateCompany = async (id: string) => {
 }
 
 const fileList = ref<UploadProps['fileList']>([]);
-// const handleUpload = async (options: UploadRequestOption) => {
-//     const { file, onSuccess, onError } = options;
-//     try {
-//         const res = await uploadApi(file, 'type');
-//         if (res) {
-//             userInfo.value.avatar = res.data.fileName;
-//             message.success('Cập nhật ảnh đại diện thành công!');
-//             onSuccess && onSuccess(res);
-//         }
-//     } catch (err: any) {
-//         message.error('Cập nhật ảnh thất bại!');
-//         onError && onError(err);
-//     }
-// };
+
 const handleFileChange = (file: File) => {
     selectedFile.value = file;
 };
@@ -234,3 +219,4 @@ onMounted(async () => {
 
 }
 </style>
+../../../services/account.service

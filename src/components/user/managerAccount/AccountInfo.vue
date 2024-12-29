@@ -4,7 +4,7 @@ import {
     UserOutlined, UploadOutlined,
     ShoppingOutlined
 } from '@ant-design/icons-vue';
-import accountService from '../../../constant/account.service';
+import accountService from '../../../services/account.service';
 import type { IUser, IUserbyAccount } from '../../../types/backend';
 import { linkUploads } from '../../../constant/api';
 import { message } from 'ant-design-vue';
@@ -20,7 +20,7 @@ const selectedFile = ref<File | null>(null);
 const store = useAuthStore();
 const loadData = async () => {
     try {
-        const userRes = await apiService.get('users/public/' + account?._id);
+        const userRes = await apiService.get('users/client/' + account?._id);
         userInfo.value = userRes.data;
     } catch (error: any) {
         message.error(error.response.data.message)
@@ -36,7 +36,7 @@ const updateUser = async (id: string) => {
     formData.append('address', userInfo.value.address || '');
     formData.append('avatar', userInfo.value.avatar || '');
     try {
-        const res = await apiService.update('users/public/' + id, formData);
+        const res = await apiService.update('users/client/' + id, formData);
         if (res.data) {
             message.success('Cập nhật thông tin tài khoản thành công');
             isEditUser.value = false
@@ -189,3 +189,4 @@ onMounted(async () => {
 
 }
 </style>
+../../../services/account.service

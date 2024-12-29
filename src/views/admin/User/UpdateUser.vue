@@ -3,9 +3,8 @@ import type { FormInstance, Rule } from 'ant-design-vue/es/form';
 import useUserStore from '../../../stores/admin/UserStore';
 import { onMounted, ref, watch } from 'vue';
 import type { ICompany, IRole } from '../../../types/backend';
-import roleService from '../../../services/role.service';
-import companyService from '../../../services/company.service';
 import { message } from 'ant-design-vue';
+import apiService from '../../../services/api.service';
 
 
 // Sử dụng Permission Store
@@ -29,7 +28,7 @@ const dataCompanies = ref<ICompany[]>([])
 
 const getData = async () => {
     try {
-        const [role, company] = await Promise.all([roleService.paginateApi('?current=1&pageSize=200'), companyService.paginateApi('?current=1&pageSize=200')])
+        const [role, company] = await Promise.all([apiService.get('roles?current=1&pageSize=200'), apiService.get('companies?current=1&pageSize=200')])
 
         dataRoles.value = role.result
         dataCompanies.value = company.result

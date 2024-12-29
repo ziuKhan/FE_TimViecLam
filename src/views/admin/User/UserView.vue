@@ -6,7 +6,7 @@ import type { IPaginate, IRole } from '../../../types/backend';
 import dayjs from 'dayjs';
 import UpdateUser from './UpdateUser.vue';
 import useUserStore from '../../../stores/admin/UserStore';
-import roleService from '../../../services/role.service';
+import apiService from '../../../services/api.service';
 
 const store = useUserStore()
 const handleRole = (value: string) => {
@@ -60,7 +60,7 @@ const dataRoles = ref<IRole[]>()
 
 const getDataRoles = async () => {
     try {
-        const role = await roleService.paginateApi('?current=1&pageSize=200')
+        const role = await apiService.get('roles?current=1&pageSize=200')
         dataRoles.value = role.result
     } catch (e) {
         console.log(e)

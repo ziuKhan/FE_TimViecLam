@@ -4,7 +4,7 @@ import { useHeaderStore } from '../../../stores/user/headerStore';
 import { useAuthStore } from '../../../stores/AuthStore';
 import ManagerAccount from '../modal/ManagerAccount.vue';
 import { linkUploads } from '../../../constant/api';
-import accountService from '../../../constant/account.service';
+import accountService from '../../../services/account.service';
 const openUser = ref<boolean>(false);
 const openMenu = ref<boolean>(false);
 const open = ref<boolean>(false);
@@ -116,3 +116,4 @@ const handleLogout = () => {
   border-bottom: 1px solid rgb(197, 197, 197);
 }
 </style>
+../../../services/account.service

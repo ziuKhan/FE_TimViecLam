@@ -1,5 +1,4 @@
-import API from '../services/api.service'
-import accountService from './account.service'
+import API from './api.service'
 
 class TokenService {
   getToken() {

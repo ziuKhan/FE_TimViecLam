@@ -19,8 +19,9 @@
 import { onMounted, ref } from 'vue';
 import { SKILLS_LIST } from '../../../until/until';
 import { message } from 'ant-design-vue';
-import subscriberService from '../../../services/subscriber.service';
-import accountService from '../../../constant/account.service';
+import accountService from '../../../services/account.service';
+import { apiClient } from '../../../constant/api';
+import apiService from '../../../services/api.service';
 
 const { account } = accountService.getAccount();
 const formModel = ref({
@@ -30,7 +31,7 @@ const formModel = ref({
 
 
 const getSkills = async () => {
-    const res = await subscriberService.getByEmailApi(account?.email);
+    const res = await apiService.get('subscribers/client');
     if (res.data) {
         formModel.value.skills = res.data.skills
     }
@@ -42,7 +43,7 @@ const onFinish = async (values: any) => {
         name: account?.name,
         email: account?.email
     }
-    const res = await subscriberService.createOrUpdateApi(data);
+    const res = await apiService.add('subscripber/client', data);
     if (res.data) {
         message.success('Đăng ký thành công')
         getSkills()
@@ -55,3 +56,4 @@ onMounted(() => {
 
 
 </script>
+../../../services/account.service

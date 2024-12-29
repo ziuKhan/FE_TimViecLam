@@ -2,11 +2,9 @@ import { defineStore } from 'pinia'
 import { ref, reactive } from 'vue'
 import type { IPaginate, IRole } from '../../types/backend'
 import { message } from 'ant-design-vue'
-import roleService from '../../services/role.service'
+import apiService from '../../services/api.service'
 
 const useRoleStore = defineStore('role', () => {
-  const { getApi, createApi, updateApi, deleteApi, paginateApi } = roleService
-
   const openModal = ref<boolean>(false)
   const dataMeta = ref<IPaginate>({
     current: 1,
@@ -45,66 +43,68 @@ const useRoleStore = defineStore('role', () => {
     loading.value = true
     try {
       const params = `?current=${dataMeta.value?.current}&pageSize=${dataMeta.value?.pageSize}&sort=-createdAt${search ? '&name=/' + search + '/' : ''}`
-      const res = await paginateApi(params)
+      const res = await apiService.get('roles' + params)
       if (res) {
-        data.value = res.result
-        dataMeta.value = res.meta
+        data.value = res.data.result
+        dataMeta.value = res.data.meta
         loading.value = false
       }
-    } catch (error) {
+    } catch (error: any) {
+      message.error(error.response.data.message)
+    } finally {
       loading.value = false
-      console.error('Error fetching data:', error)
     }
   }
 
   const deleteByID = async (id: string) => {
     loading.value = true
     try {
-      const res = await deleteApi(id)
+      const res = await apiService.delete('roles/' + id)
       if (res) {
         message.success('Xóa thành công!')
         loading.value = false
         getData()
       }
-    } catch (error) {
+    } catch (error: any) {
+      message.error(error.response.data.message)
+    } finally {
       loading.value = false
-      console.error('Error fetching data:', error)
     }
   }
 
   const getByID = async (id: string) => {
     try {
       loading.value = true
-      const res = await getApi(id)
+      const res = await apiService.get('roles/' + id)
       if (res) {
         Object.assign(form, res.data)
         form.permissions = res.data.permissions.map((permission: any) => permission._id)
         openModal.value = true
-        loading.value = false
       }
-    } catch (error) {
+    } catch (error: any) {
+      message.error(error.response.data.message)
+    } finally {
       loading.value = false
-      console.error('Error fetching data:', error)
     }
   }
   const updateAndAdd = async () => {
     loading.value = true
     try {
       if (form._id) {
-        const res = await updateApi(form, form._id)
+        const res = await apiService.update('roles/' + form._id, form)
         if (res) message.success('Cập nhật thành công!')
       } else {
-        const res = await createApi(form)
+        const res = await apiService.add('roles', form)
         if (res) message.success('Thêm thành công!')
       }
       refreshInput()
       openModal.value = false
-      loading.value = false
       getData()
-    } catch (error) {
+    } catch (error: any) {
+      message.error(error.response.data.message)
+    } finally {
       loading.value = false
     }
-    loading.value = false
   }
 
   return {

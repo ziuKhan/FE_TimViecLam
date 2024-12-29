@@ -1,4 +1,4 @@
-import { accountApi } from '../services/auth.service'
+import { accountApi } from './auth.service'
 import type { IUserbyAccount } from '../types/backend'
 
 export interface IGetAccount {

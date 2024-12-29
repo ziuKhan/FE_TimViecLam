@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import type { IJob, IPaginate } from '../../types/backend'
-import jobService from '../../services/job.service'
+import apiService from '../../services/api.service'
 
 export const useSearchStore = defineStore('search', () => {
   const location = ref<string>('')
@@ -28,7 +28,7 @@ export const useSearchStore = defineStore('search', () => {
         : ''
     const paramString = `&populate=companyId&isActive=true&current=${current.value}&pageSize=9&sort=-createdAt`
     // const paramString = `&populate=companyId&isActive=true&current=${current.value}&pageSize=9&sort=-createdAt&endDate=${new Date(Date.now() - 86400000).toISOString()}`
-    const jobs = await jobService.paginateApi(`?${queryString}${paramString}`)
+    const jobs = await apiService.get(`jobs/client?${queryString}${paramString}`)
     dataJobs.value = jobs.result
     keyword.value = route.query.name
       ? route.query.name.toString().replace(/\/(.*?)(\/i)?$/, '$1')
@@ -75,8 +75,8 @@ export const useSearchStore = defineStore('search', () => {
   }
 
   onMounted(async () => {
-    const jobs = await jobService.paginateApi(`?sort=-salary&current=1&pageSize=1`)
-    valueMax.value = jobs?.result[0].salary
+    const jobs = await apiService.get(`jobs/client?sort=-salary&current=1&pageSize=1`)
+    valueMax.value = jobs.data?.result[0].salary
   })
 
   watch(

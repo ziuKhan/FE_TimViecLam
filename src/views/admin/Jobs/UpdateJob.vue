@@ -4,16 +4,15 @@ import { onMounted, onUpdated, ref, watch } from 'vue'
 import useCompanyStore from '../../../stores/admin/CompanyStore'
 import CKEditor from '../../../components/CKEditor.vue'
 import type { UploadRequestOption } from 'ant-design-vue/es/vc-upload/interface'
-import { uploadApi } from '../../../services/upload.service'
 import { message } from 'ant-design-vue'
 import useJobStore from '../../../stores/admin/JobStore'
 import { LEVELS_LIST, SKILLS_LIST } from '../../../until/until'
 import type { Dayjs } from 'dayjs'
-import companyService from '../../../services/company.service'
 import dayjs from 'dayjs'
-import accountService from '../../../constant/account.service'
+import accountService from '../../../services/account.service'
 import type { ILocation } from '../../../types/backend'
 import { getConscious } from '../../../services/location.service'
+import apiService from '../../../services/api.service'
 
 const value1 = ref<Dayjs[] | undefined>([])
 watch(value1, (newValue) => {
@@ -51,8 +50,8 @@ const handleOk = () => {
 const dataCompany = ref<any[]>([])
 const getCompanies = async () => {
     try {
-        const res = await companyService.paginateApi(
-            '?current=1&pageSize=200&isActive=true&sort=-createdAt'
+        const res = await apiService.get(
+            'companies?current=1&pageSize=200&isActive=true&sort=-createdAt'
         )
         if (res) {
             for (let i = 0; i < res.result.length; i++) {
@@ -189,3 +188,4 @@ onMounted(() => {
     width: 100% !important;
 }
 </style>
+../../../services/account.service

@@ -3,9 +3,9 @@ import { message } from 'ant-design-vue';
 import { UploadOutlined } from '@ant-design/icons-vue';
 import type { UploadChangeParam } from 'ant-design-vue';
 import { ref, watch } from 'vue';
-import { uploadApi } from '../../../services/upload.service';
 import type { UploadRequestOption } from 'ant-design-vue/es/vc-upload/interface';
-import accountService from '../../../constant/account.service';
+import accountService from '../../../services/account.service';
+import apiService from '../../../services/api.service';
 
 defineProps({
   nameJob: String,
@@ -32,7 +32,7 @@ watch(description, () => {
 const handleUpload = async (options: UploadRequestOption) => {
   const { file, onSuccess, onError } = options;
   try {
-    const res = await uploadApi(file, 'cv');
+    const res = await apiService.upload(file, 'cv');
     if (res) {
       urlFile.value = res.data.fileName;
 
@@ -97,3 +97,4 @@ const { account, storage } = accountService.getAccount();
   border-color: #ed1b2f !important;
 }
 </style>
+../../../services/account.service

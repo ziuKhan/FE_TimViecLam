@@ -4,8 +4,8 @@ import { computed, onMounted, ref } from 'vue'
 import { message } from 'ant-design-vue'
 import { accountApi, logoutApi, refreshApi } from '../services/auth.service'
 import type { IUser } from '../types/backend'
-import tokenService from '../constant/token.service'
-import accountService from '../constant/account.service'
+import tokenService from '../services/token.service'
+import accountService from '../services/account.service'
 import apiService from '../services/api.service'
 
 export const useAuthStore = defineStore('auth', () => {
@@ -24,15 +24,11 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   const refreshToken = async () => {
-    try {
-      const res = await apiService.get(`auth/refresh`)
-      if (res.data) {
-        const { access_token } = res.data
-        tokenService.updateToken(access_token)
-        return access_token
-      }
-    } catch (error: any) {
-      message.error(error.response.data.message)
+    const res = await apiService.get(`auth/refresh`)
+    if (res.data) {
+      const { access_token } = res.data
+      tokenService.updateToken(access_token)
+      return access_token
     }
   }
 

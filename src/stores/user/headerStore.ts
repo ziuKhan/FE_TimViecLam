@@ -3,7 +3,7 @@ import { onBeforeUnmount, onMounted, ref, watchEffect } from 'vue'
 import type { INotification, IUser } from '../../types/backend'
 import { io, Socket } from 'socket.io-client'
 import notificationService from '../../services/notification.service'
-import accountService from '../../constant/account.service'
+import accountService from '../../services/account.service'
 
 export const useHeaderStore = defineStore('header', () => {
   const dataNotification = ref<INotification[]>()

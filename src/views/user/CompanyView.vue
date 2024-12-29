@@ -5,8 +5,7 @@ import { ref, watchEffect } from 'vue';
 import type { ICompany, IJob } from '../../types/backend';
 import Loading from '../../components/Loading.vue';
 import { linkUploads } from '../../constant/api';
-import companyService from '../../services/company.service';
-import jobService from '../../services/job.service';
+import apiService from '../../services/api.service';
 
 const route = useRoute()
 
@@ -19,9 +18,9 @@ const getData = async () => {
   const id = route.params.id as string;
   const params = `?current=1&pageSize=20&isActive=true&companyId=${id}&populate=companyId`
   try {
-    const [companies, jobs] = await Promise.all([companyService.getApi(id), jobService.paginateApi(params)]);
+    const [companies, jobs] = await Promise.all([apiService.get('companies/client/' + id), apiService.get('jobs/client' + params)]);
     dataCompany.value = companies.data
-    dataJobs.value = jobs.result
+    dataJobs.value = jobs.data.result
     load.value = true
 
   } catch (error) {

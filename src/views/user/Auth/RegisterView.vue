@@ -4,7 +4,7 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons-vue'
 import { loginApi, registerApi } from '../../../services/auth.service'
 import { notification } from 'ant-design-vue'
 import { useRouter } from 'vue-router'
-import tokenService from '../../../constant/token.service'
+import tokenService from '../../../services/token.service'
 
 interface IFormState {
   email: string
@@ -216,3 +216,4 @@ onMounted(() => {
   align-items: center;
 }
 </style>
+../../../services/token.service

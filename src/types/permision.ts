@@ -8,7 +8,8 @@ export const ALL_MODULES = [
   'ROLES',
   'USERS',
   'SUBSCRIBERS',
-  'NOTIFICATIONS'
+  'NOTIFICATIONS',
+  'CLIENT'
 ]
 
 export const ALL_METHODS = ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'HEAD', 'OPTIONS']

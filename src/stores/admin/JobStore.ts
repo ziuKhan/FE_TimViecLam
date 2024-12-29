@@ -2,11 +2,10 @@ import { defineStore } from 'pinia'
 import { ref, reactive, watch } from 'vue'
 import type { IJob, IPaginate } from '../../types/backend'
 import { message } from 'ant-design-vue'
-import jobService from '../../services/job.service'
-import accountService from '../../constant/account.service'
+import accountService from '../../services/account.service'
+import apiService from '../../services/api.service'
 
 const useJobStore = defineStore('job', () => {
-  const { getApi, createApi, updateApi, deleteApi, paginateApi } = jobService
   const { account } = accountService.getAccount()
   const openModal = ref<boolean>(false)
   const dataMeta = ref<IPaginate>({
@@ -65,45 +64,45 @@ const useJobStore = defineStore('job', () => {
     loading.value = true
     try {
       const params = `?current=${dataMeta.value?.current}&pageSize=${dataMeta.value?.pageSize}&isActive=${isActive.value}&sort=-createdAt${search ? '&name=/' + search + '/' : ''}${account?.role.name === 'HR_USER' ? '&companyId=' + account.companyId : ''}`
-      const res = await paginateApi(params)
+      const res = await apiService.get('jobs' + params)
       if (res) {
-        data.value = res.result
-        dataMeta.value = res.meta
-        loading.value = false
+        data.value = res.data.result
+        dataMeta.value = res.data.meta
       }
-    } catch (error) {
+    } catch (error: any) {
+      message.error(error.response.data.message)
+    } finally {
       loading.value = false
-      console.error('Error fetching data:', error)
     }
   }
 
   const deleteByID = async (id: string) => {
     loading.value = true
     try {
-      const res = await deleteApi(id)
+      const res = await apiService.delete('jobs/' + id)
       if (res) {
         message.success('Xóa thành công!')
-        loading.value = false
         getData()
       }
-    } catch (error) {
+    } catch (error: any) {
+      message.error(error.response.data.message)
+    } finally {
       loading.value = false
-      console.error('Error fetching data:', error)
     }
   }
 
   const getByID = async (id: string) => {
     try {
       loading.value = true
-      const res = await getApi(id)
+      const res = await apiService.get('jobs/' + id)
       if (res) {
         Object.assign(form, res.data)
         openModal.value = true
-        loading.value = false
       }
-    } catch (error) {
+    } catch (error: any) {
+      message.error(error.response.data.message)
+    } finally {
       loading.value = false
-      console.error('Error fetching data:', error)
     }
   }
 
@@ -111,20 +110,23 @@ const useJobStore = defineStore('job', () => {
     loading.value = true
     try {
       if (form._id) {
-        const res = await updateApi({ ...form, companyId: form.companyId?._id }, form._id)
+        const res = await apiService.update('jobs/' + form._id, {
+          ...form,
+          companyId: form.companyId?._id
+        })
         if (res) message.success('Cập nhật thành công!')
       } else {
-        const res = await createApi({ ...form, companyId: form.companyId?._id })
+        const res = await apiService.add('jobs', { ...form, companyId: form.companyId?._id })
         if (res) message.success('Thêm thành công!')
       }
       refreshInput()
       openModal.value = false
-      loading.value = false
       getData()
-    } catch (error) {
+    } catch (error: any) {
+      message.error(error.response.data.message)
+    } finally {
       loading.value = false
     }
-    loading.value = false
   }
 
   return {

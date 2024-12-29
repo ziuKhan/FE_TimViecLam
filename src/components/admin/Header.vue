@@ -119,7 +119,7 @@ import {
 import { computed, ref, watch } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
 import { checkPermission } from '../../until/permissionCheck';
-import accountService, { type IGetAccount } from '../../constant/account.service';
+import accountService, { type IGetAccount } from '../../services/account.service';
 import type { IAccount } from '../../types/backend';
 import { useAuthStore } from '../../stores/AuthStore';
 
@@ -200,4 +200,4 @@ const coTheQuanLyCongViec = computed(() =>
 
 
 </script>
-<style scoped></style>
+<style scoped></style>../../services/account.service

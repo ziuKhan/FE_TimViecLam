@@ -8,7 +8,7 @@ import { useAuthStore } from '../../../stores/AuthStore'
 import { linkUploads } from '../../../constant/api'
 import notificationService from '../../../services/notification.service'
 import dayjs from 'dayjs'
-import accountService from '../../../constant/account.service'
+import accountService from '../../../services/account.service'
 import { useRoute, useRouter } from 'vue-router'
 const isSticky = ref<boolean>(false)
 const collapsed = ref<boolean>(false)
@@ -330,3 +330,4 @@ onUnmounted(() => {
   left: 250px;
 }
 </style>
+../../../services/account.service

@@ -1,13 +1,12 @@
 import { defineStore } from 'pinia'
 import { ref, reactive, watch } from 'vue'
 import { message } from 'ant-design-vue'
-import resumeService from '../../services/resume.service'
 import type { IPaginate, IResume } from '../../types/backend'
 import notificationService from '../../services/notification.service'
-import accountService from '../../constant/account.service'
+import accountService from '../../services/account.service'
+import apiService from '../../services/api.service'
 
 const useResumeStore = defineStore('resume', () => {
-  const { getApi, createApi, updateApi, deleteApi, paginateApi } = resumeService
   const { account } = accountService.getAccount()
   const openModal = ref<boolean>(false)
   const openDrawer = ref<boolean>(false)
@@ -50,16 +49,16 @@ const useResumeStore = defineStore('resume', () => {
   const getByID = async (id: string, detail?: boolean) => {
     try {
       loading.value = true
-      const res = await getApi(id)
+      const res = await apiService.get('resumes/' + id)
       if (res) {
         Object.assign(form, res.data)
         if (detail) openDrawer.value = true
         else openModal.value = true
-        loading.value = false
       }
-    } catch (error) {
+    } catch (error: any) {
+      message.error(error.response.data.message)
+    } finally {
       loading.value = false
-      console.error('Error fetching data:', error)
     }
   }
 
@@ -69,7 +68,11 @@ const useResumeStore = defineStore('resume', () => {
     try {
       if (form._id) {
         const [res, resNotification] = await Promise.all([
-          updateApi({ ...form, companyId: form.companyId?._id, jobId: form.jobId?._id }, form._id),
+          apiService.update('resumes/' + form._id, {
+            ...form,
+            companyId: form.companyId?._id,
+            jobId: form.jobId?._id
+          }),
           notificationService.createByUserApi({
             title: 'Thông báo',
             message: `Hồ sơ xin việc của bạn đã cập nhật trang thái ${form.status}`,
@@ -81,18 +84,18 @@ const useResumeStore = defineStore('resume', () => {
         ])
         if (res) message.success('Cập nhật thành công!')
       } else {
-        const res = await createApi(form)
+        const res = await apiService.add('resumes', form)
         if (res) message.success('Thêm thành công!')
       }
       refreshInput()
       openModal.value = false
       openDrawer.value = false
-      loading.value = false
       getData()
-    } catch (error) {
+    } catch (error: any) {
+      message.error(error.response.data.message)
+    } finally {
       loading.value = false
     }
-    loading.value = false
   }
   const handleOpenModal = () => {
     refreshInput()
@@ -108,30 +111,30 @@ const useResumeStore = defineStore('resume', () => {
     loading.value = true
     try {
       const params = `?current=${dataMeta.value?.current}&pageSize=${dataMeta.value?.pageSize}&status=${isStatus.value}&sort=-createdAt${search ? '&email=/' + search + '/' : ''}${account?.role.name === 'HR_USER' ? '&companyId=' + account.companyId : ''}`
-      const res = await paginateApi(params)
+      const res = await apiService.get('resumes' + params)
       if (res) {
-        data.value = res.result
-        dataMeta.value = res.meta
-        loading.value = false
+        data.value = res.data.result
+        dataMeta.value = res.data.meta
       }
-    } catch (error) {
+    } catch (error: any) {
+      message.error(error.response.data.message)
+    } finally {
       loading.value = false
-      console.error('Error fetching data:', error)
     }
   }
 
   const deleteByID = async (id: string) => {
     loading.value = true
     try {
-      const res = await deleteApi(id)
+      const res = await apiService.delete('resumes/' + id)
       if (res) {
         message.success('Xóa thành công!')
-        loading.value = false
         getData()
       }
-    } catch (error) {
+    } catch (error: any) {
+      message.error(error.response.data.message)
+    } finally {
       loading.value = false
-      console.error('Error fetching data:', error)
     }
   }
 

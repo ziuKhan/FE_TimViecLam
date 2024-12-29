@@ -76,7 +76,7 @@ onMounted(() => {
 
             <div class="mt-3 border rounded-[10px]">
                 <a-table :columns="columns" :data-source="store.data" :loading="store.loading"
-                    :pagination=store.dataMeta @change="handleTableChange">
+                    :pagination=store.dataMeta @change="handleTableChange" :key="store.data.length">
                     <template #bodyCell="{ column, text, index }">
                         <template v-if="column.title === 'STT'">
                             {{ ((store.dataMeta.current || 1) - 1) * (store.dataMeta.pageSize || 6) + index + 1 }}

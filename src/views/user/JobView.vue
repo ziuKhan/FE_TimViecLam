@@ -9,11 +9,10 @@ import Loading from '../../components/Loading.vue';
 import { formatSalary } from '../../until/until';
 import ApplyJob from '../../components/user/modal/ApplyJob.vue';
 import { message } from 'ant-design-vue';
-import resumeService from '../../services/resume.service';
-import jobService from '../../services/job.service';
-import accountService from '../../constant/account.service';
+import accountService from '../../services/account.service';
 import CardJob from '../../components/user/CardJob.vue';
 import { format } from "date-fns";
+import apiService from '../../services/api.service';
 
 const route = useRoute()
 const load = ref<Boolean>(false)
@@ -34,7 +33,7 @@ const getData = async () => {
     load.value = false
     const id = route.params.id as string
     try {
-        const result = await jobService.getApi(id)
+        const result = await apiService.get('jobs/client/' + id)
         data.value = result.data
         load.value = true
     } catch (error) {
@@ -43,9 +42,9 @@ const getData = async () => {
 }
 const getJob = async () => {
     try {
-        const result = await jobService.paginateApi(`?current=1&pageSize=${meta.value.pageSize}&populate=companyId&sort=-createdAt&isActive=true&level=${data.value?.level}`)
-        dataJob.value = result.result
-        meta.value = result.meta
+        const result = await apiService.get(`jobs/client?current=1&pageSize=${meta.value.pageSize}&populate=companyId&sort=-createdAt&isActive=true&level=${data.value?.level}`)
+        dataJob.value = result.data.result
+        meta.value = result.data.meta
     } catch (error) {
         console.error('Error fetching data:', error)
     }
@@ -67,16 +66,14 @@ const handleOk = async () => {
             }
 
             try {
-                const res = await resumeService.createApi(dataCreate)
+                const res = await apiService.add('resumes/client', dataCreate)
                 if (res) {
                     message.success('Rải CV thành công')
-                    loadButton.value = true
                 }
-            }
-            catch (error) {
-                console.log(error)
+            } catch (error: any) {
+                message.error(error.response.data.message)
+            } finally {
                 loadButton.value = true
-
             }
 
         }
@@ -222,4 +219,4 @@ onMounted(async () => {
 .shadow-custom {
     box-shadow: -4px -4px 10px rgba(0, 0, 0, 0.1), 4px -4px 10px rgba(0, 0, 0, 0.1);
 }
-</style>
+</style>../../services/account.service

@@ -13,10 +13,10 @@ import {
     ArcElement
 } from 'chart.js'
 import { Line, PolarArea } from 'vue-chartjs'
-import jobService from '../../services/job.service';
 import { onMounted, ref } from 'vue';
 import type { IJob } from '../../types/backend';
 import { formatDate } from 'date-fns';
+import apiService from '../../services/api.service';
 
 ChartJS.register(
     CategoryScale,
@@ -114,8 +114,8 @@ const columns = [
 ];
 const loadDataJobNew = async () => {
     try {
-        const res = await jobService.paginateApi(`?current=1&pageSize=10&sort=-createdAt&isActive=true&endDate=${new Date().toISOString()}`)
-        dataTable.value = res.result
+        const res = await apiService.get(`jobs/client?current=1&pageSize=10&sort=-createdAt&isActive=true&endDate=${new Date().toISOString()}`)
+        dataTable.value = res.data.result
     } catch (error) {
         console.log(error)
     }
@@ -185,7 +185,7 @@ onMounted(async () => {
             <a-col :span="24" class="mt-4">
                 <div class="p-3 mr-[8px] bg-white rounded-[8px]">
                     <h2 class="text-xl ">Công việc mới nhất</h2>
-                    <a-table :columns="columns" :data-source="dataTable" pagination="false">
+                    <a-table :columns="columns" :data-source="dataTable" pagination="false" :key="dataTable.length">
                         <template #bodyCell="{ column, record, index }">
                             <template v-if="column.key === 'stt'">
                                 {{ index + 1 }}

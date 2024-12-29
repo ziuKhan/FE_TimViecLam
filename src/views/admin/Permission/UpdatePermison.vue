@@ -21,7 +21,7 @@
                     <a-form-item label="Phương thức" name="method">
                         <a-select v-model:value="store.form.method" placeholder="Vui lòng nhập phương thức">
                             <!-- <a-select-option disabled selected value>Vui lòng chọn method</a-select-option> -->
-                            <template v-for="item in ALL_METHODS">
+                            <template v-for="(item, index) in ALL_METHODS" :key="index">
                                 <a-select-option :value="item">{{ item }}</a-select-option>
                             </template>
                         </a-select>
@@ -30,7 +30,7 @@
                 <a-col :span="24">
                     <a-form-item label="Module" name="module">
                         <a-select v-model:value="store.form.module" placeholder="Vui lòng nhập module">
-                            <template v-for="item in ALL_MODULES">
+                            <template v-for="(item, index) in ALL_MODULES" :key="index">
                                 <a-select-option :value="item">{{ item }}</a-select-option>
                             </template>
                         </a-select>

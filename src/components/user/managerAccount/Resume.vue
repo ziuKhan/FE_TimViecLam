@@ -3,8 +3,8 @@ import { onMounted, ref, render, watch, watchEffect } from 'vue';
 import type { IPaginate, IResume } from '../../../types/backend';
 import dayjs from 'dayjs';
 import { linkUploads } from '../../../constant/api';
-import resumeService from '../../../services/resume.service';
-import accountService from '../../../constant/account.service';
+import accountService from '../../../services/account.service';
+import apiService from '../../../services/api.service';
 const load = ref<boolean>(false)
 
 const { account, storage } = accountService.getAccount();
@@ -21,10 +21,10 @@ const dataMeta = ref<IPaginate>({
 const getData = async () => {
     load.value = true
     const params = `?current=${dataMeta.value?.current || 1}&pageSize=${dataMeta.value?.pageSize || 5}&populate=jobId,companyId&createdBy._id=${account?._id}&sort=-createdAt`
-    const res = await resumeService.paginateApi(params);
+    const res = await apiService.get('resumes/client' + params);
     if (res) {
-        dataResume.value = res.result
-        dataMeta.value = res.meta
+        dataResume.value = res.data.result
+        dataMeta.value = res.data.meta
         console.log(dataMeta.value)
         load.value = false
     }
@@ -83,7 +83,7 @@ const renderColorMethod = (method: string) => {
 </script>
 <template>
     <a-table :columns="columns" :data-source="dataResume" :loading="load" :pagination=dataMeta
-        @change="handleTableChange">
+        @change="handleTableChange" :key="dataResume.length">
         <template #bodyCell="{ column, text }">
             <template v-if="column.dataIndex === 'url'">
                 <a class="text-blue-600" target="_blank" :href="linkUploads('cv/' + text)">Chi tiết</a>
@@ -105,3 +105,4 @@ const renderColorMethod = (method: string) => {
         </template>
     </a-table>
 </template>
+../../../services/account.service

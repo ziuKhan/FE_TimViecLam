@@ -31,7 +31,7 @@
 import { reactive } from 'vue';
 import { message } from 'ant-design-vue';
 import apiService from '../../../services/api.service';
-import accountService from '../../../constant/account.service';
+import accountService from '../../../services/account.service';
 
 
 interface FormState {
@@ -71,4 +71,4 @@ const onFinish = async (values: any) => {
 };
 
 
-</script>
+</script>../../../services/account.service

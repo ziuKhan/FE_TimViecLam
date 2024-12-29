@@ -2,11 +2,9 @@ import { defineStore } from 'pinia'
 import { ref, reactive } from 'vue'
 import type { IPaginate, IRole, ISubscribers } from '../../types/backend'
 import { message } from 'ant-design-vue'
-import subscriberService from '../../services/subscriber.service'
+import apiService from '../../services/api.service'
 
 const useSubscriberStore = defineStore('subscriber', () => {
-  const { getApi, createApi, updateApi, deleteApi, paginateApi } = subscriberService
-
   const openModal = ref<boolean>(false)
   const dataMeta = ref<IPaginate>({
     current: 1,
@@ -43,45 +41,48 @@ const useSubscriberStore = defineStore('subscriber', () => {
     loading.value = true
     try {
       const params = `?current=${dataMeta.value?.current}&pageSize=${dataMeta.value?.pageSize}&sort=-createdAt${search ? '&name=/' + search + '/' : ''}`
-      const res = await paginateApi(params)
+      const res = await apiService.get('subscribers' + params)
       if (res) {
-        data.value = res.result
-        dataMeta.value = res.meta
+        data.value = res.data.result
+        dataMeta.value = res.data.meta
         loading.value = false
       }
-    } catch (error) {
+    } catch (error: any) {
+      message.error(error.response.data.message)
+    } finally {
       loading.value = false
-      console.error('Error fetching data:', error)
     }
   }
 
   const deleteByID = async (id: string) => {
     loading.value = true
     try {
-      const res = await deleteApi(id)
+      const res = await apiService.delete('subscribers/' + id)
       if (res) {
         message.success('Xóa thành công!')
         loading.value = false
         getData()
       }
-    } catch (error) {
+    } catch (error: any) {
+      message.error(error.response.data.message)
+    } finally {
       loading.value = false
-      console.error('Error fetching data:', error)
     }
   }
 
   const getByID = async (id: string) => {
     try {
       loading.value = true
-      const res = await getApi(id)
+      const res = await apiService.get('subscribers/' + id)
       if (res) {
         Object.assign(form, res.data)
         openModal.value = true
         loading.value = false
       }
-    } catch (error) {
+    } catch (error: any) {
+      message.error(error.response.data.message)
+    } finally {
       loading.value = false
-      console.error('Error fetching data:', error)
     }
   }
 
@@ -89,20 +90,20 @@ const useSubscriberStore = defineStore('subscriber', () => {
     loading.value = true
     try {
       if (form._id) {
-        const res = await updateApi(form)
+        const res = await apiService.update('subscribers/' + form.email, form)
         if (res) message.success('Cập nhật thành công!')
       } else {
-        const res = await createApi(form)
+        const res = await apiService.add('subscribers', form)
         if (res) message.success('Thêm thành công!')
       }
       refreshInput()
       openModal.value = false
-      loading.value = false
       getData()
-    } catch (error) {
+    } catch (error: any) {
+      message.error(error.response.data.message)
+    } finally {
       loading.value = false
     }
-    loading.value = false
   }
 
   return {

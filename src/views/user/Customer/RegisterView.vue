@@ -3,11 +3,11 @@ import { reactive, ref, watch } from 'vue';
 import Loading from '../../../components/Loading.vue';
 import CKEditor from '../../../components/CKEditor.vue';
 import type { UploadRequestOption } from 'ant-design-vue/es/vc-upload/interface';
-import { uploadApi } from '../../../services/upload.service';
 import { message } from 'ant-design-vue';
 import { UploadOutlined } from '@ant-design/icons-vue';
 import { createCompanyApi, registerHRApi } from '../../../services/auth.service';
 import { useRouter } from 'vue-router';
+import apiService from '../../../services/api.service';
 
 const load = ref<boolean>(true)
 const loading = ref<boolean>(false)
@@ -92,7 +92,7 @@ watch(fileList, () => {
 const handleUpload = async (options: UploadRequestOption) => {
     const { file, onSuccess, onError } = options;
     try {
-        const res = await uploadApi(file, 'company');
+        const res = await apiService.upload(file, 'company');
         if (res) {
             formState.logo = res.data.fileName;
 

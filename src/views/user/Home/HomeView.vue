@@ -5,8 +5,7 @@ import CardJob from '../../../components/user/CardJob.vue'
 import Loading from '../../../components/Loading.vue'
 import FormSearch from '../../../components/user/search/FormSearch.vue'
 import type { ICompany, IJob } from '../../../types/backend'
-import companyService from '../../../services/company.service'
-import jobService from '../../../services/job.service'
+import apiService from '../../../services/api.service'
 
 const dataCompany = ref<ICompany[]>([])
 const dataJobs = ref<IJob[]>([])
@@ -14,9 +13,9 @@ const load = ref<boolean>(false)
 
 const getData = async () => {
   load.value = false
-  const [companies, jobs] = await Promise.all([companyService.paginateApi('?current=1&pageSize=9&sort=-createdAt&isActive=true'), jobService.paginateApi('?current=1&pageSize=9&populate=companyId&sort=-createdAt&isActive=true')])
-  dataCompany.value = companies?.result
-  dataJobs.value = jobs?.result
+  const [companies, jobs] = await Promise.all([apiService.get('companies/client?current=1&pageSize=9&sort=-createdAt&isActive=true'), apiService.get('jobs/client?current=1&pageSize=9&populate=companyId&sort=-createdAt&isActive=true')])
+  dataCompany.value = companies.data?.result
+  dataJobs.value = jobs.data?.result
   load.value = true
 }
 

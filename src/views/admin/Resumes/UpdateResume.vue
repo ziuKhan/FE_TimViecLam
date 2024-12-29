@@ -4,9 +4,9 @@ import { ref, watch } from 'vue';
 import useCompanyStore from '../../../stores/admin/CompanyStore';
 import CKEditor from '../../../components/CKEditor.vue';
 import type { UploadRequestOption } from 'ant-design-vue/es/vc-upload/interface';
-import { uploadApi } from '../../../services/upload.service';
 import { message } from 'ant-design-vue';
 import useResumeStore from '../../../stores/admin/ResumeStore';
+import apiService from '../../../services/api.service';
 
 
 // Sử dụng Permission Store
@@ -25,7 +25,7 @@ const fileList = ref([]);
 const handleUpload = async (options: UploadRequestOption) => {
     const { file, onSuccess, onError } = options;
     try {
-        const res = await uploadApi(file, 'cv');
+        const res = await apiService.upload(file, 'cv');
         if (res) {
             store.form.url = res.data.fileName;
             message.success('Upload file thành công!');

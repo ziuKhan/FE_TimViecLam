@@ -94,7 +94,7 @@ onMounted(() => {
 
             <div class="mt-3 border rounded-[10px]">
                 <a-table :columns="columns" :data-source="store.data" :loading="store.loading"
-                    :pagination=store.dataMeta @change="handleTableChange">
+                    :pagination=store.dataMeta @change="handleTableChange" :key="store.data.length">
                     <template #bodyCell="{ column, text, index }">
                         <template v-if="column.title === 'STT'">
                             {{ ((store.dataMeta.current || 1) - 1) * (store.dataMeta.pageSize || 6) + index + 1 }}
@@ -128,7 +128,7 @@ onMounted(() => {
                                 <a-popconfirm title="Bạn có chắc muốn xoá?" ok-text="Có" cancel-text="Không"
                                     :loading="store.loading" @confirm="store.deleteByID(text)" @cancel=""
                                     v-permission="'DELETE /api/v1/jobs/:id'">
-                                    <button type="button" v-permission="''"
+                                    <button type="button"
                                         class=" bg-red-500 hover:bg-red-400 rounded-[5px] px-[10px] ] py-1 h-8 ">
                                         <img loading="lazy" class="h-5/6"
                                             src="../../../assets/image/icon/icons8_remove.svg" alt=""></button>

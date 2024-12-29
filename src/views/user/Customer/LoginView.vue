@@ -4,7 +4,7 @@ import Loading from '../../../components/Loading.vue';
 import { useRoute, useRouter } from 'vue-router';
 import { loginApi } from '../../../services/auth.service';
 import { notification } from 'ant-design-vue';
-import tokenService from '../../../constant/token.service';
+import tokenService from '../../../services/token.service';
 
 const load = ref<boolean>(true)
 interface IFormState {
@@ -123,4 +123,4 @@ const onFinish = async (values: IFormState) => {
     </div>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss"></style>../../../services/token.service
