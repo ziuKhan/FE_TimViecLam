@@ -15,7 +15,7 @@ const getData = async () => {
     try {
         const res = await apiService.get('permissions?current=1&pageSize=100');
 
-        const data = res.result;
+        const data = res.data.result;
 
         // Nhóm dữ liệu theo module
         const grouped: Record<string, any[]> = {};

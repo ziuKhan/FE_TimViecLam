@@ -31,7 +31,8 @@ const formModel = ref({
 
 
 const getSkills = async () => {
-    const res = await apiService.get('subscribers/client');
+
+    const res = await apiService.get('subscribers/client/' + account?.email);
     if (res.data) {
         formModel.value.skills = res.data.skills
     }
@@ -43,7 +44,7 @@ const onFinish = async (values: any) => {
         name: account?.name,
         email: account?.email
     }
-    const res = await apiService.add('subscripber/client', data);
+    const res = await apiService.add('subscribers/client', data);
     if (res.data) {
         message.success('Đăng ký thành công')
         getSkills()
@@ -56,4 +57,3 @@ onMounted(() => {
 
 
 </script>
-../../../services/account.service

@@ -10,6 +10,8 @@ import apiService from '../services/api.service'
 
 export const useAuthStore = defineStore('auth', () => {
   const logout = async () => {
+    console.log('đã chạy logout')
+    message.error('đã chạy vào logout')
     try {
       await logoutApi()
       tokenService.removeToken()
@@ -24,12 +26,14 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   const refreshToken = async () => {
-    const res = await apiService.get(`auth/refresh`)
-    if (res.data) {
-      const { access_token } = res.data
-      tokenService.updateToken(access_token)
-      return access_token
-    }
+    try {
+      const res = await apiService.get(`auth/refresh`)
+      if (res.data) {
+        const { access_token } = res.data
+        tokenService.updateToken(access_token)
+        return access_token
+      }
+    } catch (error) {}
   }
 
   return { logout, refreshToken }
