@@ -7,6 +7,7 @@ import dayjs from 'dayjs';
 import UpdatePermison from './UpdatePermison.vue';
 import usePermissionStore from '../../../stores/admin/PermissionStore';
 import { message } from 'ant-design-vue';
+import { CopyOutlined, DeleteOutlined, SettingOutlined } from '@ant-design/icons-vue';
 
 
 const store = usePermissionStore()
@@ -116,18 +117,22 @@ onMounted(() => {
                         </template>
                         <template v-else-if="column.dataIndex === '_id'">
                             <button type="button"
+                                class="mr-2  bg-[#949494ec] hover:bg-[#494949] rounded-[5px] px-[10px] py-1 h-8 "
+                                @click="store.getByID(text,true)" v-permission="'PATCH /api/v1/permissions/:id'">
+                                <CopyOutlined  class="text-white"/>
+                            </button>
+                            <button type="button"
                                 class="mr-2  bg-[#1669dcec] hover:bg-[#498ff1] rounded-[5px] px-[10px] py-1 h-8 "
                                 @click="store.getByID(text)" v-permission="'PATCH /api/v1/permissions/:id'">
-                                <img loading="lazy" class=" h-5/6" src="../../../assets/image/icon/icons8_settings.svg"
-                                    alt="">
+                                    <SettingOutlined  class="text-white"/>
                             </button>
                             <a-popconfirm title="Bạn có chắc muốn xoá?" ok-text="Có" cancel-text="Không"
                                 :loading="store.load" @confirm="store.deleteByID(text)" @cancel=""
                                 v-permission="'DELETE /api/v1/permissions/:id'">
                                 <button type="button"
                                     class=" bg-red-500 hover:bg-red-400 rounded-[5px] px-[10px] ] py-1 h-8 ">
-                                    <img loading="lazy" class="h-5/6" src="../../../assets/image/icon/icons8_remove.svg"
-                                        alt=""></button>
+                                    <DeleteOutlined  class="text-white"/>
+                                </button>
                             </a-popconfirm>
                         </template>
                     </template>

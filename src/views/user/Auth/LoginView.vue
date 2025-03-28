@@ -98,7 +98,7 @@ onMounted(() => {
 <template>
   <Loading v-if="load"></Loading>
 
-  <div class="container__login " v-else>
+  <div class="container__login h-screen">
     <div class="container__login_title">
       Chào mừng bạn đến với <img loading="lazy" src="../../../assets/image/icon/logo-itviec-black.png" alt="" />
     </div>
@@ -198,7 +198,7 @@ onMounted(() => {
     font-weight: 700;
     gap: 0 10px;
     margin: 24px 0;
-
+    align-items: end;
     img {
       width: 75px;
     }

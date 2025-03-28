@@ -71,11 +71,15 @@ const usePermissionStore = defineStore('permission', () => {
 
   //code dành cho permission update
 
-  const getByID = async (id: string) => {
+  const getByID = async (id: string, isCopy?: boolean) => {
     try {
       loading.value = true
       const res = await apiService.get('permissions/' + id)
       if (res) {
+        if (isCopy) {
+          res.data._id = '';
+          message.success('Đã copy đường dẫn API!')
+        }
         Object.assign(form, res.data)
         openModal.value = true
       }
