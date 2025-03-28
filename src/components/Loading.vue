@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container w-full h-screen fixed top-0 left-0 z-[9999] bg-white"  >
     <svg class="pl" width="240" height="240" viewBox="0 0 240 240">
       <circle
         class="pl__ring pl__ring--a"
@@ -59,7 +59,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; /* Chiều cao toàn bộ viewport */
 }
 /* From Uiverse.io by Nawsome */
 .pl {
