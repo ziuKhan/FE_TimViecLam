@@ -88,7 +88,7 @@ onUnmounted(() => {
           <template #content>
             <div class="max-h-[400px] overflow-auto">
               <template v-for="item in storeHeader.dataNotification" :key="item">
-                <div @click="handleNotification(item?._id, item?.url)" :class="[
+                <div @click="handleNotification(item?._id, item?.url)" :class="[  
                   'flex w-full p-[2px] hover:border hover:border-red-500 hover:p-[1px] rounded-lg',
                   !item?.isRead ? 'bg-gray-200' : ''
                 ]">

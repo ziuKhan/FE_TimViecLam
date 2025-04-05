@@ -13,7 +13,7 @@ const load = ref<boolean>(false)
 
 const getData = async () => {
   load.value = false
-  const [companies, jobs] = await Promise.all([apiService.get('companies/client?current=1&pageSize=9&sort=-createdAt&isActive=true'), apiService.get('jobs/client?current=1&pageSize=9&populate=companyId&sort=-createdAt&isActive=true')])
+  const [companies, jobs] = await Promise.all([apiService.get('companies/client?page=1&pageSize=9&filter=sort=-createdAt,isActive=true'), apiService.get('jobs/client?page=1&pageSize=9&filter=sort=-createdAt,isActive=true,populate=companyId')])
   dataCompany.value = companies.data?.result
   dataJobs.value = jobs.data?.result
   load.value = true

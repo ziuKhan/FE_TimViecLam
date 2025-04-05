@@ -1,5 +1,5 @@
 <template>
-    <a-layout-sider v-model:collapsed="collapsed" collapsible>
+    <a-layout-sider v-model:collapsed="collapsed" collapsible  >
         <div class="sticky top-5 left-0">
             <div class="logo__itviec w-3/5 mx-auto my-5">
                 <RouterLink to="/"> <img loading="lazy" src="../../assets/image/icon/logo-itviec.png" alt=""
@@ -200,4 +200,12 @@ const coTheQuanLyCongViec = computed(() =>
 
 
 </script>
-<style scoped></style>../../services/account.service
+<style >
+.ant-layout-sider-children, .ant-menu-root{
+    background-color: #000000 !important;
+}
+.ant-layout-sider-trigger, .ant-menu-sub {
+    background-color: #202020 !important;
+}
+
+</style>

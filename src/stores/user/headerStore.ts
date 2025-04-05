@@ -18,12 +18,14 @@ export const useHeaderStore = defineStore('header', () => {
   socket.value.on('notification', async () => {
     await getData()
   })
+
   const meta = ref({
     current: 1,
     pageSize: 100,
     pages: 1,
     total: 5
   })
+
   const getData = async () => {
     const { account } = accountService.getAccount()
     if (!account || !account._id) return

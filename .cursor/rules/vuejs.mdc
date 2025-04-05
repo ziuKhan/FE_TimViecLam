@@ -1,0 +1,156 @@
+---
+description: This document outlines the coding standards and best practices to be followed for Vue.js projects within this workspace. Adhering to these rules ensures consistency, maintainability, and readability of the codebase.
+globs: 
+alwaysApply: false
+---
+# Vue.js Coding Standards and Best Practices
+
+This document outlines the coding standards and best practices to be followed for Vue.js projects within this workspace. Adhering to these rules ensures consistency, maintainability, and readability of the codebase.
+
+## 1. Project Structure
+
+-   Maintain a standard directory structure:
+    -   `src/assets`: Static assets (images, fonts, etc.).
+    -   `src/components`: Reusable UI components (presentational/dumb components).
+    -   `src/views` (or `src/pages`): Application views/pages (container/smart components, usually tied to routes).
+    -   `src/layouts`: Layout components (e.g., `DefaultLayout.vue`, `AuthLayout.vue`).
+    -   `src/router`: Vue Router configuration (`index.js`, `routes.js`).
+    -   `src/store` (or `src/stores`): Pinia store modules.
+    -   `src/services` (or `src/api`): API call logic.
+    -   `src/utils`: Utility functions.
+    -   `src/composables`: Reusable composition functions.
+    -   `src/styles` (or `src/scss`): Global styles, variables, mixins.
+
+## 2. Component Naming and Casing
+
+-   **File Names:** Use `PascalCase` for single-file component filenames (e.g., `UserProfile.vue`, `BaseButton.vue`). Components tightly coupled with a parent component can be prefixed with the parent's name (e.g., `UserProfileCard.vue`, `UserProfileEditForm.vue`).
+-   **Component Names in Templates:** Use `PascalCase` when referencing components in templates (`<UserProfile />`, `<BaseButton />`).
+-   **Base Components:** Prefix generic, reusable base components with `Base` (e.g., `BaseCard.vue`, `BaseModal.vue`).
+
+## 3. Component Structure (.vue files)
+
+-   Maintain a consistent order within `.vue` files:
+    1.  `<script setup lang="ts">` (or `<script setup>`)
+    2.  `<template>`
+    3.  `<style scoped>` (or `<style>`)
+-   Always use `<script setup>` for new components.
+
+## 4. Props
+
+-   Use `<script setup>` with `defineProps`.
+-   Use `camelCase` for prop names in JavaScript/TypeScript.
+-   Use `kebab-case` when passing props in templates (`<MyComponent :user-name="name" />`).
+-   Provide specific types for props, avoiding `Any` or overly generic types whenever possible. Use TypeScript interfaces or types if complex.
+-   Provide meaningful `default` values for optional props.
+-   Use built-in prop validation when necessary.
+
+```typescript
+// Good example within <script setup lang="ts">
+interface User {
+  id: number;
+  name: string;
+}
+
+const props = defineProps({
+  user: {
+    type: Object as PropType<User>,
+    required: true
+  },
+  isVisible: {
+    type: Boolean,
+    default: false
+  },
+  theme: {
+    type: String,
+    default: 'light',
+    validator: (value: string) => ['light', 'dark'].includes(value)
+  }
+})
+```
+
+## 5. Events
+
+-   Use `<script setup>` with `defineEmits`.
+-   Use `kebab-case` for event names (e.g., `update:modelValue`, `item-clicked`).
+-   Document emitted events, including their payload.
+
+```typescript
+// Good example within <script setup lang="ts">
+const emit = defineEmits(['update:modelValue', 'change', 'submit'])
+
+function handleClick() {
+  emit('change', someValue);
+}
+```
+
+## 6. State Management (Pinia)
+
+-   Use Pinia for centralized state management.
+-   Organize stores into modules within the `src/stores` directory.
+-   Define `state` as a function returning the initial state object.
+-   Use `getters` for computed state derivations.
+-   Use `actions` for modifying state (asynchronous or complex synchronous operations).
+-   Access stores within components using the `useXStore()` convention.
+
+## 7. Routing (Vue Router)
+
+-   Define routes in `src/router/routes.js` (or similar) and configure the router in `src/router/index.js`.
+-   Use named routes for easier navigation and refactoring.
+-   Use lazy loading for route components to improve initial load performance:
+    ```javascript
+    const UserProfile = () => import('@/views/UserProfile.vue');
+    ```
+-   Use route guards for authentication and authorization.
+
+## 8. Styling
+
+-   **Scoped Styles:** Prefer using `<style scoped>` to encapsulate styles within components and prevent global scope pollution.
+-   **Global Styles:** Place genuinely global styles (e.g., resets, typography, theme variables) in the `src/styles` directory.
+-   **CSS Variables:** Utilize CSS variables for theming and maintainability.
+-   **Naming Conventions:** If not using a utility-first framework, consider a methodology like BEM (`block__element--modifier`) for class names in non-scoped or shared styles.
+-   **Utility-First CSS (Optional):** Consider using Tailwind CSS for rapid UI development if it fits the project needs.
+
+## 9. Composition API
+
+-   **Always use `<script setup>` syntax.** It's more concise and efficient.
+-   Use `ref` for reactive primitive values (String, Number, Boolean, etc.).
+-   Use `reactive` for reactive objects. Be aware that destructuring `reactive` objects loses reactivity; use `toRefs` if necessary.
+-   Use `computed` for derived reactive state.
+-   Use lifecycle hooks imported from `vue` (`onMounted`, `onUpdated`, `onUnmounted`, etc.).
+-   Organize logic into reusable composables (`src/composables`) for complex or shared functionality.
+
+## 10. Imports
+
+-   Use path aliases (e.g., `@/components/MyComponent.vue`) configured in `vite.config.js` or `vue.config.js` for cleaner import paths.
+-   Maintain a consistent order for imports (e.g., Vue/external libraries first, then project modules, then relative paths).
+
+## 11. Linting and Formatting
+
+-   Use ESLint with recommended Vue plugins (`eslint-plugin-vue`).
+-   Use Prettier for automatic code formatting.
+-   Ensure ESLint and Prettier configurations are part of the project and integrated into the development workflow (e.g., pre-commit hooks).
+
+## 12. TypeScript (If Applicable)
+
+-   Use TypeScript for enhanced type safety.
+-   Provide explicit types for props, emits, state, function arguments, and return values.
+-   Leverage TypeScript interfaces and types for complex data structures.
+
+## 13. Accessibility (a11y)
+
+-   Write semantic HTML (`<nav>`, `<button>`, `<main>`, etc.).
+-   Use ARIA attributes where necessary to improve accessibility for assistive technologies.
+-   Ensure sufficient color contrast.
+-   Provide keyboard navigation support.
+
+## 14. Performance
+
+-   Lazy load routes and components where appropriate.
+-   Optimize images and assets.
+-   Minimize component re-renders by using `v-once` or careful prop management.
+-   Analyze bundle size using tools like `vite-bundle-visualizer`.
+
+## 15. Testing
+
+-   Write unit tests for composables and utility functions (e.g., using Vitest).
+-   Write component tests to verify component rendering, interaction, and event emission (e.g., using Vitest and Vue Testing Library).

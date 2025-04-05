@@ -108,7 +108,7 @@ const router = createRouter({
         },
         {
           path: 'user',
-          component: () => import('../views/admin/User/UserView.vue')
+          component: () => import('../views/admin/User.vue')
         },
         {
           path: 'company',

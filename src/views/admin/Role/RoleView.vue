@@ -65,7 +65,7 @@ onMounted(() => {
 
                 <a-input-search v-permission="'GET /api/v1/roles'" placeholder="Vui lòng nhập thông tin cần tìm kiếm"
                     enter-button="Tìm kiếm" v-model:value="store.valueSearch" @search="store.getData(store.valueSearch)"
-                    class="w-2/3" />
+                    class="w-1/3" />
                 <button class="bg-[#21aa55] hover:bg-green-500 text-white rounded-[7px] px-5 font-medium "
                     @click="store.handleOpenModal()" v-permission="'POST /api/v1/roles'">Thêm
                     mới</button>
@@ -83,7 +83,7 @@ onMounted(() => {
                         </template>
                         <template v-else-if="column.dataIndex === 'isActive'">
                             <span :class="text ? 'text-green-600' : 'text-red-500'">
-                                Active
+                                {{ text ? 'Hoạt động' : 'Không hoạt động' }}
                             </span>
                         </template>
                         <template v-else-if="column.dataIndex === 'createdAt'">
