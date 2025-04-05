@@ -95,19 +95,19 @@ onMounted(() => {
         <a-form :model="store.form" ref="formRef" layout="vertical" class="py-3">
             <a-row :gutter="16">
                 <a-col :span="21">
-                    <a-form-item label="Tên" name="name"
+                    <a-form-item label="Tên" name="name" class="mb-4"
                         :rules="[{ required: true, message: 'Vui lòng nhập địa chỉ!' }]">
                         <a-input v-model:value="store.form.name" placeholder="Vui lòng nhập name" />
                     </a-form-item>
                 </a-col>
                 <a-col :span="3">
-                    <a-form-item label="Trạng thái" name="isActive">
+                    <a-form-item label="Trạng thái" name="isActive" class="mb-4">
                         <a-switch v-model:checked="store.form.isActive" />
                     </a-form-item>
                 </a-col>
 
                 <a-col :span="24">
-                    <a-form-item label="Kĩ năng" name="skills"
+                    <a-form-item class="mb-4" label="Kĩ năng" name="skills"
                         :rules="[{ required: true, message: 'Vui lòng nhập kĩ năng!' }]">
                         <a-select v-model:value="store.form.skills" allowClear mode="tags" style="width: 100%"
                             placeholder="Vui lòng chọn kĩ năng..." :options="SKILLS_LIST">
@@ -116,7 +116,7 @@ onMounted(() => {
                 </a-col>
 
                 <a-col :span="12">
-                    <a-form-item label="Lương" name="salary"
+                    <a-form-item class="mb-4" label="Lương" name="salary"
                         :rules="[{ required: true, message: 'Vui lòng nhập lương!' }]">
                         <a-input-number v-model:value="store.form.salary" placeholder="Vui lòng nhập lương"
                             class="w-full" min="1"
@@ -125,7 +125,7 @@ onMounted(() => {
                     </a-form-item>
                 </a-col>
                 <a-col :span="12">
-                    <a-form-item label="Số lượng tuyển" name="quantity"
+                    <a-form-item class="mb-4" label="Số lượng tuyển" name="quantity"
                         :rules="[{ required: true, message: 'Vui lòng nhập Số lượng tuyển!' }]">
                         <a-input-number v-model:value="store.form.quantity" placeholder="Vui lòng nhập quantity"
                             class="w-full" min="1" />
@@ -133,7 +133,7 @@ onMounted(() => {
                 </a-col>
 
                 <a-col :span="12">
-                    <a-form-item label="Trình độ" name="level"
+                    <a-form-item class="mb-4" label="Trình độ" name="level"
                         :rules="[{ required: true, message: 'Vui lòng nhập kĩ năng!' }]">
                         <a-select v-model:value="store.form.level" allowClear style="width: 100%"
                             placeholder="Vui lòng nhập trình độ..." :options="LEVELS_LIST" show-search>
@@ -142,7 +142,7 @@ onMounted(() => {
                 </a-col>
 
                 <a-col :span="12">
-                    <a-form-item label="Ngày bắt đầu và kết thúc" name="endDate">
+                    <a-form-item class="mb-4" label="Ngày bắt đầu và kết thúc" name="endDate">
                         <a-range-picker ref="rangePickerRef" v-model:value="value1" class="w-full"
                             format="DD / MM / YYYY" />
                     </a-form-item>
@@ -152,7 +152,7 @@ onMounted(() => {
                     display:
                         account?.role.name === 'HR_USER' ? (account?.companyId ? 'none' : 'block') : 'block'
                 }">
-                    <a-form-item label="Công ty" name="companyId"
+                    <a-form-item class="mb-4" label="Công ty" name="companyId"
                         :rules="[{ required: true, message: 'Vui lòng nhập công ty!' }]">
                         <a-select v-model:value="store.form.companyId._id" allowClear style="width: 100%"
                             placeholder="Vui lòng công ty..." :options="dataCompany" show-search>
@@ -161,7 +161,7 @@ onMounted(() => {
                 </a-col>
 
                 <a-col :span="24">
-                    <a-form-item label="Địa chỉ" name="location"
+                    <a-form-item class="mb-6" label="Địa chỉ" name="location"
                         :rules="[{ required: true, message: 'Vui lòng nhập địa chỉ!' }]">
                         <a-select v-model:value="store.form.location" allowClear :options="dataLocation"
                             :field-names="{ label: 'name', value: 'name' }" show-search
@@ -171,8 +171,8 @@ onMounted(() => {
                 </a-col>
 
                 <a-col :span="24">
-                    <a-form-item name="description" :rules="[{ required: true, message: 'Vui lòng nhập mô tả!' }]"
-                        class="m-0">
+                    <a-form-item class="mb-4" name="description" :rules="[{ required: true, message: 'Vui lòng nhập mô tả!' }]"
+                        >
                         <CKEditor :description="store.form.description" title="Mô tả" v-model="store.form.description">
                         </CKEditor>
                     </a-form-item>
