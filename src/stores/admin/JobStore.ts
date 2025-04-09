@@ -4,6 +4,7 @@ import type { IJob, IPaginate } from '../../types/backend'
 import { message } from 'ant-design-vue'
 import accountService from '../../services/account.service'
 import apiService from '../../services/api.service'
+import type { Dayjs } from 'dayjs'
 
 const useJobStore = defineStore('job', () => {
   const { account } = accountService.getAccount()
@@ -17,37 +18,29 @@ const useJobStore = defineStore('job', () => {
 
   const data = ref<IJob[]>([])
   const valueSearch = ref<string>('')
-  const form = reactive<IJob>({
+  const valueDefault = <IJob>{  
     _id: '',
     name: '',
     skills: [],
     location: '',
-    salary: 0,
+    salaryFrom: 0,
+    salaryTo: 0,
+    isSalary: false,
     quantity: 0,
     level: '',
     companyId: {
-      _id: ''
+      _id: account?.role.name === 'HR_USER' ? account?.companyId : ''
     },
     description: '',
     startDate: new Date(),
     endDate: new Date(),
     isActive: true
-  })
+  }
+  const form = reactive<IJob>(JSON.parse(JSON.stringify(valueDefault)))
 
   const loading = ref<boolean>(false)
   const refreshInput = () => {
-    form._id = ''
-    form.name = ''
-    form.skills = []
-    form.location = ''
-    form.salary = 0
-    form.quantity = 0
-    form.companyId = {
-      _id: account?.role.name === 'HR_USER' ? account?.companyId : ''
-    }
-    form.level = ''
-    form.description = ''
-    ;(form.startDate = new Date()), (form.endDate = new Date()), (form.isActive = true)
+    Object.assign(form, JSON.parse(JSON.stringify(valueDefault)))
   }
 
   const handleOpenModal = () => {
@@ -63,7 +56,7 @@ const useJobStore = defineStore('job', () => {
   const getData = async (search?: string) => {
     loading.value = true
     try {
-      const params = `?current=${dataMeta.value?.current}&pageSize=${dataMeta.value?.pageSize}&isActive=${isActive.value}&sort=-createdAt${search ? '&name=/' + search + '/' : ''}${account?.role.name === 'HR_USER' ? '&companyId=' + account.companyId : ''}`
+      const params = `?page=${dataMeta.value?.current}&pageSize=${dataMeta.value?.pageSize}&isActive=${isActive.value}&sort=-createdAt${search ? '&name=/' + search + '/' : ''}${account?.role.name === 'HR_USER' ? '&companyId=' + account.companyId : ''}`
       const res = await apiService.get('jobs' + params)
       if (res) {
         data.value = res.data.result

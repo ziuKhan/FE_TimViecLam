@@ -9,16 +9,16 @@
         <div class="form__search_suggest">
             <span> Gợi ý của bạn:</span>
 
-            <span @click="store.updateKeyword('java')" class="search__suggest_link  cursor-pointer">Java</span>
-            <span @click="store.updateKeyword('React')" class="search__suggest_link  cursor-pointer">React</span>
-            <span @click="store.updateKeyword('Vue')" class="search__suggest_link  cursor-pointer">Vue</span>
-            <span @click="store.updateKeyword('NodeJS')" class="search__suggest_link  cursor-pointer">NodeJS</span>
-            <span @click="store.updateKeyword('Business Analyst')" class="search__suggest_link  cursor-pointer">Business
+            <span @click="updateKeyword('java')" class="search__suggest_link  cursor-pointer">Java</span>
+            <span @click="updateKeyword('React')" class="search__suggest_link  cursor-pointer">React</span>
+            <span @click="updateKeyword('Vue')" class="search__suggest_link  cursor-pointer">Vue</span>
+            <span @click="updateKeyword('NodeJS')" class="search__suggest_link  cursor-pointer">NodeJS</span>
+            <span @click="updateKeyword('Business Analyst')" class="search__suggest_link  cursor-pointer">Business
                 Analyst</span>
-            <span @click="store.updateKeyword('Tester')" class="search__suggest_link  cursor-pointer">Tester</span>
-            <span @click="store.updateKeyword('Net')" class="search__suggest_link  cursor-pointer">.Net</span>
-            <span @click="store.updateKeyword('PHP')" class="search__suggest_link  cursor-pointer">PHP</span>
-            <span @click="store.updateKeyword('Manager')" class="search__suggest_link  cursor-pointer">Manager</span>
+            <span @click="updateKeyword('Tester')" class="search__suggest_link  cursor-pointer">Tester</span>
+            <span @click="updateKeyword('Net')" class="search__suggest_link  cursor-pointer">.Net</span>
+            <span @click="updateKeyword('PHP')" class="search__suggest_link  cursor-pointer">PHP</span>
+            <span @click="updateKeyword('Manager')" class="search__suggest_link  cursor-pointer">Manager</span>
         </div>
     </div>
 </template>
@@ -27,6 +27,11 @@
 import Search from './Search.vue';
 import { useSearchStore } from '../../../stores/user/searchStore';
 const store = useSearchStore()
+
+const updateKeyword = (keyword: string) => {
+    store.keyword = keyword
+    store.handleSearch()
+}
 </script>
 
 <style lang="scss" scoped>

@@ -55,10 +55,10 @@ const handleLogout = () => {
     :root-style="{ color: 'white' }" style="color: white ; background:#121212; font-size: 17px; font-weight: 400;"
     width="250" placement="left" @after-open-change="afterOpenChange">
     <div class="flex flex-col">
-      <RouterLink to="" class="header__nav_link pl-3 py-4"> Việc làm IT</RouterLink>
-      <RouterLink to="" class="header__nav_link pl-3 py-4"> Việc làm IT</RouterLink>
-      <RouterLink to="" class="header__nav_link pl-3 py-4"> Việc làm IT</RouterLink>
-      <RouterLink to="" class="header__nav_link pl-3 py-4"> Việc làm IT</RouterLink>
+      <RouterLink to="" class="header__nav_link pl-3 py-4 hover:text-red-600"> Việc làm IT</RouterLink>
+      <RouterLink to="" class="header__nav_link pl-3 py-4 hover:text-red-600"> Việc làm IT</RouterLink>
+      <RouterLink to="" class="header__nav_link pl-3 py-4 hover:text-red-600"> Việc làm IT</RouterLink>
+      <RouterLink to="" class="header__nav_link pl-3 py-4 hover:text-red-600"> Việc làm IT</RouterLink>
     </div>
 
 

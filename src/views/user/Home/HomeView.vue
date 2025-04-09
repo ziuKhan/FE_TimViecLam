@@ -6,6 +6,7 @@ import Loading from '../../../components/Loading.vue'
 import FormSearch from '../../../components/user/search/FormSearch.vue'
 import type { ICompany, IJob } from '../../../types/backend'
 import apiService from '../../../services/api.service'
+import { formatSalary } from '../../../until/until';
 
 const dataCompany = ref<ICompany[]>([])
 const dataJobs = ref<IJob[]>([])
@@ -55,7 +56,7 @@ onMounted(() => {
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-10/12 mx-auto">
         <template v-for="data in dataJobs" :key="data._id">
           <CardJob :_id="data._id" :name="data.name" :address="data.location" :logo="data.companyId?.logo"
-            :salary="data.salary?.toString()" :nameCompany="data.companyId?.name" :company_id="data.companyId?._id">
+          :isSalary="data.isSalary"  :salary="formatSalary(data.salaryFrom?.toString() || 0) + ' - ' + formatSalary(data.salaryTo?.toString() || 0) " :nameCompany="data.companyId?.name" :company_id="data.companyId?._id">
           </CardJob>
         </template>
       </div>

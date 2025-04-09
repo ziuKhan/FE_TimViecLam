@@ -9,7 +9,8 @@ defineProps({
     logo: String,
     salary: String,
     _id: String,
-    company_id: String
+    company_id: String,
+    isSalary: Boolean
 });
 
 
@@ -33,11 +34,10 @@ defineProps({
             </RouterLink>
 
             <div class="text-xs flex gap-x-2 font-medium pt-1">
-                <div class="px-2 py-1 bg-zinc-100 rounded-md">${{ formatSalary(salary) }}</div>
+                <div class="px-2 py-1 bg-zinc-100 rounded-md">{{ !isSalary ? salary || 0 : 'Thoả thuận' }}</div>
                 <div class="px-2 py-1 bg-zinc-100 rounded-md">
                     {{ Array.isArray(address) ? (address.length > 0 ? address.join(' - ') :
                         '') : address }}
-
                 </div>
             </div>
         </div>

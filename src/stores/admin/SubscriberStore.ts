@@ -40,7 +40,7 @@ const useSubscriberStore = defineStore('subscriber', () => {
   const getData = async (search?: string) => {
     loading.value = true
     try {
-      const params = `?current=${dataMeta.value?.current}&pageSize=${dataMeta.value?.pageSize}&sort=-createdAt${search ? '&name=/' + search + '/' : ''}`
+      const params = `?page=${dataMeta.value?.current}&pageSize=${dataMeta.value?.pageSize}&sort=-createdAt${search ? '&name=/' + search + '/' : ''}`
       const res = await apiService.get('subscribers' + params)
       if (res) {
         data.value = res.data.result

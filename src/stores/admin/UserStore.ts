@@ -74,7 +74,7 @@ const useUserStore = defineStore('user', () => {
   const getData = async (search?: string) => {
     loading.value = true
     try {
-      const params = `?page=${dataMeta.value?.page}&pageSize=${dataMeta.value?.pageSize}&filter=populate=role,isActive=${isActive.value},sort=-createdAt${search ? ',name=/' + search + '/' : ''}${keySearchRole.value ? ',role=' + keySearchRole.value + '' : ''}`
+      const params = `?page=${dataMeta.value?.current}&pageSize=${dataMeta.value?.pageSize}&filter=populate=role,isActive=${isActive.value},sort=-createdAt${search ? ',name=/' + search + '/' : ''}${keySearchRole.value ? ',role=' + keySearchRole.value + '' : ''}`
       const res = await apiService.get('users' + params)
       if (res) {
         data.value = res.data.result

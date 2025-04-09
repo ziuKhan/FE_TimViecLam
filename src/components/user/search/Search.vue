@@ -1,30 +1,55 @@
 <script lang="ts" setup>
-import { reactive, ref, watch } from 'vue';
-import { useSearchStore } from '../../../stores/user/searchStore';
+import { onMounted, reactive, ref, watch } from 'vue'
+import { useSearchStore } from '../../../stores/user/searchStore'
+import type { ILocation } from '../../../types/backend'
+import { getConscious } from '../../../services/location.service'
 
 const store = useSearchStore()
+const dataLocation = ref<ILocation[]>([])
+const loadDataLocation = async () => {
+  try {
+    const res = await getConscious()
+    if (res) {
+      dataLocation.value = res.data
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
 
+onMounted(() => {
+  loadDataLocation()
+})
 </script>
 
-
 <template>
+  <div class="container__search_form flex-wrap md:flex-nowrap">
 
-  <div class="container__search_form flex-wrap md:flex-nowrap ">
-    <select class="search_form-select search_form-ctl min-w-full md:min-w-60" name="" id="" v-model="store.location">
-      <option selected value="">Tất cả thành phố</option>
-      <option value="Hà Nội">Hà Nội</option>
-      <option value="Hồ Chí Minh">TP Hồ Chí Minh</option>
-      <option value="Đà Nẵng">Đà Nẵng</option>
-    </select>
-    <input type="text" v-model="store.keyword" @keyup.enter="store.handleSearch()"
-      class="search_form-inp search_form-ctl " id="search_form-inp" placeholder="Nhập từ khoá kĩ năng">
+    <a-select
+      v-model:value="store.valueFilter.location"
+      allowClear
+      class="min-w-full md:min-w-60 custom-select !text-2xl"
+      placeholder="Tất cả thành phố"
+      :options="dataLocation"
+      :field-names="{ label: 'name', value: 'name' }"
+      show-search
+    >
+    </a-select>
+    <a-input
+      type="text"
+      v-model:value="store.keyword"
+      @keyup.enter="store.handleSearch()"
+      class="search_form-inp search_form-ctl"
+      id="search_form-inp"
+      placeholder="Nhập từ khoá kĩ năng"
+    />
 
-    <button type="button" @click="store.handleSearch()" class="search_form-btn"> <img loading="lazy"
-        src="../../../assets/image/icon/icons8_search.svg" alt="">Tìm kiếm</button>
+   <button type="button" @click="store.handleSearch()" class="search_form-btn">
+  
+      <img loading="lazy" src="../../../assets/image/icon/icons8_search.svg" alt="" />Tìm kiếm
+    </button>
   </div>
 </template>
-
-
 
 <style lang="scss" scoped>
 .container__search_form {
@@ -38,13 +63,9 @@ const store = useSearchStore()
 .search_form-ctl {
   height: 58px;
   border-radius: 5px;
-  border: none;
   padding: 6px 16px;
+  font-size: 18px;
 
-  &:hover {
-    border: 0.4px solid rgba(31, 31, 31, 0.577);
-    box-shadow: 0 0 10px rgb(249, 249, 249);
-  }
 }
 
 .search_form-inp {
@@ -65,8 +86,17 @@ const store = useSearchStore()
   border-radius: 5px;
 
   &:hover {
-    background-color: #C82222;
+    background-color: #c82222;
+  }
+}
 
+.custom-select :deep(.ant-select-selector) {
+  height: 58px !important;
+
+  span{
+   font-size: 18px;
+    display: flex;
+    align-items: center;
   }
 }
 </style>

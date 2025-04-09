@@ -8,7 +8,7 @@ const localeRef = ref(locale);
 const themeConfig = {
   token: {
     colorPrimary: '#ef0b12', // Màu chủ đạo 
-    borderRadius: 5, // Bo góc
+    borderRadius: 8, // Bo góc
     colorSuccess: '#52c41a', // Màu thành công
     colorWarning: '#faad14', // Màu cảnh báo  
     colorError: '#ff4d4f', // Màu lỗi

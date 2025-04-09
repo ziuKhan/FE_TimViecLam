@@ -32,6 +32,7 @@ const router = useRouter()
 
 
 const onFinish = async (values: IFormState) => {
+ 
   try {
     const { username, password } = values
     loading.value = true
@@ -150,7 +151,7 @@ onMounted(() => {
         </a-form-item>
 
         <a-form-item>
-          <a-button :disabled="disabled" type="primary" html-type="submit" class="login-form-button" :loading="loading">
+          <a-button  type="primary" html-type="submit" class="login-form-button" :loading="loading">
             Đăng nhập ngay
           </a-button>
           hoặc

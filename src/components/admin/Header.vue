@@ -202,7 +202,7 @@ const coTheQuanLyCongViec = computed(() =>
 </script>
 <style >
 .ant-layout-sider-children, .ant-menu-root{
-    background-color: #000000 !important;
+    background-color: #0C0C0C !important;
 }
 .ant-layout-sider-trigger, .ant-menu-sub {
     background-color: #202020 !important;

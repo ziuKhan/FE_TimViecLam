@@ -63,7 +63,7 @@ const useCompanyStore = defineStore('company', () => {
   const getData = async (search?: string) => {
     loading.value = true
     try {
-      const params = `?current=${dataMeta.value?.current}&pageSize=${dataMeta.value?.pageSize}&isActive=${isActive.value}&sort=-createdAt${search ? '&name=/' + search + '/' : ''}${account?.companyId ? '&_id=' + account?.companyId : ''}`
+      const params = `?page=${dataMeta.value?.current}&pageSize=${dataMeta.value?.pageSize}&isActive=${isActive.value}&sort=-createdAt${search ? '&name=/' + search + '/' : ''}${account?.companyId ? '&_id=' + account?.companyId : ''}`
       const res = await apiService.get('companies' + params)
       if (res) {
         data.value = res.data.result

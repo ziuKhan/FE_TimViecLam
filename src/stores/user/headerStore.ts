@@ -36,11 +36,11 @@ export const useHeaderStore = defineStore('header', () => {
     ])
 
     const filterNotifications = (items: INotification[]) =>
-      items.filter((item) => item.type === 'SYSTEM' || item.userId === account._id)
+      items?.filter((item) => item.type === 'SYSTEM' || item.userId === account._id)
 
     if (res) {
       dataNotification.value = filterNotifications(res.result)
-      totalNotification.value = filterNotifications(number.result).length
+      totalNotification.value = filterNotifications(number.result)?.length || 0
     }
   }
   const changePagination = () => {

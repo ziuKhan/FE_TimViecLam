@@ -6,6 +6,7 @@ import type { ICompany, IJob } from '../../types/backend';
 import Loading from '../../components/Loading.vue';
 import { linkUploads } from '../../constant/api';
 import apiService from '../../services/api.service';
+import { formatSalary } from '../../until/until';
 
 const route = useRoute()
 
@@ -87,7 +88,7 @@ watchEffect(() => {
         <div class="max-h-full overflow-y-auto">
           <template v-for="data in dataJobs" :key="data.id">
             <CardJob class="mb-5" :_id="data._id" :name="data.name" :address="data.location"
-              :logo="data.companyId?.logo" :salary="data.salary?.toString()" :nameCompany="data.companyId?.name"
+              :logo="data.companyId?.logo" :isSalary="data.isSalary"  :salary="formatSalary(data.salaryFrom?.toString() || 0) + ' - ' + formatSalary(data.salaryTo?.toString() || 0) " :nameCompany="data.companyId?.name"
               :company_id="data.companyId?._id">
             </CardJob>
           </template>

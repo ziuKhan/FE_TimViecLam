@@ -1,6 +1,37 @@
 export const formatSalary = (value: string | number | undefined) => {
-  if (!value) return 'N/A'
-  return parseInt(value.toString()).toLocaleString('vi-VN')
+  if (!value) return '0 đ';
+  
+  const number = parseInt(value.toString());
+  
+  // Xử lý tỷ
+  if (number >= 1000000000) {
+    const billions = number / 1000000000;
+    if (billions % 1 === 0) {
+      return `${billions} tỷ`;
+    }
+    return `${billions.toFixed(1)} tỷ`;
+  }
+  
+  // Xử lý triệu
+  if (number >= 1000000) {
+    const millions = number / 1000000;
+    if (millions % 1 === 0) {
+      return `${millions} triệu`;
+    }
+    return `${millions.toFixed(1)} triệu`;
+  }
+  
+  // Xử lý trăm nghìn
+  if (number >= 100000) {
+    const hundreds = number / 100000;
+    if (hundreds % 1 === 0) {
+      return `${hundreds} trăm`;
+    }
+    return `${hundreds.toFixed(1)} trăm`;
+  }
+  
+  // Nếu nhỏ hơn 100.000 thì format với đơn vị đồng
+  return `${number.toLocaleString('vi-VN')} đ`;
 }
 
 export const SKILLS_LIST = [

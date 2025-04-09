@@ -82,7 +82,9 @@ export interface IJob {
   }
 
   location: string
-  salary: number
+  salaryFrom?: number
+  salaryTo?: number
+  isSalary?: boolean
   quantity: number
   level: string
   description: string

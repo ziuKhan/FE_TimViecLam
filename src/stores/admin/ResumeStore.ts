@@ -110,7 +110,7 @@ const useResumeStore = defineStore('resume', () => {
   const getData = async (search?: string) => {
     loading.value = true
     try {
-      const params = `?current=${dataMeta.value?.current}&pageSize=${dataMeta.value?.pageSize}&status=${isStatus.value}&sort=-createdAt${search ? '&email=/' + search + '/' : ''}${account?.role.name === 'HR_USER' ? '&companyId=' + account.companyId : ''}`
+      const params = `?page=${dataMeta.value?.current}&pageSize=${dataMeta.value?.pageSize}&status=${isStatus.value}&sort=-createdAt${search ? '&email=/' + search + '/' : ''}${account?.role.name === 'HR_USER' ? '&companyId=' + account.companyId : ''}`
       const res = await apiService.get('resumes' + params)
       if (res) {
         data.value = res.data.result
