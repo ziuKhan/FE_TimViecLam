@@ -35,9 +35,11 @@ const getData = async () => {
     try {
         const result = await apiService.get('jobs/client/' + id)
         data.value = result.data
-        load.value = true
     } catch (error) {
         console.error('Error fetching data:', error)
+        router.push('/404')
+    } finally {
+        load.value = true
     }
 }
 const getJob = async () => {
@@ -111,7 +113,7 @@ onMounted(async () => {
                     <p class="text-base lg:text-lg font-light">HCL Vietnam Company Limited </p>
                     <div class="text-[#0AB305] flex gap-x-2 items-center font-bold text-base">
                         <img loading="lazy" class="max-w-6 " src="../../assets/image/icon/icons8_us_dollar.svg" alt="">
-                        {{ formatSalary(data?.salaryFrom?.toString() || 0) + ' - ' + formatSalary(data?.salaryTo?.toString() || 0) }}
+                        {{ !data?.isSalary ? formatSalary(data?.salaryFrom?.toString() || 0) + ' - ' + formatSalary(data?.salaryTo?.toString() || 0) : 'Thoả thuận' }}
                     </div>
                     <button @click="open = true"
                         class="w-full bg-[#ed1b2f] rounded-md text-white font-semibold text-base py-2 mt-4 hover:bg-red-700">Ứng

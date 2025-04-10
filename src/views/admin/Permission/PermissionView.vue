@@ -7,7 +7,7 @@ import dayjs from 'dayjs';
 import UpdatePermison from './UpdatePermison.vue';
 import usePermissionStore from '../../../stores/admin/PermissionStore';
 import { message } from 'ant-design-vue';
-import { CopyOutlined, DeleteOutlined, SettingOutlined } from '@ant-design/icons-vue';
+import { CopyOutlined, DeleteOutlined, EditOutlined, SettingOutlined } from '@ant-design/icons-vue';
 
 
 const store = usePermissionStore()
@@ -49,7 +49,10 @@ const handleTableChange = (pagination: IPaginate) => {
 };
 
 
-
+const handleSearch = () => {
+    store.dataMeta.current = 1;
+    store.getData()
+}
 
 const renderColorMethod = (method: string) => {
     switch (method) {
@@ -91,7 +94,7 @@ onMounted(() => {
 
                 <a-input-search v-permission="'GET /api/v1/permissions'"
                     placeholder="Vui lòng nhập thông tin cần tìm kiếm" enter-button="Tìm kiếm"
-                    v-model:value="store.valueSearch" @search="store.getData(store.valueSearch)" class="w-2/3" />
+                    v-model:value="store.valueSearch" @search="handleSearch" class="w-2/3" />
                 <button class="bg-[#21aa55] hover:bg-green-500 text-white rounded-[7px] px-5 font-medium "
                     @click="store.handleOpenModal()" v-permission="'POST /api/v1/permissions'">Thêm
                     mới</button>
@@ -124,7 +127,7 @@ onMounted(() => {
                             <button type="button"
                                 class="mr-2  bg-[#1669dcec] hover:bg-[#498ff1] rounded-[5px] px-[10px] py-1 h-8 "
                                 @click="store.getByID(text)" v-permission="'PATCH /api/v1/permissions/:id'">
-                                    <SettingOutlined  class="text-white"/>
+                                    <EditOutlined  class="text-white"/>
                             </button>
                             <a-popconfirm title="Bạn có chắc muốn xoá?" ok-text="Có" cancel-text="Không"
                                 :loading="store.load" @confirm="store.deleteByID(text)" @cancel=""

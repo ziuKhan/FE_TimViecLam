@@ -6,6 +6,7 @@ import type { IPaginate } from '../../../types/backend';
 import dayjs from 'dayjs';
 import useRoleStore from '../../../stores/admin/RoleStore';
 import UpdateRole from './UpdateRole.vue';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
 
 
 const store = useRoleStore()
@@ -92,20 +93,19 @@ onMounted(() => {
                         <template v-else-if="column.dataIndex === '_id'">
                             <div class="flex">
                                 <button type="button"
-                                    class="mr-2  bg-[#1669dcec] hover:bg-[#498ff1] rounded-[5px] px-[10px] py-1 h-8 "
-                                    @click="store.getByID(text)" v-permission="'PATCH /api/v1/roles/:id'">
-                                    <img loading="lazy" class=" h-[24px]"
-                                        src="../../../assets/image/icon/icons8_settings.svg" alt="">
+                                class="mr-2  bg-[#1669dcec] hover:bg-[#498ff1] rounded-[5px] px-[10px] py-1 h-8 "
+                                @click="store.getByID(text)"  v-permission="'PATCH /api/v1/roles/:id'">
+                                    <EditOutlined  class="text-white"/>
+                            </button>
+                            <a-popconfirm title="Bạn có chắc muốn xoá?" ok-text="Có" cancel-text="Không"
+                                :loading="store.loading" @confirm="store.deleteByID(text)" @cancel=""
+                                v-permission="'DELETE /api/v1/roles/:id'">
+                                <button type="button"
+                                    class=" bg-red-500 hover:bg-red-400 rounded-[5px] px-[10px] ] py-1 h-8 ">
+                                    <DeleteOutlined  class="text-white"/>
                                 </button>
-
-                                <a-popconfirm title="Bạn có chắc muốn xoá?" ok-text="Có" cancel-text="Không"
-                                    :loading="store.loading" @confirm="store.deleteByID(text)" @cancel=""
-                                    v-permission="'DELETE /api/v1/roles/:id'">
-                                    <button type="button"
-                                        class=" bg-red-500 hover:bg-red-400 rounded-[5px] px-[10px] ] py-1 h-8 ">
-                                        <img loading="lazy" class="h-[24px]"
-                                            src="../../../assets/image/icon/icons8_remove.svg" alt=""></button>
-                                </a-popconfirm>
+                            </a-popconfirm>
+                               
                             </div>
 
                         </template>

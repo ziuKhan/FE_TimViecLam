@@ -94,7 +94,7 @@ onUnmounted(() => {
                 ]">
                   <div class="w-1/12 flex justify-center items-center">
                     <img loading="lazy" class="max-w-[40px] max-h-[40px] object-contain rounded-full"
-                      :src="linkUploads('user/' + item?.createdBy?._id.avatar)" alt="" />
+                      :src="linkUploads('user/' + item?.createdBy?._id?.avatar)" alt="" />
                   </div>
                   <div class="w-11/12 min-h-20 cursor-pointer p-2">
                     <h3 :class="[

@@ -182,18 +182,26 @@ export interface INotification {
   title?: string
   message?: string
   type?: string
-  url?: string
+  isGlobal?: boolean
+  objInfo?: {
+    _id?: string
+    type?: string
+    name?: string
+  } 
   userId?: string
-  isRead?: false
-  url: string
+  userIds?: string[]
+  readAt?: Date
+  isURL?: boolean
+  isRead?: boolean
+  url?: string
   createdBy?: {
-    _id: {
-      _id: string
-      name: string
-      email: string
-      avatar: string
+    _id?: {
+      _id?: string
+      name?: string
+      email?: string
+      avatar?: string
     }
-    email: string
+    email?: string
   }
   isDeleted?: boolean
   deletedAt?: boolean | null

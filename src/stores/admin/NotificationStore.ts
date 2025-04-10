@@ -24,7 +24,8 @@ const useNotificationStore = defineStore('notification', () => {
     message: '',
     type: '',
     url: '',
-    isRead: false
+    isRead: false,
+    isURL: true,
   })
 
   const loading = ref<boolean>(false)
@@ -36,6 +37,7 @@ const useNotificationStore = defineStore('notification', () => {
     form.type = ''
     form.url = ''
     form.isRead = false
+    form.isURL = true
 
   }
 

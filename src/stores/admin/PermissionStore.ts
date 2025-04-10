@@ -6,7 +6,6 @@ import apiService from '../../services/api.service'
 
 const usePermissionStore = defineStore('permission', () => {
   const openModal = ref<boolean>(false)
-
   const load = ref<boolean>(false)
   const dataMeta = ref<IPaginate>({
     current: 1,
@@ -36,10 +35,10 @@ const usePermissionStore = defineStore('permission', () => {
     refreshInput()
   }
 
-  const getData = async (search?: string) => {
+  const getData = async () => {
     load.value = true
     try {
-      const params = `?page=${dataMeta.value?.current}&pageSize=${dataMeta.value?.pageSize}&sort=-createdAt${search ? '&module=/' + search + '/' : ''}`
+      const params = `?page=${dataMeta.value?.current}&pageSize=${dataMeta.value?.pageSize}&sort=-createdAt${valueSearch.value ? '&search=' + valueSearch.value : ''}`
       const res = await apiService.get('permissions' + params)
       if (res) {
         data.value = res.data.result

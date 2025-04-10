@@ -7,6 +7,7 @@ import dayjs from 'dayjs';
 import { linkUploads } from '../../../constant/api';
 import useCompanyStore from '../../../stores/admin/CompanyStore';
 import UpdateCompany from './UpdateCompany.vue';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
 
 const store = useCompanyStore()
 
@@ -99,16 +100,15 @@ onMounted(() => {
                             <button type="button"
                                 class="mr-2  bg-[#1669dcec] hover:bg-[#498ff1] rounded-[5px] px-[10px] py-1 h-8 "
                                 @click="store.getByID(text)" v-permission="'PATCH /api/v1/companies/:id'">
-                                <img loading="lazy" class=" h-5/6" src="../../../assets/image/icon/icons8_settings.svg"
-                                    alt="">
+                                    <EditOutlined  class="text-white"/>
                             </button>
                             <a-popconfirm title="Bạn có chắc muốn xoá?" ok-text="Có" cancel-text="Không"
-                                :loading="store.loading" @confirm="store.deleteByID(text)" @cancel="">
+                                :loading="store.loading" @confirm="store.deleteByID(text)" @cancel=""
+                                v-permission="'DELETE /api/v1/companies/:id'">
                                 <button type="button"
-                                    class=" bg-red-500 hover:bg-red-400 rounded-[5px] px-[10px] ] py-1 h-8 "
-                                    v-permission="'DELETE /api/v1/companies/:id'">
-                                    <img loading="lazy" class="h-5/6" src="../../../assets/image/icon/icons8_remove.svg"
-                                        alt=""></button>
+                                    class=" bg-red-500 hover:bg-red-400 rounded-[5px] px-[10px] ] py-1 h-8 ">
+                                    <DeleteOutlined  class="text-white"/>
+                                </button>
                             </a-popconfirm>
                         </template>
                     </template>

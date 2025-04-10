@@ -56,12 +56,15 @@ export const LEVELS_LIST = [
 ]
 
 export const TYPES_NOTIFICATION_LIST = [
-  { label: 'SYSTEM', value: 'SYSTEM' },
-  { label: 'PROMOTION', value: 'PROMOTION' },
-  { label: 'REMINDER', value: 'REMINDER' },   // Thông báo nhắc nhở
-  { label: 'WARNING', value: 'WARNING' },     // Thông báo cảnh báo
-  { label: 'NEWS', value: 'NEWS' },           // Thông báo tin tức
-  { label: 'UPDATE', value: 'UPDATE' }        // Thông báo cập nhật
+  { label: 'Hệ thống', value: 'SYSTEM' },
+  { label: 'Hoàn thành', value: 'SUCCESS' },
+  { label: 'Thông báo', value: 'NOTIFICATION' },
+  { label: 'Cảnh báo', value: 'WARNING' },
+  { label: 'Lỗi', value: 'ERROR' },
+  { label: 'Khuyến mãi', value: 'PROMOTION' },
+  { label: 'Nhắc nhở', value: 'REMINDER' },
+  { label: 'Tin tức', value: 'NEWS' },
+  { label: 'Cập nhật', value: 'UPDATE' }
 ]
 
 import router from '@/router' // Import router để điều hướng

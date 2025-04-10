@@ -17,7 +17,7 @@ const load = ref<boolean>(false)
 const getData = async () => {
   load.value = false
   const id = route.params.id as string;
-  const params = `?current=1&pageSize=20&isActive=true&companyId=${id}&populate=companyId`
+  const params = `?current=1&pageSize=20&isActive=true&filter=companyId=${id},populate=companyId`
   try {
     const [companies, jobs] = await Promise.all([apiService.get('companies/client/' + id), apiService.get('jobs/client' + params)]);
     dataCompany.value = companies.data

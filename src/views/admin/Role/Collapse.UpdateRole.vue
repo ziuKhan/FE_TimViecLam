@@ -6,6 +6,7 @@ import apiService from '../../../services/api.service';
 const store = useRoleStore()
 const activeKey = ref<string[]>(['1']);
 const checkedPermissions = ref<Record<string, boolean>>({});
+const moduleSelectAll = ref<Record<string, boolean>>({});
 // const data = ref<any[]>([]); // Thay đổi thành mảng để chứa nhiều mục
 
 
@@ -31,6 +32,9 @@ const getData = async () => {
             }
         });
 
+        Object.entries(grouped).forEach(([module, items]) => {
+            moduleSelectAll.value[module] = areAllPermissionsSelected(items);
+        });
         groupedData.value = grouped;
     } catch (error) {
         console.error('Lỗi khi lấy dữ liệu:', error);
@@ -83,6 +87,7 @@ watch(() => store.form._id, () => {
     activeKey.value = ['1'];
     groupedData.value = {};
     checkedPermissions.value = {}
+    moduleSelectAll.value = {}
     getData();
 })
 
@@ -91,12 +96,33 @@ const getSelectedCount = (items: any[]) => {
     return items.filter(item => checkedPermissions.value[item._id]).length;
 };
 
+const handleSelectAllModule = (module: string, checked: boolean) => {
+    const items = groupedData.value[module];
+    items.forEach(item => {
+        handleSwitchChange(item._id, checked);
+    });
+    moduleSelectAll.value[module] = checked;
+};
+
+const areAllPermissionsSelected = (items: any[]) => {
+    return items.every(item => checkedPermissions.value[item._id]);
+};
+
 </script>
 
 <template>
     <a-collapse v-model:activeKey="activeKey">
         <a-collapse-panel v-for="(items, module) in groupedData" :key="module" :header="module"
-            :extra="`${items.length} quyền, ${getSelectedCount(items)} đã chọn`">
+            :extra="$slots.extra">
+            <template #extra>
+                <div class="flex items-center gap-2">
+                    <span><span class="text-red-600 font-medium">{{ getSelectedCount(items) }}</span>/{{ items.length }} đã chọn</span>
+                    <a-switch
+                        :checked="moduleSelectAll[module]"
+                        @change="(checked: boolean) => handleSelectAllModule(module, checked)"
+                    />
+                </div>
+            </template>
             <a-row :gutter="16">
                 <a-col v-for="item in items" :key="item._id" :span="12" class="py-2">
                     <a-card style="width: 100%">

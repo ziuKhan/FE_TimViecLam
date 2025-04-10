@@ -6,6 +6,7 @@ import usePermissionStore from '../../../stores/admin/PermissionStore'
 import UpdateJob from './UpdateJob.vue'
 import useJobStore from '../../../stores/admin/JobStore'
 import { formatSalary } from '../../../until/until'
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue'
 
 const store = useJobStore()
 
@@ -131,13 +132,9 @@ onMounted(() => {
                   type="button"
                   class="mr-2 bg-[#1669dcec] hover:bg-[#498ff1] rounded-[5px] px-[10px] py-1 h-8"
                   @click="store.getByID(text)"
+                  v-permission="'PATCH /api/v1/jobs/:id'"
                 >
-                  <img
-                    loading="lazy"
-                    class="h-5/6"
-                    src="../../../assets/image/icon/icons8_settings.svg"
-                    alt=""
-                  />
+                  <EditOutlined class="text-white" />
                 </button>
                 <a-popconfirm
                   title="Bạn có chắc muốn xoá?"
@@ -152,12 +149,7 @@ onMounted(() => {
                     type="button"
                     class="bg-red-500 hover:bg-red-400 rounded-[5px] px-[10px] ] py-1 h-8"
                   >
-                    <img
-                      loading="lazy"
-                      class="h-5/6"
-                      src="../../../assets/image/icon/icons8_remove.svg"
-                      alt=""
-                    />
+                    <DeleteOutlined class="text-white" />
                   </button>
                 </a-popconfirm>
               </div>
@@ -167,15 +159,9 @@ onMounted(() => {
             <span v-if="record.salaryFrom && record.salaryTo">
               {{ formatSalary(record.salaryFrom) }} - {{ formatSalary(record.salaryTo) }}đ
             </span>
-            <span v-else-if="record.salaryFrom">
-              Từ {{ formatSalary(record.salaryFrom) }}đ
-            </span>
-            <span v-else-if="record.salaryTo">
-              Đến {{ formatSalary(record.salaryTo) }}đ
-            </span>
-            <span v-else>
-              Thoả thuận
-            </span>
+            <span v-else-if="record.salaryFrom"> Từ {{ formatSalary(record.salaryFrom) }}đ </span>
+            <span v-else-if="record.salaryTo"> Đến {{ formatSalary(record.salaryTo) }}đ </span>
+            <span v-else> Thoả thuận </span>
           </template>
         </a-table>
       </div>

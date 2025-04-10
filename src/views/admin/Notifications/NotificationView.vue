@@ -76,7 +76,7 @@ onMounted(() => {
 
             <div class="mt-3 border rounded-[10px]">
                 <a-table :columns="columns" :data-source="store.data" :loading="store.loading"
-                    :pagination=store.dataMeta @change="handleTableChange" :key="store.data.length">
+                    :pagination=store.dataMeta @change="handleTableChange" :key="store.data?.length">
                     <template #bodyCell="{ column, text, index }">
                         <template v-if="column.title === 'STT'">
                             {{ ((store.dataMeta.current || 1) - 1) * (store.dataMeta.pageSize || 6) + index + 1 }}
@@ -84,7 +84,6 @@ onMounted(() => {
                         <template v-else-if="column.dataIndex === 'createdAt'">
                             {{ dayjs(text).format('DD/MM/YYYY [lúc] HH:mm:ss') }}
                         </template>
-
                         <template v-else-if="column.dataIndex === 'skills'">
                             <template v-for="(item, index) in text" :key="item">
                                 {{ item }}{{ index !== text.length - 1 ? ', ' : '' }}
