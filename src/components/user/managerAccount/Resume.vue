@@ -20,7 +20,7 @@ const dataMeta = ref<IPaginate>({
 
 const getData = async () => {
     load.value = true
-    const params = `?current=${dataMeta.value?.current || 1}&pageSize=${dataMeta.value?.pageSize || 5}&populate=jobId,companyId&createdBy._id=${account?._id}&sort=-createdAt`
+    const params = `?page=${dataMeta.value?.current || 1}&pageSize=${dataMeta.value?.pageSize || 5}&filter=createdBy._id=${account?._id},sort=-createdAt`
     const res = await apiService.get('resumes/client' + params);
     if (res) {
         dataResume.value = res.data.result

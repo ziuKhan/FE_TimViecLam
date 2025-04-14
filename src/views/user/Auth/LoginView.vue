@@ -132,7 +132,7 @@ onMounted(() => {
           </a-input>
         </a-form-item>
 
-        <a-form-item label="Mật khẩu" name="password" :rules="[
+        <a-form-item class="mb-3" label="Mật khẩu" name="password" :rules="[
           { required: true, message: 'Vui lòng điền mật khẩu!' },
           { type: 'string', min: 6, message: 'Mật khẩu của bạn phải là 6 kí tự!' }
         ]">
@@ -155,7 +155,7 @@ onMounted(() => {
             Đăng nhập ngay
           </a-button>
           hoặc
-          <RouterLink to="/register" class="font-medium">đăng ký ngay!</RouterLink>
+          <RouterLink to="/register" class="font-medium hover:text-red-600">đăng ký ngay!</RouterLink>
         </a-form-item>
       </a-form>
     </div>

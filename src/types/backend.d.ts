@@ -201,6 +201,8 @@ export interface INotification {
       email?: string
       avatar?: string
     }
+    avatar?: string
+    name?: string
     email?: string
   }
   isDeleted?: boolean

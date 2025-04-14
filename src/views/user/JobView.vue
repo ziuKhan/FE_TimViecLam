@@ -44,7 +44,7 @@ const getData = async () => {
 }
 const getJob = async () => {
     try {
-        const result = await apiService.get(`jobs/client?current=1&pageSize=${meta.value.pageSize}&populate=companyId&sort=-createdAt&isActive=true&level=${data.value?.level}`)
+        const result = await apiService.get(`jobs/client?current=1&pageSize=${meta.value.pageSize}&filter=populate=companyId,isActive=true,level=${data.value?.level},sort=-createdAt,_id!=${data.value?._id}`)
         dataJob.value = result.data.result
         meta.value = result.data.meta
     } catch (error) {
@@ -54,6 +54,12 @@ const getJob = async () => {
 
 const urlFile = ref<string>('')
 const description = ref<string>('')
+
+const openModalApply = () => {
+    open.value = true
+    urlFile.value = ''
+    description.value = ''
+}
 
 const handleOk = async () => {
     if (account) {
@@ -111,11 +117,17 @@ onMounted(async () => {
                             class="text-red-600">{{ data?.level }}</span>
                     </h1>
                     <p class="text-base lg:text-lg font-light">HCL Vietnam Company Limited </p>
-                    <div class="text-[#0AB305] flex gap-x-2 items-center font-bold text-base">
+                    <div class="text-[#0AB305] flex gap-x-2 items-center font-bold text-base" >
                         <img loading="lazy" class="max-w-6 " src="../../assets/image/icon/icons8_us_dollar.svg" alt="">
-                        {{ !data?.isSalary ? formatSalary(data?.salaryFrom?.toString() || 0) + ' - ' + formatSalary(data?.salaryTo?.toString() || 0) : 'Thoả thuận' }}
+                        <span v-if="account?._id">
+
+                            {{ !data?.isSalary ? formatSalary(data?.salaryFrom?.toString() || 0) + ' - ' + formatSalary(data?.salaryTo?.toString() || 0) : 'Thoả thuận' }}
+                        </span> 
+                        <RouterLink v-else to="/login" >
+                            Đăng nhập để xem
+                        </RouterLink>
                     </div>
-                    <button @click="open = true"
+                    <button @click="openModalApply"
                         class="w-full bg-[#ed1b2f] rounded-md text-white font-semibold text-base py-2 mt-4 hover:bg-red-700">Ứng
                         tuyển</button>
                     <a-modal v-model:open="open" width="600px" title="Ứng tuyển JOB" @ok="handleOk"

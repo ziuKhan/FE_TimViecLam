@@ -70,9 +70,9 @@ onMounted(() => {
                        >
                         <template #label>
                             <span class="mr-2">Người nhận |</span>
-                            <a-checkbox :disabled="store.form.userId?.length" v-model:checked="store.form.isGlobal">Gửi tất cả</a-checkbox>
+                            <a-checkbox :disabled="store.form.userIds?.length" v-model:checked="store.form.isGlobal">Gửi tất cả</a-checkbox>
                         </template>
-                        <a-select :disabled="store.form.isGlobal" mode="multiple" v-model:value="store.form.userId" allowClear style="width: 100%"
+                        <a-select :disabled="store.form.isGlobal" mode="multiple" v-model:value="store.form.userIds" allowClear style="width: 100%"
                             placeholder="Vui lòng chọn người nhận..." :options="userList" :field-names="{ label: 'name', value: '_id' }" >
                         </a-select>
                     </a-form-item>

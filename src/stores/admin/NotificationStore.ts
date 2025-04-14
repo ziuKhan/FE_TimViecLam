@@ -17,33 +17,27 @@ const useNotificationStore = defineStore('notification', () => {
 
   const data = ref<INotification[]>([])
   const valueSearch = ref<string>('')
-
-  const form = reactive<INotification>({
+  const defaultForm: INotification = {
     _id: '',
     title: '',
     message: '',
     type: '',
     url: '',
     isRead: false,
-    isURL: true,
-  })
+    isGlobal: false,
+    isURL: true
+  }
+  const form = reactive<INotification>(JSON.parse(JSON.stringify(defaultForm)))
 
   const loading = ref<boolean>(false)
 
   const refreshInput = () => {
-    form._id = ''
-    form.title = ''
-    form.message = ''
-    form.type = ''
-    form.url = ''
-    form.isRead = false
-    form.isURL = true
-
+    Object.assign(form, JSON.parse(JSON.stringify(defaultForm)))
   }
 
   const handleOpenModal = () => {
-    openModal.value = true
     refreshInput()
+    openModal.value = true
   }
 
   const getData = async (search?: string) => {
@@ -52,8 +46,8 @@ const useNotificationStore = defineStore('notification', () => {
       const params = `?page=${dataMeta.value?.current}&pageSize=${dataMeta.value?.pageSize}&sort=-createdAt${search ? '&title=/' + search + '/' : ''}`
       const res = await paginateApi(params)
       if (res) {
-        data.value = res.result
-        dataMeta.value = res.meta
+        data.value = res.items
+        dataMeta.value.total = res.total
         loading.value = false
       }
     } catch (error) {

@@ -97,4 +97,3 @@ const { account, storage } = accountService.getAccount();
   border-color: #ed1b2f !important;
 }
 </style>
-../../../services/account.service
