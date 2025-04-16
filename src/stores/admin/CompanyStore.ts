@@ -28,16 +28,22 @@ const useCompanyStore = defineStore('company', () => {
     _id: '',
     logo: '',
     name: '',
+    country: '',
     province: '',
     detailedAddress: '',
     district: '',
     ward: '',
+    type: '',
+    size: '',
+    industry: '',
+    workingDays: [],
+    overtimePolicy: '',
     get fullAddress() {
       return this.detailedAddress + ', ' + this.province + ', ' + this.district + ', ' + this.ward
     },
     address: [],
     description: '',
-    isActive: false
+    isActive: true
   })
 
   const loading = ref<boolean>(false)
@@ -46,8 +52,14 @@ const useCompanyStore = defineStore('company', () => {
     form._id = ''
     form.name = ''
     form.description = ''
-    form.isActive = false
+    form.isActive = true
     form.logo = ''
+    form.country = ''
+    form.type = ''
+    form.size = ''
+    form.industry = ''
+    form.workingDays = []
+    form.overtimePolicy = ''
     form.province = ''
     form.address = []
     form.detailedAddress = ''

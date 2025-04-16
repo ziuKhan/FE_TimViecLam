@@ -1,5 +1,13 @@
 import axios from 'axios'
 
+export const getCountry = async (): Promise<any> => {
+  try {
+    const response = await axios.get('https://open.oapi.vn/location/countries')
+    return response.data
+  } catch (error) {
+    console.log(error)
+  }
+}
 export const getConscious = async (): Promise<any> => {
   try {
     const response = await axios.get('https://esgoo.net/api-tinhthanh/1/0.htm')

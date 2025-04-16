@@ -62,7 +62,13 @@ export interface ICompany {
   province?: string
   detailedAddress?: string
   district?: string
+  type?: string
+  size?: string
+  industry?: string
+  workingDays?: string[]
+  overtimePolicy?: string
   ward?: string
+  country?: string
   fullAddress?: string
   isDeleted?: boolean
   deletedAt?: boolean | null
@@ -223,4 +229,14 @@ export interface ILocation {
   full_name_en: string
   latitude: string
   longitude: string
+}
+export interface ILocationCountry {
+  id: string
+  name: string
+  niceName: string
+  iso: string
+  iso3: string
+  numCode: number
+  phoneCode: number
+  flag: string
 }

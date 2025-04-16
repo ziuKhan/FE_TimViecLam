@@ -157,10 +157,10 @@ onMounted(() => {
           </template>
           <template #salary="{ record }">
             <span v-if="record.salaryFrom && record.salaryTo">
-              {{ formatSalary(record.salaryFrom) }} - {{ formatSalary(record.salaryTo) }}đ
+              {{ formatSalary(record.salaryFrom) }} - {{ formatSalary(record.salaryTo) }}
             </span>
-            <span v-else-if="record.salaryFrom"> Từ {{ formatSalary(record.salaryFrom) }}đ </span>
-            <span v-else-if="record.salaryTo"> Đến {{ formatSalary(record.salaryTo) }}đ </span>
+            <span v-else-if="record.salaryFrom"> Từ {{ formatSalary(record.salaryFrom) }}</span>
+            <span v-else-if="record.salaryTo"> Đến {{ formatSalary(record.salaryTo) }} </span>
             <span v-else> Thoả thuận </span>
           </template>
         </a-table>

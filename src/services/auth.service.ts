@@ -1,5 +1,6 @@
 import { apiClient } from '../constant/api'
 import { handleApiError } from '../until/until'
+import tokenService from './token.service'
 
 const moduleName = '/auth'
 
@@ -74,7 +75,13 @@ export const logoutApi = async (): Promise<any> => {
 
 export const accountApi = async (): Promise<any> => {
   try {
+    if (!tokenService.getToken().storage) {
+      return
+    }
     const res = await apiClient.get(`${moduleName}/account`)
     return res.data
-  } catch (err: any) {}
+  } catch (err: any) {
+    console.log(err)
+
+  }
 }

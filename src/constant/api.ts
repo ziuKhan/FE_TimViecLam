@@ -37,13 +37,13 @@ apiClient.interceptors.response.use(
       try {
         const access_token = await store.refreshToken()
         apiClient.defaults.headers.common['Authorization'] = 'Bearer ' + access_token
+        await accountService.updateAccount()
+
         return apiClient(originalRequest)
       } catch (_error) {
         await store.logout()
         return Promise.reject(_error)
-      } finally {
-        await accountService.updateAccount()
-      }
+      } 
     }
     if (error.code === 'ECONNABORTED') {
       console.error('Request timeout.')
