@@ -10,7 +10,8 @@ export const ALL_MODULES = [
   'SUBSCRIBERS',
   'NOTIFICATIONS',
   'CLIENT',
-  'STATISTICS'
+  'STATISTICS',
+  'SKILLS'
 ]
 
 export const ALL_METHODS = ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'HEAD', 'OPTIONS']

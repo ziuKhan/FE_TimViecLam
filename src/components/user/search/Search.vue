@@ -20,6 +20,43 @@ const loadDataLocation = async () => {
 onMounted(() => {
   loadDataLocation()
 })
+const dataSource = [
+  {
+    value: 'Công ty',
+    options: [
+      {
+        value: 'AntDesignVue',
+        count: 10000,
+      },
+      {
+        value: 'AntDesignVue UI',
+        count: 10600,
+      },
+    ],
+  },
+  {
+    value: 'Skill and Title',
+    options: [
+      {
+        value: 'AntDesignVue UI FAQ',
+        count: 60100,
+      },
+      {
+        value: 'AntDesignVue FAQ',
+        count: 30010,
+      },
+    ],
+  },
+  {
+    value: 'Articles',
+    options: [
+      {
+        value: 'AntDesignVue design language',
+        count: 100000,
+      },
+    ],
+  },
+];
 </script>
 
 <template>
@@ -35,15 +72,31 @@ onMounted(() => {
       show-search
     >
     </a-select>
-    <a-input
-      type="text"
+    <a-auto-complete
       v-model:value="store.keyword"
-      @keyup.enter="store.handleSearch()"
-      class="search_form-inp search_form-ctl"
-      id="search_form-inp"
-      placeholder="Nhập từ khoá kĩ năng"
-    />
-
+      class="certain-category-search custom-select !w-full"
+      popup-class-name="certain-category-search-dropdown"
+      :dropdown-match-select-width="500"
+      style="width: 250px"
+      :options="dataSource"
+    >
+      <template #option="item">
+        <template v-if="item.options">
+          <span>
+            {{ item.value }}
+          </span>
+        </template>
+        <template v-else>
+          <div style="display: flex; justify-content: space-between">
+            {{ item.value }}
+            <span>
+              <UserOutlined />
+              {{ item.count }}
+            </span>
+          </div>
+        </template>
+      </template>
+    </a-auto-complete>
    <button type="button" @click="store.handleSearch()" class="search_form-btn">
   
       <img loading="lazy" src="../../../assets/image/icon/icons8_search.svg" alt="" />Tìm kiếm
@@ -92,11 +145,31 @@ onMounted(() => {
 
 .custom-select :deep(.ant-select-selector) {
   height: 58px !important;
-
   span{
    font-size: 18px;
     display: flex;
     align-items: center;
   }
+}
+.certain-category-search-dropdown .ant-select-dropdown-menu-item-group-title {
+  color: #666;
+  font-weight: bold;
+}
+
+.certain-category-search-dropdown .ant-select-dropdown-menu-item-group {
+  border-bottom: 1px solid #f6f6f6;
+}
+
+.certain-category-search-dropdown .ant-select-dropdown-menu-item {
+  padding-left: 16px;
+}
+
+.certain-category-search-dropdown .ant-select-dropdown-menu-item.show-all {
+  text-align: center;
+  cursor: default;
+}
+
+.certain-category-search-dropdown .ant-select-dropdown-menu {
+  max-height: 300px;
 }
 </style>

@@ -13,6 +13,8 @@ import accountService from '../../../services/account.service'
 import type { ILocation } from '../../../types/backend'
 import { getConscious } from '../../../services/location.service'
 import apiService from '../../../services/api.service'
+import useSkillStore from '../../../stores/admin/SkillStore'
+import UpdateSkill from '../Skills/UpdateSkill.vue'
 
 const value1 = ref<Dayjs[] | undefined>([])
 watch(value1, (newValue) => {
@@ -24,7 +26,7 @@ watch(value1, (newValue) => {
     store.form.endDate = new Date()
   }
 })
-
+const storeSkill = useSkillStore()
 const store = useJobStore()
 
 const formRef = ref<any>(null)
@@ -146,15 +148,20 @@ onUpdated(() => {
             name="skills"
             :rules="[{ required: true, message: 'Vui lòng nhập kĩ năng!' }]"
           >
+          <div class="flex gap-2">
             <a-select
               v-model:value="store.form.skills"
               allowClear
-              mode="tags"
+              mode="multiple"
               style="width: 100%"
               placeholder="Vui lòng chọn kĩ năng..."
-              :options="SKILLS_LIST"
+              :options="storeSkill.allDataSkill"
+              :field-names="{ label: 'name', value: 'name' }"
             >
             </a-select>
+            <a-button type="primary" @click="storeSkill.handleOpenModal()">Thêm kĩ năng</a-button>
+          </div>
+            
           </a-form-item>
         </a-col>
 
@@ -313,6 +320,8 @@ onUpdated(() => {
       </a-row>
     </a-form>
   </a-modal>
+  <UpdateSkill> </UpdateSkill>
+  
 </template>
 
 <style>

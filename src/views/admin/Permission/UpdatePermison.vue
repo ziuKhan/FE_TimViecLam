@@ -29,7 +29,7 @@
                 </a-col>
                 <a-col :span="24">
                     <a-form-item label="Module" name="module">
-                        <a-select v-model:value="store.form.module" placeholder="Vui lòng nhập module">
+                        <a-select show-search v-model:value="store.form.module" placeholder="Vui lòng nhập module">
                             <template v-for="(item, index) in ALL_MODULES" :key="index">
                                 <a-select-option :value="item">{{ item }}</a-select-option>
                             </template>

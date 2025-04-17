@@ -148,6 +148,17 @@ export interface IPermission {
   createdAt?: string
   updatedAt?: string
 }
+export interface ISkill {
+  _id?: string
+  name?: string
+  description?: string
+
+  createdBy?: string
+  isDeleted?: boolean
+  deletedAt?: boolean | null
+  createdAt?: string
+  updatedAt?: string
+}
 
 export interface IRole {
   _id?: string

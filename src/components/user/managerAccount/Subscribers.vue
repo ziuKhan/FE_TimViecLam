@@ -2,9 +2,16 @@
     <div class="w-11/12 lg:w-10/12 mx-auto">
         <a-form :model="formModel" name="basic" layout="vertical" autocomplete="off" @finish="onFinish">
             <a-form-item label="Kỹ năng" name="skills">
-                <a-select v-model:value="formModel.skills" allowClear mode="tags" style="width: 100%"
-                    placeholder="Vui lòng chọn kĩ năng..." :options="SKILLS_LIST">
-                </a-select>
+                <a-select
+                v-model:value="formModel.skills"
+                allowClear
+                mode="multiple"
+                style="width: 100%"
+                placeholder="Vui lòng chọn kĩ năng..."
+                :options="allDataSkill"
+                :field-names="{ label: 'name', value: 'name' }"
+              >
+              </a-select>
             </a-form-item>
 
             <a-form-item>
@@ -22,6 +29,8 @@ import { message } from 'ant-design-vue';
 import accountService from '../../../services/account.service';
 import { apiClient } from '../../../constant/api';
 import apiService from '../../../services/api.service';
+import useSkillStore from '../../../stores/admin/SkillStore';
+const {allDataSkill} = useSkillStore()
 
 const { account } = accountService.getAccount();
 const formModel = ref({

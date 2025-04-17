@@ -103,6 +103,10 @@ const router = createRouter({
           component: () => import('../views/admin/Permission/PermissionView.vue')
         },
         {
+          path: 'skill',
+          component: () => import('../views/admin/Skills/SkillView.vue')
+        },
+        {
           path: 'role',
           component: () => import('../views/admin/Role/RoleView.vue')
         },

@@ -295,14 +295,22 @@ onMounted(() => {
 
         <a-col :span="12">
           <a-form-item
-            label="Ngành nghề"
+            label="Lĩnh vực"
             name="industry"
-            :rules="[{ required: true, message: 'Vui lòng chọn ngành nghề!' }]"
+            :rules="[{ required: true, message: 'Vui lòng chọn lĩnh vực!' }]"
           >
-            <a-input v-model:value="store.form.industry" placeholder="Vui lòng nhập ngành nghề" />
+            <a-input v-model:value="store.form.industry" placeholder="Vui lòng nhập lĩnh vực" />
           </a-form-item>
         </a-col>
-
+        <a-col :span="12">
+          <a-form-item
+            label="mô hình công ty"
+            name="type"
+            :rules="[{ required: true, message: 'Vui lòng chọn mô hình công ty!' }]"
+          >
+            <a-input v-model:value="store.form.type" placeholder="Vui lòng nhập mô hình công ty" />
+          </a-form-item>
+        </a-col>
         <a-col :span="12">
           <a-form-item
             label="Ngày làm việc"
