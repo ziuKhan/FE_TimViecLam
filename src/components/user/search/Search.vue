@@ -3,6 +3,8 @@ import { onMounted, reactive, ref, watch } from 'vue'
 import { useSearchStore } from '../../../stores/user/searchStore'
 import type { ILocation } from '../../../types/backend'
 import { getConscious } from '../../../services/location.service'
+import { UserOutlined } from '@ant-design/icons-vue'
+import apiService from '../../../services/api.service'
 
 const store = useSearchStore()
 const dataLocation = ref<ILocation[]>([])
@@ -19,49 +21,32 @@ const loadDataLocation = async () => {
 
 onMounted(() => {
   loadDataLocation()
+  handleSearch()
 })
-const dataSource = [
-  {
-    value: 'Công ty',
-    options: [
-      {
-        value: 'AntDesignVue',
-        count: 10000,
-      },
-      {
-        value: 'AntDesignVue UI',
-        count: 10600,
-      },
-    ],
-  },
-  {
-    value: 'Skill and Title',
-    options: [
-      {
-        value: 'AntDesignVue UI FAQ',
-        count: 60100,
-      },
-      {
-        value: 'AntDesignVue FAQ',
-        count: 30010,
-      },
-    ],
-  },
-  {
-    value: 'Articles',
-    options: [
-      {
-        value: 'AntDesignVue design language',
-        count: 100000,
-      },
-    ],
-  },
-];
+const handleSearch = async () => {
+  try {
+    const res = await apiService.get(`search?page=1&pageSize=10${store.keyword ? `&search=${store.keyword}` : ''}`)
+    if (res) {
+      dataSource.value = res.data.result
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+const onSelect = (value: string, option: any) => {
+  
+  console.log( option)
+}
+
+const onEnter = () => {
+  store.handleSearch()
+}
+
+const dataSource = ref<any[]>([])
 </script>
 
 <template>
   <div class="container__search_form flex-wrap md:flex-nowrap">
-
     <a-select
       v-model:value="store.valueFilter.location"
       allowClear
@@ -77,6 +62,10 @@ const dataSource = [
       class="certain-category-search custom-select !w-full"
       popup-class-name="certain-category-search-dropdown"
       :dropdown-match-select-width="500"
+      :default-active-first-option="false"
+      @search="handleSearch"
+      @select="onSelect"
+      @keydown.enter="onEnter"
       style="width: 250px"
       :options="dataSource"
     >
@@ -87,18 +76,13 @@ const dataSource = [
           </span>
         </template>
         <template v-else>
-          <div style="display: flex; justify-content: space-between">
-            {{ item.value }}
-            <span>
-              <UserOutlined />
-              {{ item.count }}
-            </span>
+          <div style="display: flex; justify-content: space-between" class="text-semibold">
+            {{ item.value}}
           </div>
         </template>
       </template>
     </a-auto-complete>
-   <button type="button" @click="store.handleSearch()" class="search_form-btn">
-  
+    <button type="button" @click="store.handleSearch()" class="search_form-btn">
       <img loading="lazy" src="../../../assets/image/icon/icons8_search.svg" alt="" />Tìm kiếm
     </button>
   </div>
@@ -118,7 +102,6 @@ const dataSource = [
   border-radius: 5px;
   padding: 6px 16px;
   font-size: 18px;
-
 }
 
 .search_form-inp {
@@ -145,8 +128,8 @@ const dataSource = [
 
 .custom-select :deep(.ant-select-selector) {
   height: 58px !important;
-  span{
-   font-size: 18px;
+  span {
+    font-size: 18px;
     display: flex;
     align-items: center;
   }

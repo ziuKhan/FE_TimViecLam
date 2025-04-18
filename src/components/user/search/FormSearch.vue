@@ -1,8 +1,8 @@
 <template>
 
-
-    <div class="form_search theme_blackred p-5  lg:py-16 lg:px-40">
-        <div class="form__search_title text-[20px] lg:text-[32px]">
+    <div class="form_search theme_blackred p-5  lg:py-16 ">
+        <div class="w-full lg:w-8/12 mx-auto">
+            <div class="form__search_title text-[20px] lg:text-[32px]">
             1,024 Việc làm IT cho Developer "Chất"
         </div>
         <Search></Search>
@@ -20,6 +20,8 @@
             <span @click="updateKeyword('PHP')" class="search__suggest_link  cursor-pointer">PHP</span>
             <span @click="updateKeyword('Manager')" class="search__suggest_link  cursor-pointer">Manager</span>
         </div>
+        </div>
+        
     </div>
 </template>
 
