@@ -119,7 +119,7 @@ onMounted(() => {
             </template>
             <template v-else-if="column.dataIndex === 'skills'">
               <template v-for="(item, index) in text" :key="item">
-                {{ item }}<span v-if="index < text.length - 1">, </span>
+                {{ item.name }}<span v-if="index < text.length - 1">, </span>
               </template>
             </template>
             <template v-else-if="column.dataIndex === 'createdAt'">

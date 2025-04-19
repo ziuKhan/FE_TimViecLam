@@ -156,12 +156,11 @@ onUpdated(() => {
               style="width: 100%"
               placeholder="Vui lòng chọn kĩ năng..."
               :options="storeSkill.allDataSkill"
-              :field-names="{ label: 'name', value: 'name' }"
+              :field-names="{ label: 'name', value: '_id' }"
             >
             </a-select>
             <a-button type="primary" @click="storeSkill.handleOpenModal()">Thêm kĩ năng</a-button>
           </div>
-            
           </a-form-item>
         </a-col>
 
