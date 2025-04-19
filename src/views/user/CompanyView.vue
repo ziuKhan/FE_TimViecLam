@@ -40,7 +40,7 @@ watchEffect(() => {
     <header class="theme_blackred w-full min-h-56 py-8">
       <div class="w-11/12 mx-auto flex gap-x-6">
         <div class="min-w-32  max-h-32 max-w-32 lg:min-w-40 lg:max-w-40 lg:max-h-40  bg-white rounded-md p-2">
-          <img loading="lazy" class="h-full object-contain" :src="linkUploads('company/' + dataCompany.logo)" alt="" />
+          <img loading="lazy" class="h-full object-contain" :src="linkUploads('company/' + dataCompany.logo)" alt="#" />
         </div>
         <div class="text-white w-7/12">
           <div class="text-3xl font-bold mb-3">
@@ -48,12 +48,12 @@ watchEffect(() => {
           </div>
           <div class="text-sm font-normal flex gap-y-3 lg:gap-0  lg:flex-nowrap flex-wrap">
             <div class="mr-5 flex gap-x-2 w-full lg:w-auto">
-              <img loading="lazy" src="../../assets/image/icon/icons8_address.svg" alt="" />
+              <img loading="lazy" src="../../assets/image/icon/icons8_address.svg" alt="#" />
               {{ Array.isArray(dataCompany.address) ? (dataCompany.address.length > 0 ? dataCompany.address.join(', ') :
                 '') : dataCompany.address }}
             </div>
             <RouterLink to="#job" class="flex gap-x-2 hover:underline">
-              <img loading="lazy" src="../../assets/image/icon/icons8_suitcase.svg" alt="" />
+              <img loading="lazy" src="../../assets/image/icon/icons8_suitcase.svg" alt="#" />
               {{ dataJobs.length }} Việc làm đang tuyển dụng
             </RouterLink>
           </div>
@@ -83,13 +83,11 @@ watchEffect(() => {
           </div>
         </div>
       </div>
-      <div class="w-full lg:w-2/6" id="job">
+      <div class="w-full lg:w-2/6" >
         <h2 class="py-3 text-2xl font-bold">{{ dataJobs.length }} việc làm đang tuyển dụng</h2>
-        <div class="max-h-full overflow-y-auto">
+        <div class="h-screen overflow-y-auto flex flex-col gap-3">
           <template v-for="data in dataJobs" :key="data.id">
-            <CardJob class="mb-5" :_id="data._id" :name="data.name" :address="data.location"
-              :logo="data.companyId?.logo" :isSalary="data.isSalary"  :salary="formatSalary(data.salaryFrom?.toString() || 0) + ' - ' + formatSalary(data.salaryTo?.toString() || 0) " :nameCompany="data.companyId?.name"
-              :company_id="data.companyId?._id">
+            <CardJob :data="data">
             </CardJob>
           </template>
 

@@ -128,7 +128,7 @@ onMounted(async () => {
                         </RouterLink>
                     </div>
                     <button @click="openModalApply"
-                        class="w-full bg-[#ed1b2f] rounded-md text-white font-semibold text-base py-2 mt-4 hover:bg-red-700">Ứng
+                        class="w-full bg-[#ed1b2f] rounded-md text-white font-semibold text-lg py-3 mt-4 hover:bg-red-700">Ứng
                         tuyển</button>
                     <a-modal v-model:open="open" width="600px" title="Ứng tuyển JOB" @ok="handleOk"
                         :okText="account ? `Xác nhận` : `Đăng nhập ngay`" cancelText="Huỷ bỏ" :maskClosable="false"
@@ -172,9 +172,9 @@ onMounted(async () => {
                     </div>
                     <div class="flex flex-wrap gap-2 lg:text-base text-sm font-light mt-3">Kỹ năng:
                         <template v-for="skill in data?.skills" :key="skill">
-                            <RouterLink to=""
+                            <RouterLink :to="`/search?search=${skill.name}`"
                                 class="border border-solid border-gray-300 px-2 py-1 rounded-full text-[13px] lg:text-[14px] font-normal mr-2 hover:border-gray-500">
-                                {{ skill }}</RouterLink>
+                                {{ skill.name }}</RouterLink>
                         </template>
                     </div>
                 </div>
@@ -212,9 +212,7 @@ onMounted(async () => {
             <h2 class="text-left border-b-2 border-red-800 text-2xl font-semibold w-full">Công việc tương tự</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full mx-auto">
                 <template v-for="data in dataJob" :key="data._id">
-                    <CardJob :_id="data._id" :name="data.name" :address="data.location" :logo="data.companyId?.logo"
-                    :isSalary="data.isSalary"  :salary="formatSalary(data.salaryFrom?.toString() || 0) + ' - ' + formatSalary(data.salaryTo?.toString() || 0) " :nameCompany="data.companyId?.name"
-                        :company_id="data.companyId?._id">
+                    <CardJob :data="data">
                     </CardJob>
                 </template>
             </div>

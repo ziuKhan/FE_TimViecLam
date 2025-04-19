@@ -6,7 +6,7 @@
           <img
             loading="lazy"
             src="../../assets/image/icon/logo-itviec.png"
-            alt=""
+            alt="#"
             class="w-full object-contain"
         /></RouterLink>
       </div>

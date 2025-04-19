@@ -89,13 +89,13 @@ onUnmounted(() => {
               loading="lazy"
               class="icon-default"
               src="../../../assets/image/icon/icons8_chevron_down_1.svg"
-              alt=""
+              alt="#"
             />
             <img
               loading="lazy"
               class="icon-hover"
               src="../../../assets/image/icon/icons8_chevron_down_white.svg"
-              alt=""
+              alt="#"
             />
           </div>
 
@@ -130,7 +130,7 @@ onUnmounted(() => {
                         loading="lazy"
                         class="w-[50px] h-[50px] object-cover rounded-full ring-2 ring-white shadow-md"
                         :src="linkUploads('user/' + item?.createdBy?.avatar)"
-                        alt=""
+                        alt="#"
                       />
                       <div v-if="!item?.isRead" class="absolute -top-1 -right-1">
                         <span class="relative flex h-3 w-3">
@@ -233,21 +233,22 @@ onUnmounted(() => {
             loading="lazy"
             class="w-9 h-9 object-contain mr-1 rounded-full border border-solid border-gray-300"
             :src="linkUploads('user/' + account.avatar)"
-            alt=""
+            alt="#"
           />
           {{ account.name }}
           <div class="icon-wrapper">
             <img
               loading="lazy"
+               alt="#"
               class="icon-default"
               src="../../../assets/image/icon/icons8_chevron_down_1.svg"
-              alt=""
+             
             />
             <img
               loading="lazy"
               class="icon-hover"
               src="../../../assets/image/icon/icons8_chevron_down_white.svg"
-              alt=""
+              alt="#"
             />
           </div>
 

@@ -29,20 +29,20 @@ const handleLogout = () => {
 
 
     <button class="w-8 h-full p-1" @click="openMenu = true"> <img loading="lazy" class="h-full object-contain"
-        src="../../../assets/image/icon/icons8_menu.svg" alt=""></button>
+        src="../../../assets/image/icon/icons8_menu.svg" alt="#"></button>
 
     <RouterLink to="/" class="w-20 absolute left-1/2 transform -translate-x-1/2">
-      <img loading="lazy" class="h-full w-full object-contain" src="../../../assets/image/icon/logo-itviec.png" alt="">
+      <img loading="lazy" class="h-full w-full object-contain" src="../../../assets/image/icon/logo-itviec.png" alt="#">
     </RouterLink>
 
     <RouterLink v-if="!account" to="/login" class="text-white">Đăng nhập</RouterLink>
 
     <div v-else class="flex gap-x-1 relative" @click="openUser = true">
       <div class="border border-white rounded-full w-8 h-8">
-        <img loading="lazy" class="h-full w-full object-contain" :src="linkUploads('user/' + account?.avatar)" alt="" />
+        <img loading="lazy" class="h-full w-full object-contain" :src="linkUploads('user/' + account?.avatar)" alt="#" />
 
       </div>
-      <img loading="lazy" class="h-9/12" src="../../../assets/image/icon/icons8_chevron_down_1.svg" alt="">
+      <img loading="lazy" class="h-9/12" src="../../../assets/image/icon/icons8_chevron_down_1.svg" alt="#">
       <span
         class="absolute -top-[7px]  right-10 w-5 h-5 text-[14px] font-medium rounded-full bg-[#c82222] text-white text-xs text-center">
         0

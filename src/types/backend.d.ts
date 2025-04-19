@@ -80,13 +80,12 @@ export interface ICompany {
 export interface IJob {
   _id?: string
   name: string
-  skills: string[]
+  skills: ISkill[]
   companyId: {
     _id: string
     name?: string
     logo?: string
   }
-
   location: string
   salaryFrom?: number
   salaryTo?: number
@@ -178,7 +177,7 @@ export interface ISubscribers {
   _id?: string
   name?: string
   email?: string
-  skills: string[]
+  skills: ISkill[]
   createdBy?: string
   isDeleted?: boolean
   deletedAt?: boolean | null

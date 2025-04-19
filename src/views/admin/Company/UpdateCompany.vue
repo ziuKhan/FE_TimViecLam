@@ -174,7 +174,8 @@ onMounted(() => {
               >
                 <span class="flex items-center">
                   {{ item.niceName }}
-                  <img :src="item.flag" class="w-4 h-4 ml-2" />
+                  <img :src="item.flag" class="w-4 h-4 ml-2"  loading="lazy"
+                  alt="#"/>
                 </span>
               </a-select-option>
             </a-select>

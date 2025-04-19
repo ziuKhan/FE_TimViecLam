@@ -64,7 +64,7 @@ export const useSearchStore = defineStore('search', () => {
         }
         if (key === 'salary' ) {
           if(value[0] >= 0 && value[1]){
-            return `salaryFrom>=${value[0]},salaryTo<=${value[1]}`;
+            return `salaryFrom>=${value[0]},salaryFrom<=${value[1]}`;
           }else {
             return null;
           }
@@ -79,9 +79,9 @@ export const useSearchStore = defineStore('search', () => {
     try {
       load.value = true
       const { current, pageSize } = paginateJobs.value
-      const response = await apiService.get(`jobs/client?page=${current}&pageSize=${pageSize}${filter ? `&filter=${filter}` : ''}${keyword.value ? `&search=${keyword.value}` : ''}`)
-      const salary = await apiService.get(`jobs/client?filter=sort=-salary&page=1&pageSize=1`)
-      valueMax.value = salary.data?.result[0].salary || 0;
+      const response = await apiService.get(`search?page=${current}&pageSize=${pageSize}${filter ? `&filter=${filter}` : ''}${keyword.value ? `&search=${keyword.value}` : ''}`)
+      const salary = await apiService.get(`search?filter=sort=-salaryTo&page=1&pageSize=1`)
+      valueMax.value = salary.data?.result[0].salaryTo || 0;
       dataJobs.value = response.data.result
       paginateJobs.value.total = response.data.meta.total
       paginateJobs.value.keyword = keyword.value
@@ -91,8 +91,13 @@ export const useSearchStore = defineStore('search', () => {
       load.value = false
     }
   }
-
-
+  const resetFilter = () => {
+    valueFilter.value = {
+      salary: [0, 0],
+      isActive: true,
+    }
+    handleSearch()
+  }
   watch(
     () => route.query,
     () => {
@@ -112,6 +117,7 @@ export const useSearchStore = defineStore('search', () => {
     paginateJobs,
     load,
     handleSearch,
+    resetFilter,
     keyword,
     valueMax,
   }

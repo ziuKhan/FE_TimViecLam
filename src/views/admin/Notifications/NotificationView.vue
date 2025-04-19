@@ -136,7 +136,7 @@ onMounted(() => {
                   loading="lazy"
                   class="h-5/6"
                   src="../../../assets/image/icon/icons8_settings.svg"
-                  alt=""
+                  alt="#"
                 />
               </button>
               <a-popconfirm
@@ -156,7 +156,7 @@ onMounted(() => {
                     loading="lazy"
                     class="h-5/6"
                     src="../../../assets/image/icon/icons8_remove.svg"
-                    alt=""
+                    alt="#"
                   />
                 </button>
               </a-popconfirm>

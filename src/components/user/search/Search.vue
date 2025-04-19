@@ -5,7 +5,8 @@ import type { ILocation } from '../../../types/backend'
 import { getConscious } from '../../../services/location.service'
 import { UserOutlined } from '@ant-design/icons-vue'
 import apiService from '../../../services/api.service'
-
+import { useRouter } from 'vue-router'
+const router = useRouter()
 const store = useSearchStore()
 const dataLocation = ref<ILocation[]>([])
 const loadDataLocation = async () => {
@@ -25,7 +26,7 @@ onMounted(() => {
 })
 const handleSearch = async () => {
   try {
-    const res = await apiService.get(`search?page=1&pageSize=10${store.keyword ? `&search=${store.keyword}` : ''}`)
+    const res = await apiService.get(`search/suggest?page=1&pageSize=10${store.keyword ? `&search=${store.keyword}` : ''}`)
     if (res) {
       dataSource.value = res.data.result
     }
@@ -34,8 +35,11 @@ const handleSearch = async () => {
   }
 }
 const onSelect = (value: string, option: any) => {
-  
-  console.log( option)
+    if(option.type == 'company'){
+        router.push(`/company/${option._id}`)
+    }else{
+      store.handleSearch()
+    }
 }
 
 const onEnter = () => {
@@ -83,7 +87,7 @@ const dataSource = ref<any[]>([])
       </template>
     </a-auto-complete>
     <button type="button" @click="store.handleSearch()" class="search_form-btn">
-      <img loading="lazy" src="../../../assets/image/icon/icons8_search.svg" alt="" />Tìm kiếm
+      <img loading="lazy" src="../../../assets/image/icon/icons8_search.svg" alt="#" />Tìm kiếm
     </button>
   </div>
 </template>
