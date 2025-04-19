@@ -180,15 +180,7 @@ onMounted(() => {
             </a-select>
           </a-form-item>
         </a-col>
-        <a-col :span="12">
-          <a-form-item
-            label="Tỉnh thành"
-            name="province"
-            :rules="[{ required: true, message: 'Vui lòng nhập quận/huyện!' }]"
-          >
-            <a-input v-model:value="store.form.province" placeholder="Vui lòng nhập tỉnh thành" />
-          </a-form-item>
-        </a-col>
+      
         <a-col :span="12">
           <a-form-item
             label="Tỉnh thành"
