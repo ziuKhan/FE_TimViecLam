@@ -24,6 +24,9 @@ apiClient.interceptors.request.use(
   }
 )
 
+// Mảng lưu trữ các yêu cầu đang chờ khi đang refresh token
+const pendingRequests: any[] = [];
+
 // Add a response interceptor
 apiClient.interceptors.response.use(
   (response) => {
@@ -32,15 +35,26 @@ apiClient.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config
     if (error.response.status === 401 && !originalRequest._retry) {
-      const store = useAuthStore()
       originalRequest._retry = true
+      
       try {
+        const store = useAuthStore()
+        // Sử dụng refreshToken từ store, nhiều request sẽ dùng cùng một promise
         const access_token = await store.refreshToken()
-        apiClient.defaults.headers.common['Authorization'] = 'Bearer ' + access_token
-        await accountService.updateAccount()
-
-        return apiClient(originalRequest)
+        
+        if (access_token) {
+          apiClient.defaults.headers.common['Authorization'] = 'Bearer ' + access_token
+          await accountService.updateAccount()
+          
+          // Thực hiện lại request ban đầu với token mới
+          return apiClient(originalRequest)
+        } else {
+          // Nếu không nhận được token mới, đăng xuất
+          await store.logout()
+          return Promise.reject(error)
+        }
       } catch (_error) {
+        const store = useAuthStore()
         await store.logout()
         return Promise.reject(_error)
       } 

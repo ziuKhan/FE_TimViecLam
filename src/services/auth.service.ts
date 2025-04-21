@@ -26,6 +26,7 @@ export const loginByGoogleApi = async (): Promise<any> => {
 }
 
 export const refreshApi = async (): Promise<{ success: boolean; data?: any }> => {
+  debugger
   try {
     const res = await apiClient.get(`${moduleName}/refresh`, {
       withCredentials: true

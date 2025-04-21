@@ -37,7 +37,6 @@
             <a-menu-item key="4"> Vai trò </a-menu-item>
           </RouterLink>
         </a-sub-menu>
-
         <RouterLink
           to="/admin/company"
           v-if="
@@ -139,18 +138,21 @@ import {
   LogoutOutlined,
   AimOutlined
 } from '@ant-design/icons-vue'
-import { computed, ref, watch } from 'vue'
+import { computed, ref, watch, onMounted } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import { checkPermission } from '../../until/permissionCheck'
 import accountService, { type IGetAccount } from '../../services/account.service'
 import type { IAccount } from '../../types/backend'
 import { useAuthStore } from '../../stores/AuthStore'
-
+import { useWebSocketStore } from '../../stores/WebSocket'
+const storeWebSocket = useWebSocketStore()
 const store = useAuthStore()
 const collapsed = ref<boolean>(false)
 const account = ref<IGetAccount>()
 const selectedKeys = ref<string[]>(['1'])
 const route = useRoute()
+
+
 const getAccount = () => {
   account.value = accountService.getAccount()
 }
@@ -199,39 +201,51 @@ watch(
   { immediate: true }
 )
 
-const coTheQuanLyCongTy = computed(
-  () =>
-    checkPermission('GET /api/v1/companies/:id') ||
-    checkPermission('DELETE /api/v1/companies/:id') ||
-    checkPermission('PATCH /api/v1/companies/:id') ||
-    checkPermission('POST /api/v1/companies') ||
-    checkPermission('GET /api/v1/companies')
-)
+const coTheQuanLyCongTy = computed<boolean>(() => {
+  const permissions = [
+    'GET /api/v1/companies/:id',
+    'DELETE /api/v1/companies/:id',
+    'PATCH /api/v1/companies/:id',
+    'POST /api/v1/companies',
+    'GET /api/v1/companies'
+  ]
+  return permissions.some(permission => checkPermission(permission))
+})
 
-const coTheQuanLyHoSo = computed(
-  () =>
-    checkPermission('GET /api/v1/resumes/:id') ||
-    checkPermission('DELETE /api/v1/resumes/:id') ||
-    checkPermission('PATCH /api/v1/resumes/:id') ||
-    checkPermission('POST /api/v1/resumes') ||
-    checkPermission('GET /api/v1/resumes')
-)
-const coTheQuanLyCongViec = computed(
-  () =>
-    checkPermission('GET /api/v1/jobs/:id') ||
-    checkPermission('DELETE /api/v1/jobs/:id') ||
-    checkPermission('PATCH /api/v1/jobs/:id') ||
-    checkPermission('POST /api/v1/jobs') ||
-    checkPermission('GET /api/v1/jobs')
-)
-const coTheQuanLyKynang = computed(
-  () =>
-    checkPermission('GET /api/v1/skills/:id') ||
-    checkPermission('DELETE /api/v1/skills/:id') ||
-    checkPermission('PATCH /api/v1/skills/:id') ||
-    checkPermission('POST /api/v1/skills') ||
-    checkPermission('GET /api/v1/skills')
-)
+const coTheQuanLyHoSo = computed<boolean>(() => {
+  const permissions = [
+    'GET /api/v1/resumes/:id',
+    'DELETE /api/v1/resumes/:id',
+    'PATCH /api/v1/resumes/:id',
+    'POST /api/v1/resumes',
+    'GET /api/v1/resumes'
+  ]
+  
+  return permissions.some(permission => checkPermission(permission))
+})
+
+const coTheQuanLyCongViec = computed<boolean>(() => {
+  const permissions = [
+    'GET /api/v1/jobs/:id',
+    'DELETE /api/v1/jobs/:id',
+    'PATCH /api/v1/jobs/:id',
+    'POST /api/v1/jobs',
+    'GET /api/v1/jobs'
+  ]
+
+  return permissions.some(permission => checkPermission(permission))
+})
+
+const coTheQuanLyKynang = computed<boolean>(() => {
+  const permissions = [
+    'GET /api/v1/skills/:id',
+    'DELETE /api/v1/skills/:id',
+    'PATCH /api/v1/skills/:id',
+    'POST /api/v1/skills',
+    'GET /api/v1/skills'
+  ]
+  return permissions.some(permission => checkPermission(permission))
+});
 </script>
 <style>
 .ant-layout-sider-children,

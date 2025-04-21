@@ -203,7 +203,7 @@ export interface INotification {
     _id?: string
     type?: string
     name?: string
-  } 
+  }
   userId?: string
   userIds?: string[]
   readAt?: Date
@@ -249,4 +249,26 @@ export interface ILocationCountry {
   numCode: number
   phoneCode: number
   flag: string
+}
+
+export interface ICustomerApproval {
+  lastName: string
+
+  firstName: string
+
+  email: string
+
+  phoneNumber: string
+
+  logo: string
+
+  address: string
+
+  companyName: string
+
+  status: string
+
+  description: string
+
+  clause: boolean
 }
