@@ -107,6 +107,10 @@ const router = createRouter({
           component: () => import('../views/admin/Skills/SkillView.vue')
         },
         {
+          path: 'customer-approval',
+          component: () => import('../views/admin/CustomerApproval/CustomerApprovalView.vue')
+        },
+        {
           path: 'role',
           component: () => import('../views/admin/Role/RoleView.vue')
         },

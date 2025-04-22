@@ -252,6 +252,7 @@ export interface ILocationCountry {
 }
 
 export interface ICustomerApproval {
+  _id?: string
   lastName: string
 
   firstName: string
@@ -271,4 +272,6 @@ export interface ICustomerApproval {
   description: string
 
   clause: boolean
+
+  reason?: string
 }

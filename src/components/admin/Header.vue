@@ -12,13 +12,13 @@
       </div>
       <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="inline">
         <RouterLink to="/admin">
-          <a-menu-item key="1">
+          <a-menu-item :key="menuRoutes.home.key">
             <pie-chart-outlined />
             <span>Trang chủ</span>
           </a-menu-item>
         </RouterLink>
 
-        <a-sub-menu key="sub1" v-if="account?.account?.role.name === 'SUPER_ADMIN'">
+        <a-sub-menu :key="menuRoutes.userManagement.key" v-if="account?.account?.role.name === 'SUPER_ADMIN'">
           <template #title>
             <span>
               <user-outlined />
@@ -26,15 +26,15 @@
             </span>
           </template>
           <RouterLink to="/admin/user">
-            <a-menu-item key="2">
+            <a-menu-item :key="menuRoutes.user.key">
               <span>Tài khoản</span>
             </a-menu-item>
           </RouterLink>
           <RouterLink to="/admin/permission">
-            <a-menu-item key="3"> Quyền </a-menu-item>
+            <a-menu-item :key="menuRoutes.permission.key"> Quyền </a-menu-item>
           </RouterLink>
           <RouterLink to="/admin/role">
-            <a-menu-item key="4"> Vai trò </a-menu-item>
+            <a-menu-item :key="menuRoutes.role.key"> Vai trò </a-menu-item>
           </RouterLink>
         </a-sub-menu>
         <RouterLink
@@ -45,15 +45,30 @@
               account?.account?.role.name === 'NORMAL_ADMIN')
           "
         >
-          <a-menu-item key="5">
+          <a-menu-item :key="menuRoutes.company.key">
             <span>
               <GoldOutlined />
               <span>Công ty</span>
             </span>
           </a-menu-item>
         </RouterLink>
+        <RouterLink
+          to="/admin/customer-approval"
+          v-if="
+            coTheQuanLyKhachHang &&
+            (account?.account?.role.name === 'SUPER_ADMIN' ||
+              account?.account?.role.name === 'NORMAL_ADMIN')
+          "
+        >
+          <a-menu-item :key="menuRoutes.customerApproval.key">
+            <span>
+              <GoldOutlined />
+              <span>Yêu cầu đăng ký</span>
+            </span>
+          </a-menu-item>
+        </RouterLink>
         <RouterLink to="/admin/resume" v-if="coTheQuanLyHoSo">
-          <a-menu-item key="6">
+          <a-menu-item :key="menuRoutes.resume.key">
             <span>
               <FileOutlined />
               <span>Hồ sơ ứng tuyển</span>
@@ -61,12 +76,12 @@
           </a-menu-item>
         </RouterLink>
         <RouterLink to="/admin/skill" v-if="coTheQuanLyKynang">
-          <a-menu-item key="7">
+          <a-menu-item :key="menuRoutes.skill.key">
             <span> <AimOutlined /> <span>Kỹ năng</span> </span>
           </a-menu-item>
         </RouterLink>
         <RouterLink to="/admin/job" v-if="coTheQuanLyCongViec">
-          <a-menu-item key="8">
+          <a-menu-item :key="menuRoutes.job.key">
             <span>
               <ShoppingOutlined />
               <span>Công việc</span>
@@ -80,7 +95,7 @@
             account?.account?.role.name === 'NORMAL_ADMIN'
           "
         >
-          <a-menu-item key="9">
+          <a-menu-item :key="menuRoutes.subscriber.key">
             <span>
               <MailOutlined />
               <span>Đăng ký nhận mail</span>
@@ -94,7 +109,7 @@
             account?.account?.role.name === 'NORMAL_ADMIN'
           "
         >
-          <a-menu-item key="10">
+          <a-menu-item :key="menuRoutes.notification.key">
             <span>
               <NotificationOutlined />
               <span>Thông báo</span>
@@ -105,14 +120,14 @@
           to="/admin/personal_information"
           v-if="account?.account?.role.name === 'HR_USER'"
         >
-          <a-menu-item key="11">
+          <a-menu-item :key="menuRoutes.personalInfo.key">
             <span>
               <AuditOutlined />
               <span>Công ty</span>
             </span>
           </a-menu-item>
         </RouterLink>
-        <a-menu-item key="12" @click="store.logout">
+        <a-menu-item :key="menuRoutes.logout.key" @click="store.logout">
           <span>
             <LogoutOutlined />
             <span>Đăng xuất</span>
@@ -149,53 +164,44 @@ const storeWebSocket = useWebSocketStore()
 const store = useAuthStore()
 const collapsed = ref<boolean>(false)
 const account = ref<IGetAccount>()
-const selectedKeys = ref<string[]>(['1'])
+const selectedKeys = ref<string[]>(['admin'])
 const route = useRoute()
 
+// Định nghĩa cấu trúc menu routes với key tương ứng
+const menuRoutes = {
+  home: { path: '/admin', key: 'admin' },
+  userManagement: { path: '', key: 'user-management' },
+  user: { path: '/admin/user', key: 'admin-user' },
+  permission: { path: '/admin/permission', key: 'admin-permission' },
+  role: { path: '/admin/role', key: 'admin-role' },
+  company: { path: '/admin/company', key: 'admin-company' },
+  resume: { path: '/admin/resume', key: 'admin-resume' },
+  customerApproval: { path: '/admin/customer-approval', key: 'admin-customer-approval' },
+  skill: { path: '/admin/skill', key: 'admin-skill' },
+  job: { path: '/admin/job', key: 'admin-job' },
+  subscriber: { path: '/admin/subscriber', key: 'admin-subscriber' },
+  notification: { path: '/admin/notification', key: 'admin-notification' },
+  personalInfo: { path: '/admin/personal_information', key: 'admin-personal-info' },
+  logout: { path: '', key: 'logout' }
+}
 
 const getAccount = () => {
   account.value = accountService.getAccount()
 }
 
+// Cập nhật selectedKeys dựa trên đường dẫn hiện tại
 watch(
   () => route.path,
   (newPath) => {
     getAccount()
-    switch (newPath) {
-      case '/admin/permission':
-        selectedKeys.value = ['3']
-        break
-
-      case '/admin/user':
-        selectedKeys.value = ['2']
-        break
-      case '/admin/role':
-        selectedKeys.value = ['4']
-        break
-      case '/admin/company':
-        selectedKeys.value = ['5']
-        break
-      case '/admin/resume':
-        selectedKeys.value = ['6']
-        break
-      case '/admin/skill':
-        selectedKeys.value = ['7']
-        break
-      case '/admin/job':
-        selectedKeys.value = ['8']
-        break
-      case '/admin/subscriber':
-        selectedKeys.value = ['9']
-        break
-      case '/admin/notification':
-        selectedKeys.value = ['10']
-        break
-      case '/admin/personal_information':
-        selectedKeys.value = ['11']
-        break
-      default:
-        selectedKeys.value = ['1']
-        break
+    
+    // Tìm key tương ứng với đường dẫn hiện tại
+    const matchedRoute = Object.values(menuRoutes).find(route => route.path === newPath && route.path !== '')
+    if (matchedRoute) {
+      selectedKeys.value = [matchedRoute.key]
+    } else {
+      // Mặc định nếu không tìm thấy
+      selectedKeys.value = [menuRoutes.home.key]
     }
   },
   { immediate: true }
@@ -223,7 +229,15 @@ const coTheQuanLyHoSo = computed<boolean>(() => {
   
   return permissions.some(permission => checkPermission(permission))
 })
-
+const coTheQuanLyKhachHang = computed<boolean>(() => {
+  const permissions = [
+    'GET /api/v1/customer-approval/:id',
+    'DELETE /api/v1/customer-approval/:id',
+    'PATCH /api/v1/customer-approval/:id',
+    'GET /api/v1/customer-approval'
+  ]
+  return permissions.some(permission => checkPermission(permission))
+})
 const coTheQuanLyCongViec = computed<boolean>(() => {
   const permissions = [
     'GET /api/v1/jobs/:id',
