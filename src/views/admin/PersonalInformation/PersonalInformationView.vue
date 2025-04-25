@@ -119,7 +119,7 @@ onMounted(async () => {
 
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">Địa chỉ</label>
-                                    <p class="mt-1 text-lg text-gray-900">{{ companyInfo?.address }}</p>
+                                    <p class="mt-1 text-lg text-gray-900">{{ companyInfo?.address?.join(', ') }}</p>
                                 </div>
 
                                 <div>

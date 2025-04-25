@@ -3,6 +3,9 @@ import HomeView from '../views/user/Home/HomeView.vue'
 import UserLayout from '../views/user/UserLayout.vue'
 import AdminLayout from '../views/admin/AdminLayout.vue'
 import accountService from '../services/account.service'
+import checkAccountSetup from '../middleware/checkAccountSetup'
+import checkAdminAccess from '../middleware/checkAdminAccess'
+import checkLoginRedirect from '../middleware/checkLoginRedirect'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -31,19 +34,16 @@ const router = createRouter({
           component: () => import('../views/user/CompanyView.vue')
         },
         {
+          path: 'account-setup',
+      beforeEnter: checkAdminAccess,
+      name: 'accountSetup',
+          component: () => import('../views/user/Auth/AccountSetupView.vue')
+        },
+        {
           path: 'login/:id?',
           name: 'login',
           component: () => import('../views/user/Auth/LoginView.vue'),
-          beforeEnter: (to, from, next) => {
-            const { account } = accountService.getAccount()
-            if (
-              account &&
-              (account.role.name === 'SUPER_ADMIN' || account.role.name === 'NORMAL_ADMIN')
-            ) {
-              return next({ path: '/admin' })
-            }
-            next()
-          }
+          beforeEnter: checkLoginRedirect
         },
         {
           path: 'register',
@@ -79,20 +79,7 @@ const router = createRouter({
     {
       path: '/admin',
       component: AdminLayout,
-      beforeEnter: (to, from, next) => {
-        const { account } = accountService.getAccount()
-        if (!account) {
-          return next({ name: 'login' })
-        }
-        if (
-          account.role.name !== 'SUPER_ADMIN' &&
-          account.role.name !== 'NORMAL_ADMIN' &&
-          account.role.name !== 'HR_USER'
-        ) {
-          return next({ name: 'login' })
-        }
-        next()
-      },
+      beforeEnter: checkAdminAccess,
       children: [
         {
           path: '',
@@ -168,5 +155,8 @@ const router = createRouter({
     }
   ]
 })
+
+// Áp dụng middleware checkAccountSetup cho tất cả các route
+router.beforeEach(checkAccountSetup)
 
 export default router

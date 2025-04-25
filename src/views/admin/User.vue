@@ -116,7 +116,7 @@ const handleOpenModal = () => {
 
 const getData = async () => {
   const conditions = Object.entries(valueFilter.value)
-    .filter(([key, value]) => value !== null)
+    .filter(([key, value]) => value !== null && value !== undefined && value !== '')
     .map(([key, value]) => {
       if (key === 'sort') {
         return `sort=${value ? 'createdAt' : '-createdAt'}`

@@ -104,8 +104,6 @@ onMounted(() => {
 
 <template>
   <a-modal
-    {{
-    }}
     :title="store.form._id ? 'Cập nhật công ty' : 'Tạo mới công ty'"
     :okText="store.form._id ? 'Cập nhật' : 'Thêm mới'"
     :width="850"

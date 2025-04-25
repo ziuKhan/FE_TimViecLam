@@ -43,7 +43,7 @@ const useNotificationStore = defineStore('notification', () => {
   const getData = async (search?: string) => {
     loading.value = true
     try {
-      const params = `?page=${dataMeta.value?.current}&pageSize=${dataMeta.value?.pageSize}&sort=-createdAt${search ? '&title=/' + search + '/' : ''}`
+      const params = `?page=${dataMeta.value?.current}&pageSize=${dataMeta.value?.pageSize}&filter=sort=-createdAt${search ? ',title=/' + search + '/' : ''}`
       const res = await paginateApi(params)
       if (res) {
         data.value = res.items

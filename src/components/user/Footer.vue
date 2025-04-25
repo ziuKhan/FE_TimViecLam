@@ -5,7 +5,7 @@ import { useRoute } from 'vue-router'
 const route = useRoute()
 const isHiddenFooter = ref<Boolean>(false)
 watchEffect(() => {
-  isHiddenFooter.value = route.path === '/login' || route.path === '/register' || route.path === '/customer/login' || route.path === '/customer/register'
+  isHiddenFooter.value = route.path === '/login' || route.path === '/register' || route.path === '/customer/login' || route.path === '/customer/register' || route.path === '/account-setup'
 })
 </script>
 
