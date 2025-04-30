@@ -33,8 +33,9 @@ apiClient.interceptors.response.use(
     return response
   },
   async (error) => {
+    const token = TokenService.getToken().storage
     const originalRequest = error.config
-    if (error.response.status === 401 && !originalRequest._retry) {
+    if (error.response.status === 401 && !originalRequest._retry && token) {
       originalRequest._retry = true
       
       try {

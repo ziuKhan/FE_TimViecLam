@@ -10,11 +10,7 @@ import { useAuthStore } from '../stores/AuthStore'
  */
 export function checkPermission(requiredPermission: string): boolean {
   const store = useAuthStore()
-  const { account } = accountService.getAccount()
   
-  // Nếu không có tài khoản, không có quyền
-  if (!account) return false
-  
-  // Sử dụng phương thức hasPermission từ store
+  // Sử dụng trực tiếp phương thức hasPermission từ store
   return store.hasPermission(requiredPermission)
 }

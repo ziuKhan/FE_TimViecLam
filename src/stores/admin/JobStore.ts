@@ -56,7 +56,7 @@ const useJobStore = defineStore('job', () => {
   const getData = async (search?: string) => {
     loading.value = true
     try {
-      const params = `?page=${dataMeta.value?.current}&pageSize=${dataMeta.value?.pageSize}${search ? '&search=' + search  : ''}&filter=isActive=${isActive.value},sort=-createdAt${account?.role.name === 'HR_USER' ? ',companyId=/' + account.companyId + '/' : ''}`
+      const params = `?page=${dataMeta.value?.current}&pageSize=${dataMeta.value?.pageSize}${search ? '&search=' + search  : ''}&filter=isActive=${isActive.value},sort=-createdAt${account?.role.name === 'HR_USER' ? ',companyId=' + account.companyId  : ''}`
       const res = await apiService.get('jobs' + params)
       if (res) {
         data.value = res.data.result

@@ -128,7 +128,6 @@ onMounted(async () => {
                                         {{ companyInfo?.createdAt ? format(new Date(companyInfo.createdAt),
                                             'dd/MM/yyyy') + " vào " + format(new Date(companyInfo.createdAt),
                                                 'HH:mm:ss') : 'N/A' }}
-
                                     </p>
                                 </div>
                             </div>

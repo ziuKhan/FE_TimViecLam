@@ -42,7 +42,7 @@ const useRoleStore = defineStore('role', () => {
   const getData = async (search?: string) => {
     loading.value = true
     try {
-      const params = `?page=${dataMeta.value?.current}&pageSize=${dataMeta.value?.pageSize}&sort=-createdAt${search ? '&name=/' + search + '/' : ''}`
+      const params = `?page=${dataMeta.value?.current}&pageSize=${dataMeta.value?.pageSize}&filter=sort=-createdAt${search ? ',name=/' + search + '/' : ''}`
       const res = await apiService.get('roles' + params)
       if (res) {
         data.value = res.data.result
