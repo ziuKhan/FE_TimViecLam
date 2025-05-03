@@ -94,7 +94,7 @@ onMounted(() => {
 
                 <a-input-search v-permission="'GET /api/v1/permissions'"
                     placeholder="Vui lòng nhập thông tin cần tìm kiếm" enter-button="Tìm kiếm"
-                    v-model:value="store.valueSearch" @search="handleSearch" class="w-2/3" />
+                    v-model:value="store.valueSearch" @search="handleSearch" class="w-1/3" />
                 <button class="bg-[#21aa55] hover:bg-green-500 text-white rounded-[7px] px-5 font-medium "
                     @click="store.handleOpenModal()" v-permission="'POST /api/v1/permissions'">Thêm
                     mới</button>
