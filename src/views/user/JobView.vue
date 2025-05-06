@@ -13,6 +13,7 @@ import accountService from '../../services/account.service';
 import CardJob from '../../components/user/CardJob.vue';
 import { format } from "date-fns";
 import apiService from '../../services/api.service';
+import { SketchOutlined } from '@ant-design/icons-vue';
 
 const route = useRoute()
 const load = ref<Boolean>(false)
@@ -117,16 +118,25 @@ onMounted(async () => {
                             class="text-red-600">{{ data?.level }}</span>
                     </h1>
                     <p class="text-base lg:text-lg font-light">HCL Vietnam Company Limited </p>
-                    <div class="text-[#0AB305] flex gap-x-2 items-center font-bold text-base" >
+                    <div class="flex gap-x-2 justify-between" >
+                        <div class="text-[#0AB305] flex gap-x-2 items-center font-bold text-base w-1/2" >
                         <img loading="lazy" class="max-w-6 " src="../../assets/image/icon/icons8_us_dollar.svg" alt="">
-                        <span v-if="account?._id">
-
+                            <span class="mr-2" v-if="account?._id" >
                             {{ !data?.isSalary ? formatSalary(data?.salaryFrom?.toString() || 0) + ' - ' + formatSalary(data?.salaryTo?.toString() || 0) : 'Thoả thuận' }}
-                        </span> 
+                        </span>
+                    
+                        
                         <RouterLink v-else to="/login" >
                             Đăng nhập để xem
                         </RouterLink>
                     </div>
+                    <div class="w-1/2 flex items-center gap-x-2">
+                        <SketchOutlined class="text-red-600  font-bold  text-2xl " />
+                        <span v-if="account?.role?.name === 'VIP_USER'" class="text-red-600  font-bold text-base">Bạn đã nâng cấp tài khoản VIP</span>
+                        <RouterLink to="/sub-package" v-else class="text-red-600  font-bold text-base">Nâng cấp tài khoản để xem số người nộp CV</RouterLink>
+                    </div>
+                    </div>
+                 
                     <button @click="openModalApply"
                         class="w-full bg-[#ed1b2f] rounded-md text-white font-semibold text-lg py-3 mt-4 hover:bg-red-700">Ứng
                         tuyển</button>

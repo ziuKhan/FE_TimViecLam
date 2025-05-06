@@ -42,7 +42,7 @@ const useSkillStore = defineStore('skill', () => {
     const params = new URLSearchParams({
       page: String(dataMeta.value.current),
       pageSize: String(dataMeta.value.pageSize),
-      sort: '-createdAt'
+      filter: 'sort=-createdAt'
     })
     
     if (valueSearch.value) {

@@ -36,6 +36,9 @@
           <RouterLink to="/admin/role">
             <a-menu-item :key="menuRoutes.role.key"> Vai trò </a-menu-item>
           </RouterLink>
+          <RouterLink to="/admin/subscription_package">
+            <a-menu-item :key="menuRoutes.subscriptionPackage.key"> Gói dịch vụ </a-menu-item>
+          </RouterLink>
         </a-sub-menu>
         <RouterLink
           to="/admin/company"
@@ -75,6 +78,7 @@
             </span>
           </a-menu-item>
         </RouterLink>
+        
         <RouterLink to="/admin/skill" v-if="coTheQuanLyKynang">
           <a-menu-item :key="menuRoutes.skill.key">
             <span> <AimOutlined /> <span>Kỹ năng</span> </span>
@@ -174,6 +178,7 @@ const menuRoutes = {
   user: { path: '/admin/user', key: 'admin-user' },
   permission: { path: '/admin/permission', key: 'admin-permission' },
   role: { path: '/admin/role', key: 'admin-role' },
+  subscriptionPackage: { path: '/admin/subscription_package', key: 'admin-subscription-package' },
   company: { path: '/admin/company', key: 'admin-company' },
   resume: { path: '/admin/resume', key: 'admin-resume' },
   customerApproval: { path: '/admin/customer-approval', key: 'admin-customer-approval' },

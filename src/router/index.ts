@@ -35,8 +35,8 @@ const router = createRouter({
         },
         {
           path: 'account-setup',
-      beforeEnter: checkAdminAccess,
-      name: 'accountSetup',
+          beforeEnter: checkAdminAccess,
+          name: 'accountSetup',
           component: () => import('../views/user/Auth/AccountSetupView.vue')
         },
         {
@@ -71,7 +71,22 @@ const router = createRouter({
           path: 'customer/register',
           name: 'customerRegister',
           component: () => import('../views/user/Customer/RegisterView.vue')
-        }
+        },
+        {
+          path: 'sub-package',
+          name: 'subPackage',
+          component: () => import('../views/user/SubPackageView.vue')
+        },
+        {
+          path: 'success',
+          name: 'success',
+          component: () => import('../views/user/SuccessView.vue')
+        },
+        {
+          path: 'cancel',
+          name: 'cancel',
+          component: () => import('../views/user/CancelView.vue')
+        },
       ]
     },
 
@@ -128,13 +143,13 @@ const router = createRouter({
         {
           path: 'personal_information',
           component: () => import('../views/admin/PersonalInformation/PersonalInformationView.vue')
-        }
+        },
+        {
+          path: 'subscription_package',
+          component: () => import('../views/admin/SubscriptionPackage/SubscriptionPakageView.vue')
+        },
+        
       ]
-    },
-    {
-      path: '/test',
-      name: 'test',
-      component: () => import('../views/TestView.vue')
     },
 
     // Error pages

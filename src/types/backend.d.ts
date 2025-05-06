@@ -277,3 +277,58 @@ export interface ICustomerApproval {
 
   reason?: string
 }
+
+export interface ISubscriptionPackage {
+  _id?: string;
+  name: string;
+
+  code: string;
+
+  price: number;
+  priceDiscount: number;
+
+  duration: number;
+
+  description?: string;
+
+  isActive?: boolean;
+}
+
+export interface ITransaction {
+  _id?: string
+
+  orderCode?: number;
+
+  amount: number;
+
+  description?: string;
+
+  buyerName?: string;
+
+  buyerEmail?: string;
+
+
+  items?: { name: string; quantity: number; price: number }[];
+
+  status?: string;
+
+  cancelUrl: string;
+
+  returnUrl: string;
+
+  expiredAt?: number;
+
+  signature?: string;
+
+  transactionDateTime?: string
+
+  counterAccountBankId?: string;
+
+  counterAccountName?: string;
+
+  counterAccountNumber?: string;
+
+  type: string; // NORMAL, VIP_UPGRADE
+
+  packageId: string;
+}
