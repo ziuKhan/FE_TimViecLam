@@ -1,13 +1,14 @@
-import accountService from "../services/account.service"
+import accountService from '../services/account.service'
 import type { RouteLocation, NavigationGuardNext } from 'vue-router'
 
 // Mở rộng IUserbyAccount để bao gồm thuộc tính isSetup
 interface UserWithSetup {
-  isSetup: boolean;
+  isSetup: boolean
   role: {
-    _id: string;
-    name: string;
-  };
+    _id: string
+    name: string
+  }
+  google: boolean
 }
 
 /**
@@ -15,40 +16,51 @@ interface UserWithSetup {
  * Nếu tài khoản có role là HR_USER và isSetup = false thì sẽ tự động chuyển hướng đến trang /account-setup
  */
 const checkAccountSetup = async (
-  to: RouteLocation, 
-  from: RouteLocation, 
+  to: RouteLocation,
+  from: RouteLocation,
   next: NavigationGuardNext
 ) => {
-  const { account } = accountService.getAccount()
-  
-  // Nếu không có tài khoản, cho phép điều hướng
-  if (!account) {
+  try {
+    const { account } = accountService.getAccount()
+
+    // Nếu không có tài khoản, cho phép điều hướng
+    if (!account) {
+      return next()
+    }
+
+    const accountWithSetup = account as unknown as UserWithSetup
+
+    // Nếu đã setup thì không cho phép vào trang setup
+    if (accountWithSetup.isSetup) {
+      if (to.path === '/account-setup' || to.path === '/account-setup-pass') {
+        return next({ path: '/' })
+      }
+      return next()
+    }
+
+    // Nếu chưa setup
+    if (!accountWithSetup.isSetup) {
+       // Sau đó mới xử lý tài khoản HR_USER
+       if (accountWithSetup.role?.name === 'HR_USER') {
+        if (to.path !== '/account-setup') {
+          return next({ path: '/account-setup' })
+        }
+      }
+      // Ưu tiên xử lý tài khoản Google trước
+      else if (accountWithSetup.google) {
+        if (to.path !== '/account-setup-pass') {
+          return next({ path: '/account-setup-pass' })
+        }
+      }
+     
+    }
+
+    // Mặc định cho phép điều hướng
+    return next()
+  } catch (error) {
+    console.error('Error in checkAccountSetup:', error)
     return next()
   }
-  
-  // Kiểm tra xem tài khoản có thuộc tính isSetup không
-  const accountWithSetup = account as unknown as UserWithSetup;
-  
-  // Kiểm tra nếu tài khoản có role là HR_USER và isSetup = false
-  // và không đang ở trang account-setup, thì chuyển hướng đến trang account-setup
-  if (
-    accountWithSetup.role.name === 'HR_USER' && 
-    accountWithSetup.isSetup === false && 
-    to.path !== '/account-setup'
-  ) {
-    return next({ path: '/account-setup' })
-  }
-  if (
-    accountWithSetup.role.name === 'HR_USER' && 
-    accountWithSetup.isSetup === true && 
-    to.path === '/account-setup'
-  ) {
-    return next({ path: '/' })
-  }
-
-  // Mặc định cho phép điều hướng
-  next()
 }
 
 export default checkAccountSetup
-

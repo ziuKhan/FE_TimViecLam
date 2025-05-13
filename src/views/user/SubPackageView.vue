@@ -128,7 +128,7 @@
     >
       <p>
         Bạn đang chọn gói <strong>{{ selectedPackage?.name }}</strong> với giá
-        <strong>{{ formatCurrency(selectedPackage?.priceDiscount) }}</strong> có thời hạn
+        <strong>{{ formatCurrency(selectedPackage?.priceDiscount || 0) }}</strong> có thời hạn
         <strong>{{ selectedPackage?.duration }} tháng</strong>.
       </p>
       <p class="mt-2">Xác nhận để tiếp tục thanh toán?</p>
@@ -219,16 +219,17 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { message } from 'ant-design-vue'
 import apiService from '../../services/api.service'
 import { useTransactionsStore } from '../../stores/Transactions'
+import type { ISubscriptionPackage } from '../../types/backend'
 
 const API_ENDPOINT = 'subscription-package'
-const packages = ref([])
+const packages = ref<ISubscriptionPackage[]>([])
 const loading = ref(false)
-const selectedPackage = ref(null)
+const selectedPackage = ref<ISubscriptionPackage | null>(null)
 const confirmModal = ref({
   visible: false,
   loading: false
@@ -255,7 +256,7 @@ const getSubscriptionPackages = async () => {
 }
 
 // Format tiền tệ
-const formatCurrency = (value) => {
+const formatCurrency = (value: number) => {
   if (!value) return '0 đ'
   return new Intl.NumberFormat('vi-VN', {
     style: 'currency',
@@ -264,7 +265,7 @@ const formatCurrency = (value) => {
 }
 
 // Chọn gói
-const selectPackage = (pkg) => {
+const selectPackage = (pkg: ISubscriptionPackage) => {
   selectedPackage.value = pkg
   confirmModal.value.visible = true
 }
@@ -276,7 +277,7 @@ const confirmUpgrade = async () => {
   confirmModal.value.loading = true
   try {
     store.dataTransaction.amount = selectedPackage.value.priceDiscount
-    store.dataTransaction.packageId = selectedPackage.value._id
+    store.dataTransaction.packageId = selectedPackage.value._id || ''
     store.dataTransaction.description = selectedPackage.value.code
     await store.handleDonate()
     confirmModal.value.visible = false

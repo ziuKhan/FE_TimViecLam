@@ -6,6 +6,7 @@ export interface IUser {
   confirmPassword?: string
   gender?: string
   address?: string
+  phoneNumber?: string
   isSetup?: boolean
   avatar?: string
   isActive?: boolean
@@ -94,6 +95,7 @@ export interface IJob {
   isSalary?: boolean
   quantity: number
   level: string
+  countResume?: number
   description: string
   startDate: Date
   endDate: Date

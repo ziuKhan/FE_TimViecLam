@@ -13,7 +13,7 @@ import accountService from '../../services/account.service';
 import CardJob from '../../components/user/CardJob.vue';
 import { format } from "date-fns";
 import apiService from '../../services/api.service';
-import { SketchOutlined } from '@ant-design/icons-vue';
+import { FileDoneOutlined, SketchOutlined, UserAddOutlined, UserOutlined } from '@ant-design/icons-vue';
 
 const route = useRoute()
 const load = ref<Boolean>(false)
@@ -78,6 +78,7 @@ const handleOk = async () => {
                 const res = await apiService.add('resumes/client', dataCreate)
                 if (res) {
                     message.success('Rải CV thành công')
+                    getData()
                 }
             } catch (error: any) {
                 message.error(error.response.data.message)
@@ -131,9 +132,14 @@ onMounted(async () => {
                         </RouterLink>
                     </div>
                     <div class="w-1/2 flex items-center gap-x-2">
-                        <SketchOutlined class="text-red-600  font-bold  text-2xl " />
-                        <span v-if="account?.role?.name === 'VIP_USER'" class="text-red-600  font-bold text-base">Bạn đã nâng cấp tài khoản VIP</span>
-                        <RouterLink to="/sub-package" v-else class="text-red-600  font-bold text-base">Nâng cấp tài khoản để xem số người nộp CV</RouterLink>
+                        <div v-if="account?.role?.name != 'NORMAL_USER'" >
+                            <FileDoneOutlined class="text-[#0AB305]  font-bold  text-2xl mr-1" />
+                            <span class="text-[#0AB305]  font-bold text-base"><span class="text-xl text-green-600">{{ data?.countResume || 0}} </span> hồ sơ đã ứng tuyển</span>
+                        </div>
+                        <div v-else>
+                            <SketchOutlined class="text-red-600  font-bold  text-2xl " />
+                            <RouterLink to="/sub-package"  class="text-red-600  font-bold text-base">Nâng cấp tài khoản để xem số người nộp CV</RouterLink>
+                        </div>
                     </div>
                     </div>
                  

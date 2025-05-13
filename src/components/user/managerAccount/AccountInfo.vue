@@ -29,14 +29,16 @@ const loadData = async () => {
 }
 
 const updateUser = async (id: string) => {
-    const formData = new FormData();
-    formData.append('name', userInfo.value.name || '');
-    formData.append('email', userInfo.value.email || '');
-    formData.append('gender', userInfo.value.gender || '');
-    formData.append('address', userInfo.value.address || '');
-    formData.append('avatar', userInfo.value.avatar || '');
     try {
-        const res = await apiService.update('users/client/' + id, formData);
+        const data = {
+            phoneNumber: userInfo.value.phoneNumber,
+            name: userInfo.value.name,
+            email: userInfo.value.email,
+            gender: userInfo.value.gender,
+            address: userInfo.value.address,
+            avatar: userInfo.value.avatar,
+        }
+        const res = await apiService.update('users/client/' + id,data);
         if (res.data) {
             message.success('Cập nhật thông tin tài khoản thành công');
             isEditUser.value = false
@@ -116,6 +118,10 @@ onMounted(async () => {
                         </div>
 
                         <div>
+                            <label class="block text-sm font-medium text-gray-700">Số điện thoại</label>
+                            <p class="mt-1 text-lg text-gray-900">{{ userInfo?.phoneNumber }}</p>
+                        </div>
+                        <div>
                             <label class="block text-sm font-medium text-gray-700">Giới tính</label>
                             <p class="mt-1 text-lg text-gray-900">{{ userInfo?.gender }}</p>
                         </div>
@@ -146,7 +152,12 @@ onMounted(async () => {
                                 placeholder="Vui lòng nhập giới tính" />
 
                         </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Số điện thoại</label>
+                            <a-input :maxlength="11" class="mt-1 text-base text-gray-900" v-model:value="userInfo.phoneNumber"
+                                placeholder="Vui lòng nhập số điện thoại" />
 
+                        </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Địa chỉ</label>
                             <a-input class="mt-1 text-base text-gray-900" v-model:value="userInfo.address"

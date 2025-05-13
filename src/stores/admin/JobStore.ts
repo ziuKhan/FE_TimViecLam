@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, reactive, watch } from 'vue'
-import type { IJob, IPaginate } from '../../types/backend'
+import type { IJob, IPaginate, ISkill } from '../../types/backend'
 import { message } from 'ant-design-vue'
 import accountService from '../../services/account.service'
 import apiService from '../../services/api.service'
@@ -89,6 +89,7 @@ const useJobStore = defineStore('job', () => {
       loading.value = true
       const res = await apiService.get('jobs/' + id)
       if (res) {
+        res.data.skills = res.data.skills.map((skill: ISkill) => skill._id)
         Object.assign(form, res.data)
         openModal.value = true
       }

@@ -122,7 +122,7 @@ onUnmounted(() => {
         <RouterLink to="" class="header__nav_link"> Blog </RouterLink>
       </nav>
       <div class="header__user">
-        <RouterLink to="/customer/login" class="header__user_link link_distance"
+        <RouterLink to="/customer" class="header__user_link link_distance" v-if="account?.role?.name === 'NORMAL_USER'"
           >Nhà Tuyển Dụng</RouterLink
         >
         <a-popover v-model:open="openNotification" trigger="click" placement="bottomRight">

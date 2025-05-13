@@ -29,11 +29,11 @@ class AccountService {
 
   async updateAccount() {
     const newAccount = await accountApi()
-    const { storage } = this.getAccount()
+    const { storage } =  this.getAccount()
     if (storage === 'local') {
-      return localStorage.setItem('account', JSON.stringify(newAccount.data))
+     return  localStorage.setItem('account', JSON.stringify(newAccount.data))
     } else if (storage === 'session') {
-      return sessionStorage.setItem('account', JSON.stringify(newAccount.data))
+     return  sessionStorage.setItem('account', JSON.stringify(newAccount.data))
     }
   }
 

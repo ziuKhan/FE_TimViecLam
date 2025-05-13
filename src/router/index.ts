@@ -40,6 +40,11 @@ const router = createRouter({
           component: () => import('../views/user/Auth/AccountSetupView.vue')
         },
         {
+          path: 'account-setup-pass',
+          name: 'accountSetupPass',
+          component: () => import('../views/user/Auth/AccountSetupPassView.vue')
+        },
+        {
           path: 'login/:id?',
           name: 'login',
           component: () => import('../views/user/Auth/LoginView.vue'),
@@ -63,12 +68,7 @@ const router = createRouter({
 
         //customer
         {
-          path: 'customer/login',
-          name: 'customerLogin',
-          component: () => import('../views/user/Customer/LoginView.vue')
-        },
-        {
-          path: 'customer/register',
+          path: 'customer',
           name: 'customerRegister',
           component: () => import('../views/user/Customer/RegisterView.vue')
         },

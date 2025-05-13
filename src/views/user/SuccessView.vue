@@ -74,7 +74,7 @@ let timer: ReturnType<typeof setInterval> | null = null;
 const startCountdown = () => {
   timer = setInterval(() => {
     countdown.value--;
-    
+
     if (countdown.value <= 0) {
       if (timer) clearInterval(timer);
       goToHome();

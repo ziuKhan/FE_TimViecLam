@@ -231,7 +231,6 @@ const coTheQuanLyHoSo = computed<boolean>(() => {
     'POST /api/v1/resumes',
     'GET /api/v1/resumes'
   ]
-  
   return permissions.some(permission => checkPermission(permission))
 })
 const coTheQuanLyKhachHang = computed<boolean>(() => {

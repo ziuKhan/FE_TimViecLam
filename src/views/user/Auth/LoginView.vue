@@ -70,6 +70,8 @@ const googleCallback = async (access_token: any) => {
     await accountService.createAccount(formState.remember)
     openNotificationWithIcon();
     router.push('/');
+    window.location.reload();
+
   } catch (error) {
     console.error('Lỗi do try catch bắt:', error);
   }

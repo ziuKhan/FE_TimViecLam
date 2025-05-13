@@ -46,6 +46,7 @@ const onFinish = async () => {
     if (res) {
       message.success('Gửi thông tin thành công!')
       resetForm()
+      window.location.reload()
     }
   } catch (err) {
     console.log(err)
@@ -183,7 +184,7 @@ const handleUpload = async (options: UploadRequestOption) => {
                       maxCount="1"
                       name="file"
                       v-model:file-list="fileList"
-                      accept="image/png,image/svg+xml,image/x-icon"
+                      accept="image/png,image/svg+xml,image/x-icon,image/jpeg,image/jpg,image/webp"
                       :custom-request="handleUpload"
                     >
                       <a-button class="test-button">
@@ -250,7 +251,7 @@ const handleUpload = async (options: UploadRequestOption) => {
               class="row-span-2 row-start-15 flex items-center text-base font-[Lexend,sans-serif]"
             >
               Đã có tài khoản Khách hàng?
-              <RouterLink to="/customer/login" class="ml-1 font-bold hover:text-red-600"> Đăng nhập</RouterLink>
+              <RouterLink to="/login" class="ml-1 font-bold hover:text-red-600"> Đăng nhập</RouterLink>
             </div>
             <div class="row-span-2 row-start-15 flex justify-end">
               <a-button

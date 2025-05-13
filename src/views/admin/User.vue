@@ -58,7 +58,7 @@ const openModal = ref<boolean>(false)
 const keySearchRole = ref<string>('')
 const dataMeta = ref<IPaginate>({
   current: 1,
-  pageSize: 6,
+  pageSize: 10,
   pages: 0,
   total: 0
 })
@@ -81,6 +81,7 @@ const form = reactive<IUser>({
   name: '',
   email: '',
   password: '',
+  phoneNumber: '',
   gender: '',
   address: '',
   role: '',
@@ -98,6 +99,7 @@ const refreshInput = () => {
     name: '',
     email: '',
     password: '',
+    phoneNumber: '',
     gender: '',
     address: '',
     role: '',
@@ -195,6 +197,7 @@ const getByID = async (id: string) => {
       form.address = res.data.address || ''
       form.role = res.data.role?._id || ''
       form.company = res.data.company || { _id: '', name: '' }
+      form.phoneNumber = res.data.phoneNumber || ''
       form.isActive = res.data.isActive || false
       openModal.value = true
     }
@@ -214,8 +217,12 @@ const rules: Record<string, Rule[]> = {
   ],
   role: [{ required: true, message: 'Vui lòng nhập role ' }],
   address: [{ required: true, message: 'Vui lòng nhập address ' }],
-  gender: [{ required: true, message: 'Vui lòng nhập gender ' }]
+  phoneNumber: [
+    { required: true, message: 'Vui lòng nhập số điện thoại' },
+    { pattern: /^0[0-9]{9,10}$/, message: 'Số điện thoại phải bắt đầu bằng số 0 và có 10 hoặc 11 chữ số' }
+  ]
 }
+
 
 const dataCompanies = ref<ICompany[]>([])
 
@@ -276,13 +283,13 @@ onMounted(() => {
     </a-breadcrumb>
     <div class="p-6 bg-white min-h-[360px] rounded-[10px]">
       <div class="flex justify-between">
-        <div class="w-3/4 flex" v-permission="'GET /api/v1/users'">
+        <div class="w-4/5 flex" v-permission="'GET /api/v1/users'">
           <a-input-search
             placeholder="Vui lòng nhập thông tin cần tìm kiếm"
             enter-button="Tìm kiếm"
             v-model:value="keySearch"
             @search="getData"
-            class="w-3/6"
+            class="w-2/6"
           />
           <a-select
             v-model:value="valueFilter.role"
@@ -402,7 +409,12 @@ onMounted(() => {
         </a-col>
       </a-row>
       <a-row :gutter="16">
-        <a-col :span="20">
+        <a-col :span="12">
+          <a-form-item label="Số điện thoại" name="phoneNumber">
+            <a-input :maxLength="11" class="w-full" v-model:value="form.phoneNumber" placeholder="Vui lòng nhập số điện thoại" />
+          </a-form-item>
+        </a-col>
+        <a-col :span="8">
           <a-form-item label="Giới tính" name="gender">
             <a-select v-model:value="form.gender" placeholder="Vui này chọn giới tính">
               <a-select-option selected value="Nam">Nam</a-select-option>

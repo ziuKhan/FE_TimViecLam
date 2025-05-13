@@ -60,6 +60,7 @@ const columns = [
     {
         title: 'Thao tác',
         dataIndex: '_id',
+        width: 150,
     }
 ];
 

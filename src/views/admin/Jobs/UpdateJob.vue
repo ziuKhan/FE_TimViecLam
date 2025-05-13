@@ -152,11 +152,12 @@ onUpdated(() => {
             <a-select
               v-model:value="store.form.skills"
               allowClear
-              mode="multiple"
-              style="width: 100%"
-              placeholder="Vui lòng chọn kĩ năng..."
               :options="storeSkill.allDataSkill"
               :field-names="{ label: 'name', value: '_id' }"
+              show-search
+              mode="multiple"
+              placeholder="Vui lòng chọn kĩ năng..."
+              style="width: 100%"
             >
             </a-select>
             <a-button type="primary" @click="storeSkill.handleOpenModal()">Thêm kĩ năng</a-button>
@@ -295,6 +296,7 @@ onUpdated(() => {
               :options="dataLocation"
               :field-names="{ label: 'name', value: 'name' }"
               show-search
+              multiple
               placeholder="Vui lòng nhập location"
               style="width: 100%"
             >
