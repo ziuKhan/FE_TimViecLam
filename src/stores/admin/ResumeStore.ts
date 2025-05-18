@@ -64,7 +64,6 @@ const useResumeStore = defineStore('resume', () => {
 
   const updateAndAdd = async () => {
     loading.value = true
-    debugger
     try {
       if (form._id) {
         const [res, resNotification] = await Promise.all([

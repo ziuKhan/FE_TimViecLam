@@ -7,7 +7,11 @@ body {
   background-color: #ffffff;
   position: relative;
 }
-
+.ant-btn span svg{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .theme_blackred {
   background: linear-gradient(to right, #121212 45%, #54151c);
 }

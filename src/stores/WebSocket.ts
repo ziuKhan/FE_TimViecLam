@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
-import { io, Socket } from 'socket.io-client'
+import type { Socket } from 'socket.io-client'
+import { io } from 'socket.io-client'
 import { onBeforeUnmount, reactive, ref } from 'vue'
 import apiService from '../services/api.service'
 import accountService from '../services/account.service'
@@ -42,37 +43,87 @@ export const useWebSocketStore = defineStore('webSocket', () => {
       console.error('Lấy thông báo thất bại:', error)
     }
   }
+
+  // Khởi tạo kết nối socket
+  const initSocket = () => {
+    if (!socket.value && account?._id) {
+      try {
+        socket.value = io(import.meta.env.VITE_API_URL + '/websockets', {
+          query: { userId: account._id }
+        })
+
+        socket.value.on('connect', async () => {
+          await getNotification()
+        })
+
+        socket.value.on('connect_error', (error: Error) => {
+          console.error('Kết nối socket thất bại:', error)
+        })
+
+        socket.value.on('notification', async () => {
+          await getNotification()
+        })
+
+        socket.value.on('permission', async () => {
+          await storeAuth.getPermission(true)
+        })
+      } catch (error) {
+        console.error('Lỗi khởi tạo socket:', error)
+      }
+    }
+    return socket.value !== null
+  }
+
+  // Nếu account tồn tại, khởi tạo kết nối
   if (account?._id) {
-    socket.value = io(import.meta.env.VITE_API_URL + '/websockets', {
-      query: { userId: account._id }
-    })
+    initSocket()
+  }
 
-    socket.value.on('connect', async () => {
-      await getNotification()
-    })
+  // Đăng ký lắng nghe sự kiện
+  const on = (event: string, callback: (...args: any[]) => void) => {
+    if (socket.value) {
+      socket.value.on(event, callback)
+    }
+  }
 
-    socket.value.on('connect_error', (error: Error) => {
-      console.error('Kết nối socket thất bại:', error)
-    })
+  // Hủy đăng ký lắng nghe sự kiện
+  const off = (event: string) => {
+    if (socket.value) {
+      socket.value.off(event)
+    }
+  }
 
-    socket.value.on('notification', async () => {
-      await getNotification()
-    })
-
-    socket.value.on('permission', async () => {
-      await storeAuth.getPermission(true)
-    })
+  // Gửi sự kiện
+  const emit = (event: string, data: any) => {
+    if (socket.value) {
+      socket.value.emit(event, data)
+    }
   }
 
   const changePagination = () => {
     state.paginate.pageSize = (state.paginate.pageSize || 10) + 20
   }
 
-  onBeforeUnmount(() => {
+  // Hủy kết nối socket khi component unmount
+  const disconnect = () => {
     if (socket.value) {
       socket.value.disconnect()
+      socket.value = null
     }
+  }
+
+  onBeforeUnmount(() => {
+    disconnect()
   })
 
-  return { state, getNotification, changePagination }
+  return { 
+    state, 
+    getNotification, 
+    changePagination,
+    on,
+    off,
+    emit,
+    initSocket,
+    disconnect
+  }
 })

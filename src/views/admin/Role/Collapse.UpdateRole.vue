@@ -134,8 +134,8 @@ const areAllPermissionsSelected = (items: any[]) => {
                                 <div class="text-[13px]">
                                     <span :class="'mr-2 font-bold  ' + renderColorMethod(item.method)">
                                         {{ item.method }}</span>
-                                    <span>{{ item.apiPath }}</span>
-                                </div>
+                                        <span class="break-all">{{ item.apiPath }}</span>
+                                    </div>
                             </div>
                         </div>
                     </a-card>

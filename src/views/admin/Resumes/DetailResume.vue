@@ -54,7 +54,7 @@
                     Tên công ty: {{ store.form.companyId.name }}
                 </a-col>
                 <a-col :span="24">
-                    Địa chỉ: {{ store.form.companyId.address }}
+                    Địa chỉ: {{ store.form.companyId.address.join(', ') }}
                 </a-col>
                 <a-col :span="24" class="text-base font-bold mt-5">
                     THÔNG TIN VIỆC LÀM
@@ -65,7 +65,7 @@
                 <a-col :span="12">
                     Kỹ năng:
                     <template v-for="(skill, index) in store.form.jobId.skills" :key="index">
-                        <span class="mr-1">{{ skill }} -</span>
+                        <span class="mr-1">{{ skill.name }} <span v-if="index !== store.form.jobId.skills.length - 1">-</span></span>
                     </template>
                 </a-col>
                 <a-col :span="12">
@@ -176,7 +176,7 @@ const store = useResumeStore()
 const data = ref<IUser>()
 const getUser = async () => {
     try {
-        const res = await apiService.get('users/' + store.form.userId);
+        const res = await apiService.get('users/client/' + store.form.userId);
         if (res) {
             data.value = res.data;
         }

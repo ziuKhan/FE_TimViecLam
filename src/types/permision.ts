@@ -16,6 +16,7 @@ export const ALL_MODULES = [
   'SUBSCRIPTION_PACKAGE',
   'VIP_HISTORY',
   'TRANSACTIONS',
+  'MESSAGES',
 ]
 
 export const ALL_METHODS = ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'HEAD', 'OPTIONS']

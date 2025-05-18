@@ -334,3 +334,37 @@ export interface ITransaction {
 
   packageId: string;
 }
+
+export interface IConversationParticipant {
+  _id?: string
+  conversationId: string
+  userId: string
+  lastReadMessageId?: string
+  unreadCount: number
+  isArchived?: boolean
+  constraint?: string
+}
+export interface IMessage {
+  _id?: string
+  conversationId: string
+  senderId: string
+  contentType: 'text' | 'file' | 'image' | 'system'
+  textContent?: string
+  file_name?: string 
+  file_size?: number
+  statusByRecipient?: string[]
+  isRead?: boolean
+  createdAt?: string
+}
+
+export interface IConversation {
+  _id?: string
+  name?: string
+  lastMessage?: IMessage
+  lastMessageId?: string
+  participantsCount?: number
+  unreadCount?: number
+  createdAt?: string
+  updatedAt?: string
+  participants?: IConversationParticipant[]
+}

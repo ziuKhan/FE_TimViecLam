@@ -51,7 +51,23 @@
                 >
                   <a-input v-model:value="userInfo.name" placeholder="Vui lòng nhập họ và tên" />
                 </a-form-item>
-
+                <a-form-item
+                label="Số điện thoại"
+                name="phoneNumber"
+                :rules="[
+                  { required: true, message: 'Vui lòng nhập số điện thoại' },
+                  {
+                    pattern: /^0[0-9]{9,10}$/,
+                    message: 'Số điện thoại phải bắt đầu bằng số 0 và có 10 hoặc 11 chữ số'
+                  }
+                ]"
+              >
+                <a-input
+                  :maxLength="11"
+                  v-model:value="userInfo.phoneNumber"
+                  placeholder="Vui lòng nhập số điện thoại"
+                />
+              </a-form-item>
                 <a-form-item label="Giới tính" name="gender">
                   <a-select v-model:value="userInfo.gender">
                     <a-select-option value="Nam">Nam</a-select-option>

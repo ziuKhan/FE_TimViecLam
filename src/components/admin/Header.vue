@@ -78,7 +78,11 @@
             </span>
           </a-menu-item>
         </RouterLink>
-        
+        <RouterLink to="/admin/chat" >
+          <a-menu-item :key="menuRoutes.chat.key">
+            <span> <MessageOutlined /> <span>Nhắn tin</span> </span>
+          </a-menu-item>
+        </RouterLink>
         <RouterLink to="/admin/skill" v-if="coTheQuanLyKynang">
           <a-menu-item :key="menuRoutes.skill.key">
             <span> <AimOutlined /> <span>Kỹ năng</span> </span>
@@ -155,7 +159,8 @@ import {
   MailOutlined,
   AuditOutlined,
   LogoutOutlined,
-  AimOutlined
+  AimOutlined,
+  MessageOutlined
 } from '@ant-design/icons-vue'
 import { computed, ref, watch, onMounted } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
@@ -187,6 +192,7 @@ const menuRoutes = {
   subscriber: { path: '/admin/subscriber', key: 'admin-subscriber' },
   notification: { path: '/admin/notification', key: 'admin-notification' },
   personalInfo: { path: '/admin/personal_information', key: 'admin-personal-info' },
+  chat: { path: '/admin/chat', key: 'admin-chat' },
   logout: { path: '', key: 'logout' }
 }
 

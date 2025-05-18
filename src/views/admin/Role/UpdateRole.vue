@@ -1,6 +1,6 @@
 <template>
     <a-modal :title="store.form._id ? 'Cập nhật vai trò' : 'Tạo mới vai trò'"
-        :okText="store.form._id ? 'Cập nhật' : 'Thêm mới'" :width="850" v-model:open="store.openModal"
+        :okText="store.form._id ? 'Cập nhật' : 'Thêm mới'" :width="900" v-model:open="store.openModal"
         :body-style="{ paddingBottom: '80px' }" :footer-style="{ textAlign: 'right' }" :maskClosable="false"
         :cancelButtonProps="{ style: { display: 'none' } }" @ok="handleOk" :confirm-loading="store.loading">
 

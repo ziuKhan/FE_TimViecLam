@@ -148,7 +148,10 @@ const router = createRouter({
           path: 'subscription_package',
           component: () => import('../views/admin/SubscriptionPackage/SubscriptionPakageView.vue')
         },
-        
+        {
+          path: 'chat',
+          component: () => import('../views/admin/Chat/ChatView.vue')
+        },
       ]
     },
 

@@ -7,7 +7,7 @@ import useCompanyStore from '../../../stores/admin/CompanyStore'
 import UpdateResume from './UpdateResume.vue'
 import useResumeStore from '../../../stores/admin/ResumeStore'
 import DetailResume from './DetailResume.vue'
-import { DeleteOutlined } from '@ant-design/icons-vue'
+import { DeleteOutlined, EyeOutlined, MessageOutlined } from '@ant-design/icons-vue'
 
 const store = useResumeStore()
 
@@ -20,8 +20,8 @@ const columns = [
     dataIndex: 'email'
   },
   {
-    title: 'Mã người dùng',
-    dataIndex: 'userId'
+    title: 'Người dùng',
+    dataIndex: ['userId', 'name']
   },
   {
     title: 'Link CV',
@@ -140,10 +140,24 @@ const renderStatus = (status: string) => {
             <template v-else-if="column.dataIndex === '_id'">
               <div class="flex items-center">
                 <a-button
+                  class="mr-2 rounded-[5px] px-[10px] py-1 h-8"
+                  @click="store.getByID(text, true)"
+                  >
+                  
+                  <template #icon>
+                    <MessageOutlined />
+                  </template>
+                  Liên hệ
+                </a-button>
+                <a-button
                   v-permission="'GET /api/v1/resumes/:id'"
                   class="mr-2 rounded-[5px] px-[10px] py-1 h-8"
                   @click="store.getByID(text, true)"
-                  >Chi tiêt</a-button
+                  >
+                  <template #icon>
+                    <EyeOutlined />
+                  </template>
+                  </a-button
                 >
                 <a-popconfirm
                   title="Bạn có chắc muốn xoá?"
