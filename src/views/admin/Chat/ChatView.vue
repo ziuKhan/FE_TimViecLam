@@ -48,12 +48,11 @@
               :type="messageStore.currentConversation?._id === conv._id ? 'primary' : 'text'"
               class="flex flex-row items-center hover:bg-gray-100 rounded-xl p-2 w-full text-left h-auto"
             >
-            <a-avatar class="min-w-9 min-h-9"> 
-                {{ (conv.name?.charAt(0) || 'C') }}
+            <a-avatar class="min-w-9 min-h-9" :src="conv.otherUser?.avatar ? linkUploads('user/' + conv.otherUser?.avatar) : 'https://placehold.co/100'" > 
             </a-avatar>
 
-              <div class="ml-2  font-semibold truncate">
-                {{ conv.name }}
+              <div class="ml-2 font-semibold truncate flex-1">
+                {{ conv.otherUser?.name }}
                 <div
                   class="text-xs truncate"
                   :class="messageStore.currentConversation?._id === conv._id ? 'text-gray-200' : 'text-gray-500'"
@@ -61,11 +60,16 @@
                   {{ conv.lastMessage?.textContent }}
                 </div>
               </div>
-              <div
-                v-if="conv.unreadCount && conv.unreadCount > 0"
-                class="ml-auto text-xs bg-red-500 text-white rounded-full px-2 py-0.5"
-              >
-                {{ conv.unreadCount }}
+              <div class="flex flex-col items-end">
+                <div class="text-xs  mb-1" :class="messageStore.currentConversation?._id === conv._id ? 'text-gray-200' : 'text-gray-500'">
+                  {{ conv.lastMessage?.createdAt ? formatDistanceToNow(new Date(conv.lastMessage?.createdAt), { addSuffix: true, locale: vi }) : 'N/A' }}
+                </div>
+                <div
+                  v-if="conv.unreadCount && conv.unreadCount > 0"
+                  class="text-xs bg-red-500 text-white rounded-full px-2 py-0.5"
+                >
+                  {{ conv.unreadCount }}
+                </div>
               </div>
             </a-button>
           </div>
@@ -81,18 +85,12 @@
           <!-- Header của cuộc trò chuyện -->
           <div class="flex items-center justify-between pb-2 border-b-2 mb-4">
             <div class="flex items-center">
-              <div
-                class="flex items-center justify-center h-10 w-10 rounded-full bg-red-500 text-white font-bold"
-              >
-                {{ messageStore.currentConversation.name?.charAt(0) || 'C' }}
-              </div>
+             
+                <a-avatar class="w-12 h-12 border-2 border-red-500" :src="messageStore.currentConversation.otherUser?.avatar ? linkUploads('user/' + messageStore.currentConversation.otherUser?.avatar) : 'https://placehold.co/100'" > </a-avatar>
               <div class="ml-3">
-                <p class="text-lg font-semibold mb-0">{{ messageStore.currentConversation.name }}</p>
+                <p class="text-lg font-semibold mb-0">{{ messageStore.currentConversation.otherUser?.name }}</p>
                 <p class="text-xs text-gray-500 mb-0" v-if="messageStore.isTyping.status && messageStore.isTyping.userId !== currentUserId">
                   Đang nhập...
-                </p>
-                <p class="text-xs text-gray-500 mb-0" v-else>
-                  {{ messageStore.currentConversation.participantsCount || 2 }} thành viên
                 </p>
               </div>
             </div>
@@ -103,11 +101,11 @@
               <div v-for="message in messageStore.messages" :key="message._id" class="grid grid-cols-12 gap-y-2">
                 <!-- Tin nhắn của người khác -->
                 <div
-                  v-if="message.senderId !== currentUserId"
+                  v-if="message.senderId._id !== currentUserId"
                   class="col-start-1 col-end-8 p-3 rounded-lg"
                 >
                   <div class="flex flex-row items-center">
-                    <a-avatar class="min-w-9 min-h-9"> U </a-avatar>
+                    <a-avatar class="min-w-9 min-h-9" :src="message.senderId?.avatar ? linkUploads('user/' + message.senderId?.avatar) : 'https://placehold.co/100'" > </a-avatar>
                     <div class="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl ">
                       <div>{{ message.textContent }}</div>
                       <div class="absolute text-xs bottom-0 right-0 -mb-5 mr-2 text-gray-500">
@@ -119,7 +117,7 @@
                 <!-- Tin nhắn của tôi -->
                 <div v-else class="col-start-6 col-end-13 p-3 rounded-lg">
                   <div class="flex items-center justify-start flex-row-reverse">
-                    <a-avatar class="min-w-9 min-h-9"> B </a-avatar>
+                    <a-avatar class="min-w-9 min-h-9" :src="account?.avatar ? linkUploads('user/' + account?.avatar) : 'https://placehold.co/100'" > </a-avatar>
                     <div class="relative mr-3 text-sm bg-red-100 py-2 px-4 shadow rounded-xl">
                       <div>{{ message.textContent }}</div>
                       <div class="absolute text-xs bottom-0 left-0 -mb-5 ml-2 text-gray-500">
@@ -184,6 +182,8 @@ import accountService from '../../../services/account.service'
 import type { IUserbyAccount } from '../../../types/backend'
 import { linkUploads } from '../../../constant/api'
 import useMessageStore from '../../../stores/admin/MessageStore'
+import { formatDistanceToNow } from 'date-fns'
+import { vi } from 'date-fns/locale'
 
 const account = ref<IUserbyAccount | null>(accountService.getAccount()?.account)
 const messageStore = useMessageStore()
@@ -201,6 +201,8 @@ const scrollToBottom = async () => {
 
 const selectConversation = async (convId: string) => {
   await messageStore.getConversationById(convId)
+  // Đóng mini chat nếu đang mở
+  messageStore.showMiniChat = false
   await scrollToBottom()
 }
 

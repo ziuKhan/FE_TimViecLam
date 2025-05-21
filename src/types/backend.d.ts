@@ -347,7 +347,11 @@ export interface IConversationParticipant {
 export interface IMessage {
   _id?: string
   conversationId: string
-  senderId: string
+  senderId: {
+    _id: string
+    name: string
+    avatar: string
+  }
   contentType: 'text' | 'file' | 'image' | 'system'
   textContent?: string
   file_name?: string 
@@ -367,4 +371,5 @@ export interface IConversation {
   createdAt?: string
   updatedAt?: string
   participants?: IConversationParticipant[]
+  otherUser?: IUser
 }

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onMounted, watch, watchEffect } from 'vue'
+import { onMounted, watch, watchEffect, onBeforeUnmount } from 'vue'
 import type { IPaginate } from '../../../types/backend'
 import dayjs from 'dayjs'
 import { linkUploads } from '../../../constant/api'
@@ -8,9 +8,11 @@ import UpdateResume from './UpdateResume.vue'
 import useResumeStore from '../../../stores/admin/ResumeStore'
 import DetailResume from './DetailResume.vue'
 import { DeleteOutlined, EyeOutlined, MessageOutlined } from '@ant-design/icons-vue'
+import useMessageStore from '../../../stores/admin/MessageStore'
+import MiniChat from '../../../components/MiniChat.vue'
 
 const store = useResumeStore()
-
+const storeMessage = useMessageStore()
 const columns = [
   {
     title: 'STT'
@@ -47,8 +49,17 @@ const handleTableChange = (pagination: IPaginate) => {
   store.getData()
 }
 
+const handleContactClick = (userId: string) => {
+  storeMessage.CheckChat(userId)
+}
+
 onMounted(() => {
   store.getData()
+  storeMessage.initializeMiniChat()
+})
+
+onBeforeUnmount(() => {
+  storeMessage.cleanup()
 })
 
 const renderColorMethod = (method: string) => {
@@ -118,7 +129,7 @@ const renderStatus = (status: string) => {
           :pagination="store.dataMeta"
           @change="handleTableChange"
         >
-          <template #bodyCell="{ column, text, index }">
+          <template #bodyCell="{ column, text, index, record }">
             <template v-if="column.title === 'STT'">
               {{ ((store.dataMeta.current || 1) - 1) * (store.dataMeta.pageSize || 6) + index + 1 }}
             </template>
@@ -141,7 +152,7 @@ const renderStatus = (status: string) => {
               <div class="flex items-center">
                 <a-button
                   class="mr-2 rounded-[5px] px-[10px] py-1 h-8"
-                  @click="store.getByID(text, true)"
+                  @click="handleContactClick(record.userId._id)"
                   >
                   
                   <template #icon>
@@ -184,4 +195,5 @@ const renderStatus = (status: string) => {
   </a-layout-content>
   <UpdateResume />
   <DetailResume />
+  <MiniChat />
 </template>

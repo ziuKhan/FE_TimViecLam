@@ -27,6 +27,7 @@ const useMessageStore = defineStore('message', () => {
   const openModal = ref<boolean>(false)
   const openDrawer = ref<boolean>(false)
   const isTyping = ref<{ userId: string, status: boolean }>({ userId: '', status: false })
+  const showMiniChat = ref<boolean>(false)
 
   // Form để tạo cuộc trò chuyện mới
   const form = reactive<{
@@ -173,7 +174,7 @@ const useMessageStore = defineStore('message', () => {
   const getMessages = async (conversationId: string) => {
     loading.value = true
     try {
-      const params = `?page=1&pageSize=20`
+      const params = `?page=1&pageSize=20&filter=sort=createdAt`
       const res = await apiService.get(`${API_URL}/conversations/${conversationId}/messages${params}`)
       if (res) {
         messages.value = res.data.result
@@ -196,7 +197,7 @@ const useMessageStore = defineStore('message', () => {
   const createConversation = async () => {
     loading.value = true
     try {
-      const res = await apiService.add(`${API_URL}/conversation`, form)
+      const res = await apiService.add(`${API_URL}/conversations`, form)
       if (res) {
         message.success('Tạo cuộc trò chuyện thành công!')
         refreshInput()
@@ -278,12 +279,74 @@ const useMessageStore = defineStore('message', () => {
     openModal.value = true
   }
 
+  // Kiểm tra xem có cuộc trò chuyện với người dùng đã tồn tại hay không
+  const CheckChat = async (userId: string) => {
+    loading.value = true
+    try {
+      const res = await apiService.add(`${API_URL}/check-one-to-one`, {
+        otherUserId: userId
+      })
+      
+      if (res && res.data) {
+        if (res.data.exists) {
+          // Nếu cuộc trò chuyện đã tồn tại, lấy thông tin và mở mini chat
+          await getConversationById(res.data.conversationId)
+        } else {
+          // Nếu chưa tồn tại, tạo cuộc trò chuyện mới
+          form.userId = [userId]
+          await createOneToOneConversation(userId)
+        }
+        // Hiển thị mini chat
+        showMiniChat.value = true
+      }
+    } catch (error: any) {
+      message.error(error.response?.data?.message || 'Có lỗi xảy ra khi kiểm tra cuộc trò chuyện')
+    } finally {
+      loading.value = false
+    }
+  }
+
+  // Tạo cuộc trò chuyện 1-1 mới
+  const createOneToOneConversation = async (userId: string) => {
+    loading.value = true
+    try {
+      const res = await apiService.add(`${API_URL}/conversations`, {
+        userId: [userId],
+        conversationName: '',
+        message: {
+          contentType: 'text',
+          textContent: 'Xin chào! Tôi muốn trao đổi về hồ sơ của bạn.'
+        }
+      })
+      
+      if (res) {
+        message.success('Tạo cuộc trò chuyện thành công!')
+        await getConversationById(res.data._id)
+      }
+    } catch (error: any) {
+      message.error(error.response?.data?.message || 'Có lỗi xảy ra khi tạo cuộc trò chuyện mới')
+    } finally {
+      loading.value = false
+    }
+  }
+
+  // Đóng mini chat
+  const closeMiniChat = () => {
+    showMiniChat.value = false
+  }
+
   // Khi component sử dụng store này được mount, khởi tạo socket và lấy dữ liệu
   const initialize = () => {
     // Đảm bảo kết nối socket đã được khởi tạo
     webSocketStore.initSocket()
     setupSocketListeners()
     getConversations()
+  }
+
+  // Khởi tạo mini chat mà không lấy toàn bộ cuộc trò chuyện
+  const initializeMiniChat = () => {
+    webSocketStore.initSocket()
+    setupSocketListeners()
   }
 
   // Khi component sử dụng store này bị unmount, hủy lắng nghe socket
@@ -300,8 +363,10 @@ const useMessageStore = defineStore('message', () => {
     currentConversation,
     messages,
     dataMeta,
+    valueSearch,
     messageForm,
     isTyping,
+    showMiniChat,
     getConversations,
     getConversationById,
     getMessages,
@@ -312,10 +377,13 @@ const useMessageStore = defineStore('message', () => {
     deleteConversation,
     handleOpenModal,
     initialize,
+    initializeMiniChat,
     cleanup,
-    valueSearch,
     refreshInput,
-    refreshMessageInput
+    CheckChat,
+    refreshMessageInput,
+    closeMiniChat,
+    createOneToOneConversation
   }
 })
 
