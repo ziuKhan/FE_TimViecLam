@@ -1,14 +1,16 @@
 <template>
   <RouterLink :to="`/company/${id}`" class="card__employer">
     <div class="card__first">
-      <div class="first__logoBrand "> <img loading="lazy" :src="linkUploads('company/' + logo)" alt="" />
+      <div class="first__logoBrand">
+        <img loading="lazy" :src="linkUploads('company/' + logo)" alt="" />
       </div>
     </div>
     <div class="card__second">
       <div class="card__name">{{ name }}</div>
     </div>
     <div class="card__third">
-      <div class="card__address">{{ Array.isArray(address) ? (address.length > 0 ? address.join(', ') : '') : address }}
+      <div class="card__address">
+        {{ Array.isArray(address) ? (address.length > 0 ? address.join(', ') : '') : address }}
       </div>
       <div class="card__job">
         {{ jobs }} việc làm

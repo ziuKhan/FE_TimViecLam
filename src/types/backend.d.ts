@@ -281,58 +281,57 @@ export interface ICustomerApproval {
 }
 
 export interface ISubscriptionPackage {
-  _id?: string;
-  name: string;
+  _id?: string
+  name: string
 
-  code: string;
+  code: string
 
-  price: number;
-  priceDiscount: number;
+  price: number
+  priceDiscount: number
 
-  duration: number;
+  duration: number
 
-  description?: string;
+  description?: string
 
-  isActive?: boolean;
+  isActive?: boolean
 }
 
 export interface ITransaction {
   _id?: string
 
-  orderCode?: number;
+  orderCode?: number
 
-  amount: number;
+  amount: number
 
-  description?: string;
+  description?: string
 
-  buyerName?: string;
+  buyerName?: string
 
-  buyerEmail?: string;
+  buyerEmail?: string
 
+  items?: { name: string; quantity: number; price: number }[]
 
-  items?: { name: string; quantity: number; price: number }[];
+  status?: string
 
-  status?: string;
+  cancelUrl: string
 
-  cancelUrl: string;
+  returnUrl: string
 
-  returnUrl: string;
+  expiredAt?: number
 
-  expiredAt?: number;
-
-  signature?: string;
+  signature?: string
 
   transactionDateTime?: string
 
-  counterAccountBankId?: string;
+  counterAccountBankId?: string
 
-  counterAccountName?: string;
+  counterAccountName?: string
 
-  counterAccountNumber?: string;
+  counterAccountNumber?: string
 
-  type: string; // NORMAL, VIP_UPGRADE
+  type: string // NORMAL, VIP_UPGRADE
 
-  packageId: string;
+  packageId: string
 }
 
 export interface IConversationParticipant {
@@ -354,7 +353,7 @@ export interface IMessage {
   }
   contentType: 'text' | 'file' | 'image' | 'system'
   textContent?: string
-  file_name?: string 
+  file_name?: string
   file_size?: number
   statusByRecipient?: string[]
   isRead?: boolean

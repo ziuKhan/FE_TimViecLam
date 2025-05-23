@@ -10,7 +10,7 @@ import { useAuthStore } from '../stores/AuthStore'
  */
 export function checkPermission(requiredPermission: string): boolean {
   const store = useAuthStore()
-  
+
   // Sử dụng trực tiếp phương thức hasPermission từ store
   return store.hasPermission(requiredPermission)
 }

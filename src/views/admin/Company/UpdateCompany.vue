@@ -164,22 +164,21 @@ onMounted(() => {
               placeholder="Vui lòng chọn quốc gia"
               style="width: 100%"
             >
-              <a-select-option 
-                v-for="item in dataCountry" 
-                :key="item.id" 
+              <a-select-option
+                v-for="item in dataCountry"
+                :key="item.id"
                 :value="item.id"
                 :label="item.niceName"
               >
                 <span class="flex items-center">
                   {{ item.niceName }}
-                  <img :src="item.flag" class="w-4 h-4 ml-2"  loading="lazy"
-                  alt="#"/>
+                  <img :src="item.flag" class="w-4 h-4 ml-2" loading="lazy" alt="#" />
                 </span>
               </a-select-option>
             </a-select>
           </a-form-item>
         </a-col>
-      
+
         <a-col :span="12">
           <a-form-item
             label="Tỉnh thành"
@@ -331,7 +330,10 @@ onMounted(() => {
             name="overtimePolicy"
             :rules="[{ required: true, message: 'Vui lòng nhập chính sách làm thêm giờ!' }]"
           >
-            <a-input v-model:value="store.form.overtimePolicy" placeholder="Vui lòng nhập chính sách làm thêm giờ" />
+            <a-input
+              v-model:value="store.form.overtimePolicy"
+              placeholder="Vui lòng nhập chính sách làm thêm giờ"
+            />
           </a-form-item>
         </a-col>
         <a-col :span="24">

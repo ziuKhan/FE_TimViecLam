@@ -33,7 +33,6 @@ export const useWebSocketStore = defineStore('webSocket', () => {
       const res = await apiService.get(
         `notifications?page=${state.paginate.current}&pageSize=${state.paginate.pageSize}&filter=sort=-createdAt`
       )
-
       state.notifications = res.data.items
       state.paginate.total = res.data.total
       state.paginate.pages = res.data.pages
@@ -116,9 +115,9 @@ export const useWebSocketStore = defineStore('webSocket', () => {
     disconnect()
   })
 
-  return { 
-    state, 
-    getNotification, 
+  return {
+    state,
+    getNotification,
     changePagination,
     on,
     off,

@@ -1,5 +1,7 @@
 <template>
-  <div class="flex justify-center items-center h-screen w-full fixed top-0 left-0 z-[9999] bg-white" >
+  <div
+    class="flex justify-center items-center h-screen w-full fixed top-0 left-0 z-[9999] bg-white"
+  >
     <svg class="pl" width="240" height="240" viewBox="0 0 240 240">
       <circle
         class="pl__ring pl__ring--a"
@@ -54,7 +56,6 @@
 <script lang="ts" setup></script>
 
 <style>
-
 /* From Uiverse.io by Nawsome */
 .pl {
   width: 6em;

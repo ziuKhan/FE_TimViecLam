@@ -76,7 +76,7 @@ const usePermissionStore = defineStore('permission', () => {
       const res = await apiService.get('permissions/' + id)
       if (res) {
         if (isCopy) {
-          res.data._id = '';
+          res.data._id = ''
           message.success('Đã copy đường dẫn API!')
         }
         Object.assign(form, res.data)

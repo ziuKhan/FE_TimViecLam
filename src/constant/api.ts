@@ -25,7 +25,7 @@ apiClient.interceptors.request.use(
 )
 
 // Mảng lưu trữ các yêu cầu đang chờ khi đang refresh token
-const pendingRequests: any[] = [];
+const pendingRequests: any[] = []
 
 // Add a response interceptor
 apiClient.interceptors.response.use(
@@ -37,16 +37,16 @@ apiClient.interceptors.response.use(
     const originalRequest = error.config
     if (error.response.status === 401 && !originalRequest._retry && token) {
       originalRequest._retry = true
-      
+
       try {
         const store = useAuthStore()
         // Sử dụng refreshToken từ store, nhiều request sẽ dùng cùng một promise
         const access_token = await store.refreshToken()
-        
+
         if (access_token) {
           apiClient.defaults.headers.common['Authorization'] = 'Bearer ' + access_token
           await accountService.updateAccount()
-          
+
           // Thực hiện lại request ban đầu với token mới
           return apiClient(originalRequest)
         } else {
@@ -58,7 +58,7 @@ apiClient.interceptors.response.use(
         const store = useAuthStore()
         await store.logout()
         return Promise.reject(_error)
-      } 
+      }
     }
     if (error.code === 'ECONNABORTED') {
       console.error('Request timeout.')

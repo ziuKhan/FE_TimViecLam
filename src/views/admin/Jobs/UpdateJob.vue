@@ -148,20 +148,20 @@ onUpdated(() => {
             name="skills"
             :rules="[{ required: true, message: 'Vui lòng nhập kĩ năng!' }]"
           >
-          <div class="flex gap-2">
-            <a-select
-              v-model:value="store.form.skills"
-              allowClear
-              :options="storeSkill.allDataSkill"
-              :field-names="{ label: 'name', value: '_id' }"
-              show-search
-              mode="multiple"
-              placeholder="Vui lòng chọn kĩ năng..."
-              style="width: 100%"
-            >
-            </a-select>
-            <a-button type="primary" @click="storeSkill.handleOpenModal()">Thêm kĩ năng</a-button>
-          </div>
+            <div class="flex gap-2">
+              <a-select
+                v-model:value="store.form.skills"
+                allowClear
+                :options="storeSkill.allDataSkill"
+                :field-names="{ label: 'name', value: '_id' }"
+                show-search
+                mode="multiple"
+                placeholder="Vui lòng chọn kĩ năng..."
+                style="width: 100%"
+              >
+              </a-select>
+              <a-button type="primary" @click="storeSkill.handleOpenModal()">Thêm kĩ năng</a-button>
+            </div>
           </a-form-item>
         </a-col>
 
@@ -322,7 +322,6 @@ onUpdated(() => {
     </a-form>
   </a-modal>
   <UpdateSkill> </UpdateSkill>
-  
 </template>
 
 <style>

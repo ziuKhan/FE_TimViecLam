@@ -281,7 +281,6 @@ const confirmUpgrade = async () => {
     store.dataTransaction.description = selectedPackage.value.code
     await store.handleDonate()
     confirmModal.value.visible = false
-
   } catch (error) {
     message.error('Có lỗi xảy ra. Vui lòng thử lại sau')
     console.error(error)

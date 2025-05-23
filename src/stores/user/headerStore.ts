@@ -10,7 +10,7 @@ export const useHeaderStore = defineStore('header', () => {
   const totalNotification = ref<number>(0)
 
   const { account } = accountService.getAccount()
- 
+
   const meta = ref({
     current: 1,
     pageSize: 100,

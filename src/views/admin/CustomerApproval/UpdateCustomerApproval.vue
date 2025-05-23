@@ -119,7 +119,6 @@ const handleOk = () => {
     })
 }
 
-
 const fileList = ref([])
 
 const handleUpload = async (options: UploadRequestOption) => {
@@ -141,7 +140,6 @@ watch(fileList, () => {
     store.form.logo = ''
   }
 })
-
 </script>
 
 <style>

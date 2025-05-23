@@ -11,14 +11,14 @@
 
         <!-- Bước 1: Tạo công ty -->
         <div v-if="currentStep === 0" class="space-y-6">
-         
           <a-form :model="userInfo" layout="vertical" ref="formRef2">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div class="md:col-span-2 space-y-4">
                 <a-form-item
                   label="Mật khẩu mới"
                   name="password"
-                  :rules="[{ required: true, message: 'Vui lòng nhập mật khẩu mới!' },
+                  :rules="[
+                    { required: true, message: 'Vui lòng nhập mật khẩu mới!' },
                     { min: 6, message: 'Mật khẩu phải có ít nhất 6 ký tự!' }
                   ]"
                 >
@@ -52,22 +52,22 @@
                   <a-input v-model:value="userInfo.name" placeholder="Vui lòng nhập họ và tên" />
                 </a-form-item>
                 <a-form-item
-                label="Số điện thoại"
-                name="phoneNumber"
-                :rules="[
-                  { required: true, message: 'Vui lòng nhập số điện thoại' },
-                  {
-                    pattern: /^0[0-9]{9,10}$/,
-                    message: 'Số điện thoại phải bắt đầu bằng số 0 và có 10 hoặc 11 chữ số'
-                  }
-                ]"
-              >
-                <a-input
-                  :maxLength="11"
-                  v-model:value="userInfo.phoneNumber"
-                  placeholder="Vui lòng nhập số điện thoại"
-                />
-              </a-form-item>
+                  label="Số điện thoại"
+                  name="phoneNumber"
+                  :rules="[
+                    { required: true, message: 'Vui lòng nhập số điện thoại' },
+                    {
+                      pattern: /^0[0-9]{9,10}$/,
+                      message: 'Số điện thoại phải bắt đầu bằng số 0 và có 10 hoặc 11 chữ số'
+                    }
+                  ]"
+                >
+                  <a-input
+                    :maxLength="11"
+                    v-model:value="userInfo.phoneNumber"
+                    placeholder="Vui lòng nhập số điện thoại"
+                  />
+                </a-form-item>
                 <a-form-item label="Giới tính" name="gender">
                   <a-select v-model:value="userInfo.gender">
                     <a-select-option value="Nam">Nam</a-select-option>
@@ -76,7 +76,9 @@
                   </a-select>
                 </a-form-item>
 
-                <a-form-item label="Địa chỉ" name="address"
+                <a-form-item
+                  label="Địa chỉ"
+                  name="address"
                   :rules="[{ required: true, message: 'Vui lòng nhập địa chỉ!' }]"
                 >
                   <a-input v-model:value="userInfo.address" placeholder="Vui lòng nhập địa chỉ" />
@@ -91,9 +93,7 @@
                     class="object-cover rounded-lg w-[150px] h-[150px]"
                   />
                 </div>
-                    <a-button @click="openModalAvatar = true" 
-                  >Tải lên ảnh đại diện</a-button
-                >
+                <a-button @click="openModalAvatar = true">Tải lên ảnh đại diện</a-button>
                 <p class="text-sm text-gray-500">Ảnh đại diện của bạn</p>
               </div>
             </div>
@@ -102,15 +102,12 @@
 
         <!-- Bước 2: Cập nhật thông tin cá nhân -->
         <div v-if="currentStep === 1" class="space-y-6">
-            <a-form :model="companyInfo" layout="vertical" ref="formRef">
+          <a-form :model="companyInfo" layout="vertical" ref="formRef">
             <a-row :gutter="16">
               <a-col :span="17">
-                <a-form-item
-                  label="Tên công ty"
-                  name="name"
-                >
+                <a-form-item label="Tên công ty" name="name">
                   <a-input
-                  disabled
+                    disabled
                     v-model:value="companyInfo.name"
                     placeholder="Vui lòng nhập tên công ty"
                   />
@@ -512,7 +509,7 @@ const loadUserData = async () => {
 }
 
 const updateAccount = async () => {
-    if (!userInfo.value.name ) {
+  if (!userInfo.value.name) {
     message.warning('Vui lòng nhập đầy đủ thông tin tài khoản!')
     return
   }
@@ -524,11 +521,11 @@ const updateAccount = async () => {
     message.warning('Vui lòng nhập địa chỉ!')
     return
   }
-  if(!userInfo.value.confirmPassword) {
+  if (!userInfo.value.confirmPassword) {
     message.warning('Vui lòng nhập lại mật khẩu!')
     return
   }
-  if(userInfo.value.password !== userInfo.value.confirmPassword) {
+  if (userInfo.value.password !== userInfo.value.confirmPassword) {
     message.warning('Mật khẩu không khớp!')
     return
   }
@@ -543,7 +540,6 @@ const updateAccount = async () => {
 }
 
 const updateCompany = async () => {
-
   if (
     !companyInfo.value.country ||
     !companyInfo.value.province ||
@@ -585,16 +581,16 @@ const updateCompany = async () => {
       size: companyInfo.value.size,
       industry: companyInfo.value.industry,
       workingDays: companyInfo.value.workingDays,
-      overtimePolicy: companyInfo.value.overtimePolicy,
+      overtimePolicy: companyInfo.value.overtimePolicy
     }
   }
 
   try {
     const res = await apiService.add('customer-approval/setup', updateData)
-      message.success('Cập nhật thông tin tài khoản thành công')
-      // Hoàn tất thiết lập và chuyển hướng đến trang chủ
-      await accountService.updateAccount()
-      router.push('/')
+    message.success('Cập nhật thông tin tài khoản thành công')
+    // Hoàn tất thiết lập và chuyển hướng đến trang chủ
+    await accountService.updateAccount()
+    router.push('/')
   } catch (error: any) {
     message.error(error.response?.data?.message || 'Cập nhật thông tin thất bại')
   } finally {
@@ -665,12 +661,10 @@ const nextStep = () => {
         message.error('Vui lòng kiểm tra lại các trường đã nhập!')
       })
   } else {
-   
-      formRef.value
+    formRef.value
       .validate()
       .then(() => {
         updateCompany()
-
       })
       .catch(() => {
         message.error('Vui lòng kiểm tra lại các trường đã nhập!')
@@ -682,11 +676,11 @@ const prevStep = () => {
   currentStep.value = 0
 }
 
-onMounted( () => {
-   loadUserData()
-   getDataConscious()
-   getDataCountry()
-   getCompany()
+onMounted(() => {
+  loadUserData()
+  getDataConscious()
+  getDataCountry()
+  getCompany()
 })
 </script>
 

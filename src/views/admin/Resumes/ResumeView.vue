@@ -7,12 +7,9 @@ import useCompanyStore from '../../../stores/admin/CompanyStore'
 import UpdateResume from './UpdateResume.vue'
 import useResumeStore from '../../../stores/admin/ResumeStore'
 import DetailResume from './DetailResume.vue'
-import { DeleteOutlined, EyeOutlined, MessageOutlined } from '@ant-design/icons-vue'
-import useMessageStore from '../../../stores/admin/MessageStore'
-import MiniChat from '../../../components/MiniChat.vue'
+import { DeleteOutlined, EyeOutlined } from '@ant-design/icons-vue'
 
 const store = useResumeStore()
-const storeMessage = useMessageStore()
 const columns = [
   {
     title: 'STT'
@@ -49,17 +46,8 @@ const handleTableChange = (pagination: IPaginate) => {
   store.getData()
 }
 
-const handleContactClick = (userId: string) => {
-  storeMessage.CheckChat(userId)
-}
-
 onMounted(() => {
   store.getData()
-  storeMessage.initializeMiniChat()
-})
-
-onBeforeUnmount(() => {
-  storeMessage.cleanup()
 })
 
 const renderColorMethod = (method: string) => {
@@ -129,7 +117,7 @@ const renderStatus = (status: string) => {
           :pagination="store.dataMeta"
           @change="handleTableChange"
         >
-          <template #bodyCell="{ column, text, index, record }">
+          <template #bodyCell="{ column, text, index }">
             <template v-if="column.title === 'STT'">
               {{ ((store.dataMeta.current || 1) - 1) * (store.dataMeta.pageSize || 6) + index + 1 }}
             </template>
@@ -151,32 +139,19 @@ const renderStatus = (status: string) => {
             <template v-else-if="column.dataIndex === '_id'">
               <div class="flex items-center">
                 <a-button
-                  class="mr-2 rounded-[5px] px-[10px] py-1 h-8"
-                  @click="handleContactClick(record.userId._id)"
-                  >
-                  
-                  <template #icon>
-                    <MessageOutlined />
-                  </template>
-                  Liên hệ
-                </a-button>
-                <a-button
                   v-permission="'GET /api/v1/resumes/:id'"
                   class="mr-2 rounded-[5px] px-[10px] py-1 h-8"
                   @click="store.getByID(text, true)"
-                  >
+                >
                   <template #icon>
                     <EyeOutlined />
                   </template>
-                  </a-button
-                >
+                </a-button>
                 <a-popconfirm
                   title="Bạn có chắc muốn xoá?"
                   ok-text="Có"
-                  cancel-text="Không"
                   :loading="store.loading"
                   @confirm="store.deleteByID(text)"
-                  @cancel=""
                   v-permission="'DELETE /api/v1/resumes/:id'"
                 >
                   <button
@@ -195,5 +170,4 @@ const renderStatus = (status: string) => {
   </a-layout-content>
   <UpdateResume />
   <DetailResume />
-  <MiniChat />
 </template>

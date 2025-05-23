@@ -46,8 +46,16 @@ const handleOk = () => {
           <div class="flex gap-2">
             <a-tooltip title="Xoá lọc">
               <a-button size="large" class="group" @click="store.resetFilter">
-                <img src="../../../assets/image/icon/icons8_refresh.svg" alt="" class="w-5 h-5 group-hover:hidden">
-                <img src="../../../assets/image/icon/icons8_refresh_red.svg" alt="" class="w-5 h-5 hidden group-hover:block animate-pulse">
+                <img
+                  src="../../../assets/image/icon/icons8_refresh.svg"
+                  alt=""
+                  class="w-5 h-5 group-hover:hidden"
+                />
+                <img
+                  src="../../../assets/image/icon/icons8_refresh_red.svg"
+                  alt=""
+                  class="w-5 h-5 hidden group-hover:block animate-pulse"
+                />
               </a-button>
             </a-tooltip>
 
@@ -65,7 +73,7 @@ const handleOk = () => {
             :okButtonProps="{ style: { background: '#ed1b2f' } }"
           >
             <template #title>
-               <div class="text-xl font-semibold border-b border-gray-300 pb-1 ">Bộ lọc</div>
+              <div class="text-xl font-semibold border-b border-gray-300 pb-1">Bộ lọc</div>
             </template>
             <FilterSearch></FilterSearch>
           </a-modal>

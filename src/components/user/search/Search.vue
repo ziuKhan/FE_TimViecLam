@@ -26,7 +26,9 @@ onMounted(() => {
 })
 const handleSearch = async () => {
   try {
-    const res = await apiService.get(`search/suggest?page=1&pageSize=10${store.keyword ? `&search=${store.keyword}` : ''}`)
+    const res = await apiService.get(
+      `search/suggest?page=1&pageSize=10${store.keyword ? `&search=${store.keyword}` : ''}`
+    )
     if (res) {
       dataSource.value = res.data.result
     }
@@ -35,11 +37,11 @@ const handleSearch = async () => {
   }
 }
 const onSelect = (value: string, option: any) => {
-    if(option.type == 'company'){
-        router.push(`/company/${option._id}`)
-    }else{
-      store.handleSearch()
-    }
+  if (option.type == 'company') {
+    router.push(`/company/${option._id}`)
+  } else {
+    store.handleSearch()
+  }
 }
 
 const onEnter = () => {
@@ -81,7 +83,7 @@ const dataSource = ref<any[]>([])
         </template>
         <template v-else>
           <div style="display: flex; justify-content: space-between" class="text-semibold">
-            {{ item.value}}
+            {{ item.value }}
           </div>
         </template>
       </template>

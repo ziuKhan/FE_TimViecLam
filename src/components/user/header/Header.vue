@@ -55,15 +55,16 @@ const handleNotification = async (item: INotification) => {
 }
 
 const handleRemoveNotification = async (item: INotification) => {
-    await apiService.delete(`notifications/hide/${item._id}`).then((res) => {
-      if(res){
+  await apiService
+    .delete(`notifications/hide/${item._id}`)
+    .then((res) => {
+      if (res) {
         storeHeader.getNotification()
       }
-    }).catch((err) => {
+    })
+    .catch((err) => {
       console.log(err)
     })
-      
-
 }
 const { account, storage } = accountService.getAccount()
 
@@ -122,7 +123,10 @@ onUnmounted(() => {
         <RouterLink to="" class="header__nav_link"> Blog </RouterLink>
       </nav>
       <div class="header__user">
-        <RouterLink to="/customer" class="header__user_link link_distance" v-if="account?.role?.name === 'NORMAL_USER'"
+        <RouterLink
+          to="/customer"
+          class="header__user_link link_distance"
+          v-if="account?.role?.name === 'NORMAL_USER'"
           >Nhà Tuyển Dụng</RouterLink
         >
         <a-popover v-model:open="openNotification" trigger="click" placement="bottomRight">
@@ -130,13 +134,15 @@ onUnmounted(() => {
             <div class="max-h-[500px] overflow-auto w-[500px]">
               <template v-for="item in storeHeader.state.notifications" :key="item">
                 <div
-                 
                   :class="[
                     'flex w-full p-1 hover:shadow-lg transition-all duration-300 rounded-lg mb-1',
                     !item?.isRead ? 'bg-red-50 border-l-4 border-red-500' : 'bg-white'
                   ]"
                 >
-                  <div class="w-[60px] flex justify-center items-center"  @click="handleNotification(item)">
+                  <div
+                    class="w-[60px] flex justify-center items-center"
+                    @click="handleNotification(item)"
+                  >
                     <div class="relative">
                       <img
                         loading="lazy"
@@ -154,7 +160,10 @@ onUnmounted(() => {
                       </div>
                     </div>
                   </div>
-                  <div class="w-[85%] min-h-20 cursor-pointer p-2"  @click="handleNotification(item)">
+                  <div
+                    class="w-[85%] min-h-20 cursor-pointer p-2"
+                    @click="handleNotification(item)"
+                  >
                     <div class="flex items-center justify-between">
                       <h3
                         :class="[
@@ -166,10 +175,7 @@ onUnmounted(() => {
                       </h3>
                       <span v-if="!item?.isRead" class="text-xs text-red-500 font-medium">Mới</span>
                     </div>
-                    <p class="mb-2 text-sm text-gray-600">{{ item?.message }}
-
-                   
-                    </p>
+                    <p class="mb-2 text-sm text-gray-600">{{ item?.message }}</p>
                     <div class="flex items-center text-xs text-gray-500">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -188,17 +194,20 @@ onUnmounted(() => {
                       {{ dayjs(item?.createdAt).format('DD/MM/YYYY [lúc] HH:mm') }}
                     </div>
                   </div>
-                  <a-popconfirm v-if="item?.isRead"
-                            title="Bạn có chắc muốn xoá thông báo này?" 
-                            ok-text="Có" 
-                            cancel-text="Không"
-                            @confirm="handleRemoveNotification(item)"
-                        >
-                            <button danger class="text-red-500 hover:text-white hover:bg-red-500 rounded-lg text-base p-2">
-                                <DeleteOutlined />
-                            </button>
-                        </a-popconfirm>
-
+                  <a-popconfirm
+                    v-if="item?.isRead"
+                    title="Bạn có chắc muốn xoá thông báo này?"
+                    ok-text="Có"
+                    cancel-text="Không"
+                    @confirm="handleRemoveNotification(item)"
+                  >
+                    <button
+                      danger
+                      class="text-red-500 hover:text-white hover:bg-red-500 rounded-lg text-base p-2"
+                    >
+                      <DeleteOutlined />
+                    </button>
+                  </a-popconfirm>
                 </div>
               </template>
               <div
@@ -241,7 +250,7 @@ onUnmounted(() => {
             @click="openNotification = true"
             class="header__user_link rounded-full bg-[#f3f3f3f6] p-[5px] relative cursor-pointer"
           >
-            <a-badge  :count="storeHeader.state.unreadCount">
+            <a-badge :count="storeHeader.state.unreadCount">
               <a-avatar size="normal" :src="Avatar" />
             </a-badge>
           </span>
@@ -265,10 +274,9 @@ onUnmounted(() => {
           <div class="icon-wrapper">
             <img
               loading="lazy"
-               alt="#"
+              alt="#"
               class="icon-default"
               src="../../../assets/image/icon/icons8_chevron_down_1.svg"
-             
             />
             <img
               loading="lazy"

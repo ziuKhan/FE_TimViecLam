@@ -219,10 +219,12 @@ const rules: Record<string, Rule[]> = {
   address: [{ required: true, message: 'Vui lòng nhập address ' }],
   phoneNumber: [
     { required: true, message: 'Vui lòng nhập số điện thoại' },
-    { pattern: /^0[0-9]{9,10}$/, message: 'Số điện thoại phải bắt đầu bằng số 0 và có 10 hoặc 11 chữ số' }
+    {
+      pattern: /^0[0-9]{9,10}$/,
+      message: 'Số điện thoại phải bắt đầu bằng số 0 và có 10 hoặc 11 chữ số'
+    }
   ]
 }
-
 
 const dataCompanies = ref<ICompany[]>([])
 
@@ -234,7 +236,9 @@ const getDataOption = async () => {
     ])
     dataRoles.value = role.data.result
     dataCompanies.value = company.data.result
-  } catch (e) {}
+  } catch (e) {
+    console.error('Error fetching data:', e)
+  }
 }
 
 const handleCompanyChange = (companyId: string) => {
@@ -352,7 +356,6 @@ onMounted(() => {
                   cancel-text="Không"
                   :loading="loading"
                   @confirm="deleteByID(text)"
-                  @cancel=""
                   v-permission="'DELETE /api/v1/users/:id'"
                 >
                   <button
@@ -411,7 +414,12 @@ onMounted(() => {
       <a-row :gutter="16">
         <a-col :span="12">
           <a-form-item label="Số điện thoại" name="phoneNumber">
-            <a-input :maxLength="11" class="w-full" v-model:value="form.phoneNumber" placeholder="Vui lòng nhập số điện thoại" />
+            <a-input
+              :maxLength="11"
+              class="w-full"
+              v-model:value="form.phoneNumber"
+              placeholder="Vui lòng nhập số điện thoại"
+            />
           </a-form-item>
         </a-col>
         <a-col :span="8">

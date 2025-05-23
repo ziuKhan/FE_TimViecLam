@@ -18,20 +18,20 @@ export const useTransactionsStore = defineStore('transactions', () => {
     cancelUrl: window.location.origin + '/cancel',
     returnUrl: window.location.origin + '/success',
     packageId: '',
-    type:  'VIP_UPGRADE'
-});
-// http://localhost:5000/cancel?code=00&id=7a5c14b430704851abeb2e1099a99e1d&cancel=true&status=CANCELLED&orderCode=127
+    type: 'VIP_UPGRADE'
+  })
+  // http://localhost:5000/cancel?code=00&id=7a5c14b430704851abeb2e1099a99e1d&cancel=true&status=CANCELLED&orderCode=127
   const handleDonate = async () => {
     try {
-        const res = await apiService.add(`transactions`, dataTransaction.value );
-        if (res.data) {
-            window.location.href = res.data.checkoutUrl;
-        }
+      const res = await apiService.add(`transactions`, dataTransaction.value)
+      if (res.data) {
+        window.location.href = res.data.checkoutUrl
+      }
     } catch (error: any) {
-        message.error(error.response.data.message || 'Đã xảy ra lỗi trong quá trình thanh toán');
+      message.error(error.response.data.message || 'Đã xảy ra lỗi trong quá trình thanh toán')
     }
-};
- 
+  }
+
   return {
     dataTransaction,
     handleDonate

@@ -27,7 +27,7 @@ export const useSearchStore = defineStore('search', () => {
 
   const valueFilter = ref<IValueFilter>({
     salary: [0, 0],
-    isActive: true,
+    isActive: true
   })
 
   const load = ref<boolean>(false)
@@ -35,11 +35,9 @@ export const useSearchStore = defineStore('search', () => {
   const route = useRoute()
   const valueMax = ref<number>(0)
 
-
   const handleSearch = async () => {
-    
     paginateJobs.value.current = 1
-    let params = new URLSearchParams()
+    const params = new URLSearchParams()
     if (valueFilter.value.location) {
       params.set('location', `${valueFilter.value.location}`)
     }
@@ -54,34 +52,36 @@ export const useSearchStore = defineStore('search', () => {
 
   const getSearch = async () => {
     const conditions = Object.entries(valueFilter.value)
-    .filter(([key, value]) => value !== null && value !== undefined && value !== '')
-    .map(([key, value]: [string, any]) => {
+      .filter(([key, value]) => value !== null && value !== undefined && value !== '')
+      .map(([key, value]: [string, any]) => {
         if (key === 'startDate') {
-            return `startDate>=${format(value, 'yyyy-MM-dd')}`;
+          return `startDate>=${format(value, 'yyyy-MM-dd')}`
         }
         if (key === 'endDate') {
-            return `endDate<=${format(value, 'yyyy-MM-dd')}`;
+          return `endDate<=${format(value, 'yyyy-MM-dd')}`
         }
-        if (key === 'salary' ) {
-          if(value[0] >= 0 && value[1]){
-            return `salaryFrom>=${value[0]},salaryFrom<=${value[1]}`;
-          }else {
-            return null;
+        if (key === 'salary') {
+          if (value[0] >= 0 && value[1]) {
+            return `salaryFrom>=${value[0]},salaryFrom<=${value[1]}`
+          } else {
+            return null
           }
         }
         if (Array.isArray(value)) {
-          return `${key}=${value.join(',')}`;
+          return `${key}=${value.join(',')}`
         }
-        return `${key}=${value}`;
-    });
+        return `${key}=${value}`
+      })
 
-    const filter = conditions.filter(Boolean).join(',');
+    const filter = conditions.filter(Boolean).join(',')
     try {
       load.value = true
       const { current, pageSize } = paginateJobs.value
-      const response = await apiService.get(`search?page=${current}&pageSize=${pageSize}${filter ? `&filter=${filter}` : ''}${keyword.value ? `&search=${keyword.value}` : ''}`)
+      const response = await apiService.get(
+        `search?page=${current}&pageSize=${pageSize}${filter ? `&filter=${filter}` : ''}${keyword.value ? `&search=${keyword.value}` : ''}`
+      )
       const salary = await apiService.get(`search?filter=sort=-salaryTo&page=1&pageSize=1`)
-      valueMax.value = salary.data?.result[0].salaryTo || 0;
+      valueMax.value = salary.data?.result[0].salaryTo || 0
       dataJobs.value = response.data.result
       paginateJobs.value.total = response.data.meta.total
       paginateJobs.value.keyword = keyword.value
@@ -94,7 +94,7 @@ export const useSearchStore = defineStore('search', () => {
   const resetFilter = () => {
     valueFilter.value = {
       salary: [0, 0],
-      isActive: true,
+      isActive: true
     }
     handleSearch()
   }
@@ -103,8 +103,8 @@ export const useSearchStore = defineStore('search', () => {
     () => {
       console.log(route.query)
       keyword.value = route.query.name as string
-      paginateJobs.value.keyword = route.query?.name as string || ''
-      valueFilter.value.location = route.query?.location as string || undefined
+      paginateJobs.value.keyword = (route.query?.name as string) || ''
+      valueFilter.value.location = (route.query?.location as string) || undefined
       handleSearch()
     },
     { immediate: true }
@@ -119,6 +119,6 @@ export const useSearchStore = defineStore('search', () => {
     handleSearch,
     resetFilter,
     keyword,
-    valueMax,
+    valueMax
   }
 })

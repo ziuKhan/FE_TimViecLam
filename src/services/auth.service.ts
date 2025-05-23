@@ -82,6 +82,5 @@ export const accountApi = async (): Promise<any> => {
     return res.data
   } catch (err: any) {
     console.log(err)
-
   }
 }

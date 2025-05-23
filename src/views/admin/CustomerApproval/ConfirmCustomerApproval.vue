@@ -63,7 +63,7 @@
           </div>
           <div class="preview-item" v-if="store.form.status === 'TC'">
             <div class="preview-label">Lý do từ chối:</div>
-            <div class="preview-value">{{ store.form.reason  }}</div>
+            <div class="preview-value">{{ store.form.reason }}</div>
           </div>
         </a-col>
         <a-col :span="6">
@@ -80,7 +80,7 @@
             <div v-else class="preview-value">Không có logo</div>
           </div>
         </a-col>
-     
+
         <a-col :span="24">
           <div class="preview-item">
             <div class="preview-label">Mô tả:</div>
@@ -97,7 +97,7 @@
     <template #footer>
       <a-space>
         <a-button @click="closeModal">Đóng</a-button>
-        <a-button v-if="store.form.status === 'CD'" type="primary"  @click="showRejectConfirm">
+        <a-button v-if="store.form.status === 'CD'" type="primary" @click="showRejectConfirm">
           Từ chối
         </a-button>
         <a-button

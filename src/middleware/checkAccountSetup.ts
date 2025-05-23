@@ -40,8 +40,8 @@ const checkAccountSetup = async (
 
     // Nếu chưa setup
     if (!accountWithSetup.isSetup) {
-       // Sau đó mới xử lý tài khoản HR_USER
-       if (accountWithSetup.role?.name === 'HR_USER') {
+      // Sau đó mới xử lý tài khoản HR_USER
+      if (accountWithSetup.role?.name === 'HR_USER') {
         if (to.path !== '/account-setup') {
           return next({ path: '/account-setup' })
         }
@@ -52,7 +52,6 @@ const checkAccountSetup = async (
           return next({ path: '/account-setup-pass' })
         }
       }
-     
     }
 
     // Mặc định cho phép điều hướng

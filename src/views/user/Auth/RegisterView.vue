@@ -53,25 +53,35 @@ onMounted(() => {
 })
 </script>
 
-
 <template>
   <div class="container__login">
     <div class="container__login_title">
-      Chào mừng bạn đến với <img loading="lazy" src="../../../assets/image/icon/logo-itviec-black.png" alt="" />
+      Chào mừng bạn đến với
+      <img loading="lazy" src="../../../assets/image/icon/logo-itviec-black.png" alt="" />
     </div>
 
     <div class="leftSide w-full lg:w-6/12 lg:pr-32">
       <div class="leftSide__title">Đăng ký tài khoản</div>
-      <a-button danger class="login__btn_google"> <img loading="lazy" src="../../../assets/image/icon/icons8_google.svg"
-          alt="" /> Đăng
-        ký với
-        Google</a-button>
+      <a-button danger class="login__btn_google">
+        <img loading="lazy" src="../../../assets/image/icon/icons8_google.svg" alt="" /> Đăng ký với
+        Google</a-button
+      >
 
-      <a-form :model="formState" layout="vertical" name="normal_register" class="login-form" @finish="onFinish">
+      <a-form
+        :model="formState"
+        layout="vertical"
+        name="normal_register"
+        class="login-form"
+        @finish="onFinish"
+      >
         <div class="or">hoặc</div>
 
-        <a-form-item label="Họ và Tên" name="name" class="login-form-username"
-          :rules="[{ required: true, message: 'Vui lòng điền họ và tên!' }]">
+        <a-form-item
+          label="Họ và Tên"
+          name="name"
+          class="login-form-username"
+          :rules="[{ required: true, message: 'Vui lòng điền họ và tên!' }]"
+        >
           <a-input v-model:value="formState.name" size="large" placeholder="Họ và Tên">
             <template #prefix>
               <UserOutlined class="site-form-item-icon" />
@@ -79,10 +89,15 @@ onMounted(() => {
           </a-input>
         </a-form-item>
 
-        <a-form-item label="Email" name="email" class="login-form-username" :rules="[
-          { required: true, message: 'Vui lòng điền email!' },
-          { type: 'email', message: 'Email phải là email!' }
-        ]">
+        <a-form-item
+          label="Email"
+          name="email"
+          class="login-form-username"
+          :rules="[
+            { required: true, message: 'Vui lòng điền email!' },
+            { type: 'email', message: 'Email phải là email!' }
+          ]"
+        >
           <a-input v-model:value="formState.email" size="large" placeholder="Email cả nhân">
             <template #prefix>
               <UserOutlined class="site-form-item-icon" />
@@ -90,10 +105,14 @@ onMounted(() => {
           </a-input>
         </a-form-item>
 
-        <a-form-item label="Mật khẩu" name="password" :rules="[
-          { required: true, message: 'Vui lòng điền mật khẩu!' },
-          { type: 'string', min: 6, message: 'Mật khẩu phải có ít nhất 6 ký tự!' }
-        ]">
+        <a-form-item
+          label="Mật khẩu"
+          name="password"
+          :rules="[
+            { required: true, message: 'Vui lòng điền mật khẩu!' },
+            { type: 'string', min: 6, message: 'Mật khẩu phải có ít nhất 6 ký tự!' }
+          ]"
+        >
           <a-input-password v-model:value="formState.password" size="large" placeholder="Mật khẩu">
             <template #prefix>
               <LockOutlined class="site-form-item-icon" />
@@ -106,12 +125,19 @@ onMounted(() => {
             <a-checkbox v-model:checked="formState.clause">
               <div class="clause__title">
                 Tôi đã đọc và đồng ý với các
-                <a href="https://itviec.com/blog/terms-conditions-vn/" target="_blank" class="hyperlink">Điều khoản dịch
-                  vụ</a>
+                <a
+                  href="https://itviec.com/blog/terms-conditions-vn/"
+                  target="_blank"
+                  class="hyperlink"
+                  >Điều khoản dịch vụ</a
+                >
                 và
-                <a href="https://itviec.com/blog/chinh-sach-bao-mat/" target="_blank" class="hyperlink">Chính sách quyền
-                  riêng
-                  tư</a>
+                <a
+                  href="https://itviec.com/blog/chinh-sach-bao-mat/"
+                  target="_blank"
+                  class="hyperlink"
+                  >Chính sách quyền riêng tư</a
+                >
                 của ITviec liên quan đến thông tin riêng tư của tôi.
               </div>
             </a-checkbox>
@@ -119,7 +145,12 @@ onMounted(() => {
         </a-form-item>
 
         <a-form-item>
-          <a-button :disabled="disabled" type="primary" html-type="submit" class="login-form-button">
+          <a-button
+            :disabled="disabled"
+            type="primary"
+            html-type="submit"
+            class="login-form-button"
+          >
             Đăng ký
           </a-button>
           Bạn đã có tài khoản

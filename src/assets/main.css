@@ -7,7 +7,7 @@ body {
   background-color: #ffffff;
   position: relative;
 }
-.ant-btn span svg{
+.ant-btn span svg {
   display: flex;
   align-items: center;
   justify-content: center;

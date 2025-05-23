@@ -145,7 +145,6 @@ onMounted(() => {
                 cancel-text="Không"
                 :loading="store.loading"
                 @confirm="store.deleteByID(text)"
-                @cancel=""
                 v-permission="'DELETE /api/v1/notifications/:id'"
               >
                 <button

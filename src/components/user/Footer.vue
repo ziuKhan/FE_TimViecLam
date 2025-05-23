@@ -5,16 +5,26 @@ import { useRoute } from 'vue-router'
 const route = useRoute()
 const isHiddenFooter = ref<Boolean>(false)
 watchEffect(() => {
-  isHiddenFooter.value = route.path === '/login' || route.path === '/register' || route.path === '/customer/login' || route.path === '/customer/register' || route.path === '/account-setup'
+  isHiddenFooter.value =
+    route.path === '/login' ||
+    route.path === '/register' ||
+    route.path === '/customer/login' ||
+    route.path === '/customer/register' ||
+    route.path === '/account-setup'
 })
 </script>
 
 <template>
-  <footer v-if="!isHiddenFooter" class="theme_blackred w-full pt-12 relative overflow-hidden ">
-    <div class="m-auto w-11/12 lg:w-10/12 mb-12 flex flex-wrap gap-2 lg:gap-0 lg:flex-nowrap ">
+  <footer v-if="!isHiddenFooter" class="theme_blackred w-full pt-12 relative overflow-hidden">
+    <div class="m-auto w-11/12 lg:w-10/12 mb-12 flex flex-wrap gap-2 lg:gap-0 lg:flex-nowrap">
       <div class="w-full lg:h-full flex justify-center flex-col mb-3 items-center lg:w-1/4">
         <div class="h-12">
-          <img loading="lazy" class="h-full" src="../../assets/image/icon/logo-itviec.png" alt="#" />
+          <img
+            loading="lazy"
+            class="h-full"
+            src="../../assets/image/icon/logo-itviec.png"
+            alt="#"
+          />
         </div>
         <div class="text-white pt-1">Ít nhưng mà chất</div>
       </div>
@@ -67,7 +77,5 @@ watchEffect(() => {
     </div>
   </footer>
 </template>
-
-
 
 <style scoped></style>

@@ -14,7 +14,7 @@ const useSkillStore = defineStore('skill', () => {
   const data = ref<ISkill[]>([])
   const allDataSkill = ref<ISkill[]>([])
   const valueSearch = ref<string>('')
-  
+
   const dataMeta = ref<IPaginate>({
     current: 1,
     pageSize: DEFAULT_PAGE_SIZE,
@@ -27,7 +27,7 @@ const useSkillStore = defineStore('skill', () => {
     name: '',
     description: ''
   }
-  
+
   const form = reactive<ISkill>({ ...initialForm })
 
   // Methods
@@ -44,11 +44,11 @@ const useSkillStore = defineStore('skill', () => {
       pageSize: String(dataMeta.value.pageSize),
       filter: 'sort=-createdAt'
     })
-    
+
     if (valueSearch.value) {
       params.append('search', valueSearch.value)
     }
-    
+
     return `?${params.toString()}`
   }
 
@@ -57,7 +57,7 @@ const useSkillStore = defineStore('skill', () => {
       loading.value = true
       const params = buildQueryParams()
       const res = await apiService.get(`${API_ENDPOINT}${params}`)
-      
+
       if (res) {
         data.value = res.data.result
         dataMeta.value = res.data.meta
@@ -73,7 +73,7 @@ const useSkillStore = defineStore('skill', () => {
     try {
       loading.value = true
       const res = await apiService.delete(`${API_ENDPOINT}/${id}`)
-      
+
       if (res) {
         message.success('Xóa thành công!')
         await getData()
@@ -89,12 +89,12 @@ const useSkillStore = defineStore('skill', () => {
     try {
       loading.value = true
       const res = await apiService.get(`${API_ENDPOINT}/${id}`)
-      
+
       if (res) {
         const formData = isCopy ? { ...res.data, _id: '' } : res.data
         Object.assign(form, formData)
         openModal.value = true
-        
+
         if (isCopy) {
           message.success('Đã copy đường dẫn API!')
         }
@@ -110,7 +110,7 @@ const useSkillStore = defineStore('skill', () => {
     try {
       loading.value = true
       const isUpdate = Boolean(form._id)
-      const apiCall = isUpdate 
+      const apiCall = isUpdate
         ? apiService.update(`${API_ENDPOINT}/${form._id}`, form)
         : apiService.add(API_ENDPOINT, form)
 

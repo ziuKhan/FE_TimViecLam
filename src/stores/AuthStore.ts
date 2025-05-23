@@ -11,7 +11,7 @@ import { ConsoleSqlOutlined } from '@ant-design/icons-vue'
 
 export const useAuthStore = defineStore('auth', () => {
   // Biến để theo dõi promise refreshToken đang chạy
-  let refreshTokenPromise: Promise<string | undefined> | null = null;
+  let refreshTokenPromise: Promise<string | undefined> | null = null
   const permission = ref<IPermission[]>([])
 
   // Thêm biến theo dõi trạng thái tải quyền
@@ -24,21 +24,21 @@ export const useAuthStore = defineStore('auth', () => {
 
   const getPermission = async (forceReload = false) => {
     if (!tokenService.getToken().storage) {
-      return;
+      return
     }
-    
+
     // Kiểm tra nếu đang tải
     if (isLoadingPermission.value) {
-      return;
+      return
     }
-    
+
     // Nếu không phải force reload và đã tải xong và có quyền, không tải lại
     if (!forceReload && isPermissionLoaded.value && permission.value.length > 0) {
-      return;
+      return
     }
-    
+
     isLoadingPermission.value = true
-    
+
     try {
       const res = await apiService.get('auth/permission')
       permission.value = res.data
@@ -67,41 +67,42 @@ export const useAuthStore = defineStore('auth', () => {
   const refreshToken = async () => {
     // Nếu đã có một promise đang chạy, trả về promise đó
     if (refreshTokenPromise) {
-      return refreshTokenPromise;
+      return refreshTokenPromise
     }
-
     // Tạo một promise mới và lưu vào biến
-    refreshTokenPromise = new Promise(async (resolve, reject) => {
-      try {
-        if (!tokenService.getToken().storage) {
-          refreshTokenPromise = null;
-          resolve(undefined);
-          return;
-        }
-        
-        const res = await apiService.get(`auth/refresh`)
-        if (res.data) {
-          const { access_token } = res.data
-          tokenService.updateToken(access_token)
-          refreshTokenPromise = null;
-          resolve(access_token);
-          return access_token;
-        }
-        refreshTokenPromise = null;
-        resolve(undefined);
-      } catch (error: any) {
-        refreshTokenPromise = null;
-        if (error.response?.data?.message === 'LOGOUT') {
-          tokenService.removeToken()
-          accountService.removeAccount()
-          window.location.reload()
-          alert('Vui lòng đăng nhập lại!')
-        }
-        reject(error);
+    refreshTokenPromise = new Promise((resolve, reject) => {
+      if (!tokenService.getToken().storage) {
+        refreshTokenPromise = null
+        resolve(undefined)
+        return
       }
-    });
 
-    return refreshTokenPromise;
+      apiService
+        .get(`auth/refresh`)
+        .then((res) => {
+          if (res.data) {
+            const { access_token } = res.data
+            tokenService.updateToken(access_token)
+            refreshTokenPromise = null
+            resolve(access_token)
+            return access_token
+          }
+          refreshTokenPromise = null
+          resolve(undefined)
+        })
+        .catch((error) => {
+          refreshTokenPromise = null
+          if (error.response?.data?.message === 'LOGOUT') {
+            tokenService.removeToken()
+            accountService.removeAccount()
+            window.location.reload()
+            alert('Vui lòng đăng nhập lại!')
+          }
+          reject(error)
+        })
+    })
+
+    return refreshTokenPromise
   }
 
   // Thêm phương thức kiểm tra quyền trực tiếp trong store
@@ -111,11 +112,9 @@ export const useAuthStore = defineStore('auth', () => {
       getPermission()
       return false
     }
-    
+
     const [method, apiPath] = requiredPermission.split(' ')
-    return permission.value.some(
-      (p) => p.apiPath === apiPath && p.method === method
-    )
+    return permission.value.some((p) => p.apiPath === apiPath && p.method === method)
   }
 
   return {

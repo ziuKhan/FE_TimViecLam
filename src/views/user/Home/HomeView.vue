@@ -6,7 +6,7 @@ import Loading from '../../../components/Loading.vue'
 import FormSearch from '../../../components/user/search/FormSearch.vue'
 import type { ICompany, IJob } from '../../../types/backend'
 import apiService from '../../../services/api.service'
-import { formatSalary } from '../../../until/until';
+import { formatSalary } from '../../../until/until'
 
 const dataCompany = ref<ICompany[]>([])
 const dataJobs = ref<IJob[]>([])
@@ -14,7 +14,12 @@ const load = ref<boolean>(false)
 
 const getData = async () => {
   load.value = false
-  const [companies, jobs] = await Promise.all([apiService.get('companies/client?page=1&pageSize=9&filter=sort=-createdAt,isActive=true'), apiService.get('jobs/client?page=1&pageSize=9&filter=sort=-createdAt,isActive=true,populate=companyId')])
+  const [companies, jobs] = await Promise.all([
+    apiService.get('companies/client?page=1&pageSize=9&filter=sort=-createdAt,isActive=true'),
+    apiService.get(
+      'jobs/client?page=1&pageSize=9&filter=sort=-createdAt,isActive=true,populate=companyId'
+    )
+  ])
   dataCompany.value = companies.data?.result
   dataJobs.value = jobs.data?.result
   load.value = true
@@ -24,9 +29,6 @@ onMounted(() => {
   getData()
 })
 </script>
-
-
-
 
 <template>
   <Loading v-if="!load"> </Loading>
@@ -44,9 +46,17 @@ onMounted(() => {
     </div>
 
     <div class="home__employer grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-10/12">
-      <div class="home__employer_title lg:col-span-3 md:col-span-2 text-xl lg:text-3xl">Nhà tuyển dụng hàng đầu</div>
+      <div class="home__employer_title lg:col-span-3 md:col-span-2 text-xl lg:text-3xl">
+        Nhà tuyển dụng hàng đầu
+      </div>
       <template v-for="data in dataCompany" :key="data._id">
-        <CardEmployer :id="data._id" :name="data.name" :address="data.address" :logo="data.logo" :jobs="data.jobs">
+        <CardEmployer
+          :id="data._id"
+          :name="data.name"
+          :address="data.address"
+          :logo="data.logo"
+          :jobs="data.jobs"
+        >
         </CardEmployer>
       </template>
     </div>
@@ -55,14 +65,12 @@ onMounted(() => {
       <h2 class="text-3xl font-bold mb-7 text-center w-full">Việc làm tốt nhất</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-10/12 mx-auto">
         <template v-for="data in dataJobs" :key="data._id">
-          <CardJob :data="data">
-          </CardJob>
+          <CardJob :data="data"> </CardJob>
         </template>
       </div>
     </div>
   </main>
 </template>
-
 
 <style lang="scss" scoped>
 .link__cv {
@@ -99,4 +107,5 @@ onMounted(() => {
     text-align: center;
   }
 }
-</style>>
+</style>
+>

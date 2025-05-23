@@ -18,7 +18,10 @@
           </a-menu-item>
         </RouterLink>
 
-        <a-sub-menu :key="menuRoutes.userManagement.key" v-if="account?.account?.role.name === 'SUPER_ADMIN'">
+        <a-sub-menu
+          :key="menuRoutes.userManagement.key"
+          v-if="account?.account?.role.name === 'SUPER_ADMIN'"
+        >
           <template #title>
             <span>
               <user-outlined />
@@ -76,11 +79,6 @@
               <FileOutlined />
               <span>Hồ sơ ứng tuyển</span>
             </span>
-          </a-menu-item>
-        </RouterLink>
-        <RouterLink to="/admin/chat" >
-          <a-menu-item :key="menuRoutes.chat.key">
-            <span> <MessageOutlined /> <span>Nhắn tin</span> </span>
           </a-menu-item>
         </RouterLink>
         <RouterLink to="/admin/skill" v-if="coTheQuanLyKynang">
@@ -192,7 +190,6 @@ const menuRoutes = {
   subscriber: { path: '/admin/subscriber', key: 'admin-subscriber' },
   notification: { path: '/admin/notification', key: 'admin-notification' },
   personalInfo: { path: '/admin/personal_information', key: 'admin-personal-info' },
-  chat: { path: '/admin/chat', key: 'admin-chat' },
   logout: { path: '', key: 'logout' }
 }
 
@@ -205,9 +202,11 @@ watch(
   () => route.path,
   (newPath) => {
     getAccount()
-    
+
     // Tìm key tương ứng với đường dẫn hiện tại
-    const matchedRoute = Object.values(menuRoutes).find(route => route.path === newPath && route.path !== '')
+    const matchedRoute = Object.values(menuRoutes).find(
+      (route) => route.path === newPath && route.path !== ''
+    )
     if (matchedRoute) {
       selectedKeys.value = [matchedRoute.key]
     } else {
@@ -226,7 +225,7 @@ const coTheQuanLyCongTy = computed<boolean>(() => {
     'POST /api/v1/companies',
     'GET /api/v1/companies'
   ]
-  return permissions.some(permission => checkPermission(permission))
+  return permissions.some((permission) => checkPermission(permission))
 })
 
 const coTheQuanLyHoSo = computed<boolean>(() => {
@@ -237,7 +236,7 @@ const coTheQuanLyHoSo = computed<boolean>(() => {
     'POST /api/v1/resumes',
     'GET /api/v1/resumes'
   ]
-  return permissions.some(permission => checkPermission(permission))
+  return permissions.some((permission) => checkPermission(permission))
 })
 const coTheQuanLyKhachHang = computed<boolean>(() => {
   const permissions = [
@@ -246,7 +245,7 @@ const coTheQuanLyKhachHang = computed<boolean>(() => {
     'PATCH /api/v1/customer-approval/:id',
     'GET /api/v1/customer-approval'
   ]
-  return permissions.some(permission => checkPermission(permission))
+  return permissions.some((permission) => checkPermission(permission))
 })
 const coTheQuanLyCongViec = computed<boolean>(() => {
   const permissions = [
@@ -257,7 +256,7 @@ const coTheQuanLyCongViec = computed<boolean>(() => {
     'GET /api/v1/jobs'
   ]
 
-  return permissions.some(permission => checkPermission(permission))
+  return permissions.some((permission) => checkPermission(permission))
 })
 
 const coTheQuanLyKynang = computed<boolean>(() => {
@@ -268,8 +267,8 @@ const coTheQuanLyKynang = computed<boolean>(() => {
     'POST /api/v1/skills',
     'GET /api/v1/skills'
   ]
-  return permissions.some(permission => checkPermission(permission))
-});
+  return permissions.some((permission) => checkPermission(permission))
+})
 </script>
 <style>
 .ant-layout-sider-children,

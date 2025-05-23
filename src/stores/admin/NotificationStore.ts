@@ -88,13 +88,12 @@ const useNotificationStore = defineStore('notification', () => {
 
   const updateAndAdd = async () => {
     loading.value = true
-     
+
     try {
       if (form._id) {
         const res = await updateApi(form, form._id)
         if (res) message.success('Cập nhật thành công!')
       } else {
-         
         const res = await createApi(form)
         if (res) message.success('Thêm thành công!')
       }
