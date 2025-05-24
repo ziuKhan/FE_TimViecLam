@@ -286,10 +286,10 @@ export interface ISubscriptionPackage {
 
   code: string
 
-  price: number
-  priceDiscount: number
+  price: number | null
+  priceDiscount: number | null
 
-  duration: number
+  duration: number | null
 
   description?: string
 

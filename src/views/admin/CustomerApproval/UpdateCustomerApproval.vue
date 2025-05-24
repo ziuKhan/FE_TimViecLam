@@ -10,17 +10,29 @@
     <a-form :model="store.form" :rules="rules" ref="formRef" layout="vertical">
       <a-row :gutter="16">
         <a-col :span="12">
-          <a-form-item label="Họ" name="lastName">
+          <a-form-item
+            label="Họ"
+            name="lastName"
+            :rules="[{ required: true, message: 'Vui lòng nhập họ' }]"
+          >
             <a-input v-model:value="store.form.lastName" placeholder="Vui lòng nhập họ" />
           </a-form-item>
         </a-col>
         <a-col :span="12">
-          <a-form-item label="Tên" name="firstName">
+          <a-form-item
+            label="Tên"
+            name="firstName"
+            :rules="[{ required: true, message: 'Vui lòng nhập tên' }]"
+          >
             <a-input v-model:value="store.form.firstName" placeholder="Vui lòng nhập tên" />
           </a-form-item>
         </a-col>
         <a-col :span="12">
-          <a-form-item label="Số điện thoại" name="phoneNumber">
+          <a-form-item
+            label="Số điện thoại"
+            name="phoneNumber"
+            :rules="[{ required: true, message: 'Vui lòng nhập số điện thoại' }]"
+          >
             <a-input
               v-model:value="store.form.phoneNumber"
               placeholder="Vui lòng nhập số điện thoại"
@@ -28,13 +40,21 @@
           </a-form-item>
         </a-col>
         <a-col :span="12">
-          <a-form-item label="Email" name="email">
+          <a-form-item
+            label="Email"
+            name="email"
+            :rules="[{ required: true, message: 'Vui lòng nhập email' }]"
+          >
             <a-input v-model:value="store.form.email" placeholder="Vui lòng nhập email" />
           </a-form-item>
         </a-col>
         <hr />
         <a-col :span="18">
-          <a-form-item label="Tên công ty" name="companyName">
+          <a-form-item
+            label="Tên công ty"
+            name="companyName"
+            :rules="[{ required: true, message: 'Vui lòng nhập tên công ty' }]"
+          >
             <a-input
               v-model:value="store.form.companyName"
               placeholder="Vui lòng nhập tên công ty"
@@ -63,7 +83,11 @@
           </a-form-item>
         </a-col>
         <a-col :span="24">
-          <a-form-item label="Địa chỉ" name="address">
+          <a-form-item
+            label="Địa chỉ"
+            name="address"
+            :rules="[{ required: true, message: 'Vui lòng nhập địa chỉ' }]"
+          >
             <a-input v-model:value="store.form.address" placeholder="Vui lòng nhập địa chỉ" />
           </a-form-item>
         </a-col>
@@ -140,6 +164,18 @@ watch(fileList, () => {
     store.form.logo = ''
   }
 })
+// Theo dõi khi modal mở để reset validate
+watch(
+  () => store.openModal,
+  (newVal) => {
+    if (!newVal && formRef.value) {
+      // Reset các lỗi validation khi modal mở
+      if (!store.form._id) {
+        formRef.value.resetFields()
+      }
+    }
+  }
+)
 </script>
 
 <style>

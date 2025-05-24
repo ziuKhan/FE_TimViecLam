@@ -68,8 +68,8 @@ const useCompanyStore = defineStore('company', () => {
   }
 
   const handleOpenModal = () => {
-    refreshInput()
     openModal.value = true
+    refreshInput()
   }
 
   const getData = async (search?: string) => {
@@ -147,6 +147,7 @@ const useCompanyStore = defineStore('company', () => {
     getData,
     valueSearch,
     deleteByID,
+    refreshInput,
     getByID,
     handleOpenModal,
     isActive

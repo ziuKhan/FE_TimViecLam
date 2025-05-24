@@ -22,9 +22,9 @@ const useSubscriptionPackageStore = defineStore('subscriptionPackage', () => {
     name: '',
     description: '',
     code: '',
-    price: 0,
-    priceDiscount: 0,
-    duration: 0,
+    price: null,
+    priceDiscount: null,
+    duration: null,
     isActive: false
   }
 

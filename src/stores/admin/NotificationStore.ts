@@ -27,12 +27,13 @@ const useNotificationStore = defineStore('notification', () => {
     isGlobal: false,
     isURL: true
   }
+  const resetForm =JSON.parse(JSON.stringify(defaultForm))
   const form = reactive<INotification>(JSON.parse(JSON.stringify(defaultForm)))
 
   const loading = ref<boolean>(false)
 
   const refreshInput = () => {
-    Object.assign(form, JSON.parse(JSON.stringify(defaultForm)))
+    Object.assign(form, resetForm)
   }
 
   const handleOpenModal = () => {

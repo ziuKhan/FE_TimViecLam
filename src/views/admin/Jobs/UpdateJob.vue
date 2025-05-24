@@ -110,6 +110,16 @@ onUpdated(() => {
     value1.value = []
   }
 })
+// Theo dõi khi modal mở để reset validate
+watch(
+  () => store.openModal,
+  (newVal) => {
+    if (!newVal && formRef.value) {
+      // Reset các lỗi validation khi modal mở
+        formRef.value.resetFields()
+    }
+  }
+)
 </script>
 
 <template>

@@ -188,7 +188,8 @@ const useCustomerApprovalStore = defineStore('customer-approval', () => {
     getByID,
     handleOpenModal,
     approveRequest,
-    rejectRequest
+    rejectRequest,
+    resetForm
   }
 })
 

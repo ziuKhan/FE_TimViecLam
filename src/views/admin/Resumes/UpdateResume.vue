@@ -43,6 +43,14 @@ watch(fileList, () => {
     store.form.logo = ''
   }
 })
+watch(
+  () => store.openModal,
+  (newVal) => {
+    if (!newVal && formRef.value) {
+        formRef.value.resetFields()
+    }
+  }
+)
 </script>
 
 <template>

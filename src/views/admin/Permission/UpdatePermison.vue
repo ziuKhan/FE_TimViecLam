@@ -60,7 +60,7 @@
 import type { Rule } from 'ant-design-vue/es/form'
 import usePermissionStore from '../../../stores/admin/PermissionStore'
 import { ALL_METHODS, ALL_MODULES } from '../../../types/permision'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { message } from 'ant-design-vue'
 
 // Sử dụng Permission Store
@@ -91,6 +91,15 @@ const handleOk = () => {
       message.error('Vui lòng kiểm tra lại các trường đã nhập!')
     })
 }
+// Theo dõi khi modal mở để reset validate
+watch(
+  () => store.openModal,
+  (newVal) => {
+    if (!newVal && formRef.value) {
+        formRef.value.resetFields()
+    }
+  }
+)
 </script>
 
 <style>

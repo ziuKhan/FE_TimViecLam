@@ -44,7 +44,29 @@ onMounted(() => {
         <img loading="lazy" src="../../../assets/image/icon/icons8_right.svg" alt="" />
       </RouterLink>
     </div>
-
+  <!-- Thống kê section -->
+  <div class="bg-white pt-12">
+      <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 max-w-6xl mx-auto">
+          <div class="text-center p-6 hover:transform hover:scale-105 transition-transform duration-300">
+            <div class="text-4xl font-bold text-red-600 mb-2">10,000+</div>
+            <div class="text-gray-600">Việc làm IT mỗi tháng</div>
+          </div>
+          <div class="text-center p-6 hover:transform hover:scale-105 transition-transform duration-300">
+            <div class="text-4xl font-bold text-red-600 mb-2">5,000+</div>
+            <div class="text-gray-600">Công ty công nghệ</div>
+          </div>
+          <div class="text-center p-6 hover:transform hover:scale-105 transition-transform duration-300">
+            <div class="text-4xl font-bold text-red-600 mb-2">250,000+</div>
+            <div class="text-gray-600">Ứng viên IT tiềm năng</div>
+          </div>
+          <div class="text-center p-6 hover:transform hover:scale-105 transition-transform duration-300">
+            <div class="text-4xl font-bold text-red-600 mb-2">85%</div>
+            <div class="text-gray-600">Tỷ lệ ứng viên thành công</div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="home__employer grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-10/12">
       <div class="home__employer_title lg:col-span-3 md:col-span-2 text-xl lg:text-3xl">
         Nhà tuyển dụng hàng đầu
@@ -67,6 +89,29 @@ onMounted(() => {
         <template v-for="data in dataJobs" :key="data._id">
           <CardJob :data="data"> </CardJob>
         </template>
+      </div>
+    </div>
+      <!-- IT Trends Section -->
+      <div class="bg-gray-50 py-12">
+      <div class="container mx-auto px-4">
+        <h2 class="text-2xl md:text-3xl font-bold text-center mb-8">Xu hướng IT</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+          <div class="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
+            <h3 class="text-lg font-semibold mb-3">Báo cáo lương IT 2024</h3>
+            <p class="text-gray-600 mb-4">Tìm hiểu mức lương thị trường IT hiện tại và xu hướng trong tương lai</p>
+            <RouterLink to="" class="text-red-600 font-medium hover:underline">Xem chi tiết</RouterLink>
+          </div>
+          <div class="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
+            <h3 class="text-lg font-semibold mb-3">Kỹ năng IT hot nhất</h3>
+            <p class="text-gray-600 mb-4">Khám phá những kỹ năng được nhà tuyển dụng săn đón nhiều nhất</p>
+            <RouterLink to="" class="text-red-600 font-medium hover:underline">Xem chi tiết</RouterLink>
+          </div>
+          <div class="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
+            <h3 class="text-lg font-semibold mb-3">Mẹo phỏng vấn IT</h3>
+            <p class="text-gray-600 mb-4">Các bí quyết giúp bạn thành công trong buổi phỏng vấn IT</p>
+            <RouterLink to="" class="text-red-600 font-medium hover:underline">Xem chi tiết</RouterLink>
+          </div>
+        </div>
       </div>
     </div>
   </main>

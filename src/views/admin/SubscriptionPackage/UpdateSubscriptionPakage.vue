@@ -73,7 +73,7 @@
 
 <script lang="ts" setup>
 import type { Rule } from 'ant-design-vue/es/form'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { message } from 'ant-design-vue'
 import useSubscriptionPackageStore from '../../../stores/admin/SubPakageStore'
 
@@ -98,6 +98,16 @@ const handleOk = () => {
       message.error('Vui lòng kiểm tra lại các trường đã nhập!')
     })
 }
+
+// Theo dõi khi modal mở để reset validate
+watch(
+  () => store.openModal,
+  (newVal) => {
+    if (!newVal && formRef.value) {
+        formRef.value.resetFields()
+    }
+  }
+)
 </script>
 
 <style>

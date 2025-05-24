@@ -22,6 +22,16 @@ const handleOk = () => {
       message.error('Vui lòng kiểm tra lại các trường đã nhập!')
     })
 }
+// Theo dõi khi modal mở để reset validate
+watch(
+  () => store.openModal,
+  (newVal) => {
+    if (!newVal && formRef.value) {
+      // Reset các lỗi validation khi modal mở
+        formRef.value.resetFields()
+    }
+  }
+)
 const userList = ref<IUser[]>([])
 const getAllUser = async () => {
   try {

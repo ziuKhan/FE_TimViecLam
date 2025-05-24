@@ -39,11 +39,9 @@ const useResumeStore = defineStore('resume', () => {
       }
     ]
   })
-
+  const refreshForm = JSON.parse(JSON.stringify(form))
   const refreshInput = () => {
-    for (const key in form) {
-      form[key] = ''
-    }
+    Object.assign(form, refreshForm)
   }
 
   const getByID = async (id: string, detail?: boolean) => {
@@ -66,29 +64,19 @@ const useResumeStore = defineStore('resume', () => {
     loading.value = true
     try {
       if (form._id) {
-        const [res, resNotification] = await Promise.all([
-          apiService.update('resumes/' + form._id, {
-            ...form,
-            companyId: form.companyId?._id,
-            jobId: form.jobId?._id
-          }),
-          notificationService.createByUserApi({
-            title: 'Thông báo',
-            message: `Hồ sơ xin việc của bạn đã cập nhật trang thái ${form.status}`,
-            type: 'RESUME',
-            userId: form.userId,
-            isRead: false,
-            url: '/admin/resumes'
-          })
-        ])
-        if (res) message.success('Cập nhật thành công!')
+         await apiService.update('resumes/' + form._id, {
+          ...form,
+          companyId: form.companyId?._id,
+          jobId: form.jobId?._id
+        })
+         message.success('Cập nhật thành công!')
       } else {
-        const res = await apiService.add('resumes', form)
-        if (res) message.success('Thêm thành công!')
+         await apiService.add('resumes', form)
+        message.success('Thêm thành công!')
       }
-      refreshInput()
       openModal.value = false
       openDrawer.value = false
+      refreshInput()
       getData()
     } catch (error: any) {
       message.error(error.response.data.message)

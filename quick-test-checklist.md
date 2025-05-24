@@ -1,24 +1,24 @@
 # Quick Test Checklist - User System
 
 ## 🚀 Setup & Start
-- [ ] `npm install` (nếu chưa install)
-- [ ] `npm run dev` 
-- [ ] Truy cập http://localhost:5173
-- [ ] Trang chủ load thành công
+- [ v] `npm install` (nếu chưa install)
+- [ v] `npm run dev` 
+- [ v] Truy cập http://localhost:5173
+- [v] Trang chủ load thành công
 
 ## 🏠 Trang Chủ (HomeView)
-- [ ] Banner/hero section hiển thị
-- [ ] Job listings hiển thị (nếu có data)
-- [ ] Search box hoạt động
-- [ ] Navigation menu hoạt động
-- [ ] Footer hiển thị đầy đủ
+- [v ] Banner/hero section hiển thị
+- [v ] Job listings hiển thị (nếu có data)
+- [ v] Search box hoạt động
+- [ v] Navigation menu hoạt động
+- [v ] Footer hiển thị đầy đủ
 
 ## 🔍 Tìm Kiếm (SearchView)
-- [ ] Truy cập `/search`
-- [ ] Search form hoạt động
-- [ ] Kết quả hiển thị (hoặc empty state)
-- [ ] Pagination (nếu có)
-- [ ] Filter options (nếu có)
+- [ v] Truy cập `/search`
+- [ v] Search form hoạt động
+- [ v] Kết quả hiển thị (hoặc empty state)
+- [ v] Pagination (nếu có)
+- [ v] Filter options (nếu có)
 
 ## 🔐 Authentication
 ### Đăng Ký

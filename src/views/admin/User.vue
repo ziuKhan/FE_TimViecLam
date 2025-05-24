@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onMounted, reactive, ref, watchEffect } from 'vue'
+import { onMounted, reactive, ref, watch, watchEffect } from 'vue'
 import type { ICompany, IPaginate, IRole, IUser } from '../../types/backend'
 
 import dayjs from 'dayjs'
@@ -112,8 +112,8 @@ const handleRole = () => {
   getData()
 }
 const handleOpenModal = () => {
-  refreshInput()
   openModal.value = true
+  refreshInput()
 }
 
 const getData = async () => {
@@ -171,11 +171,8 @@ const updateAndAdd = async () => {
       const res = await apiService.add(`users`, form)
       if (res) message.success('Thêm thành công!')
     }
-    refreshInput()
-    // openModal.value = false
     loading.value = false
     openModal.value = false
-
     getData()
   } catch (error: any) {
     message.error(error.response.data.message)
@@ -199,8 +196,8 @@ const getByID = async (id: string) => {
       form.company = res.data.company || { _id: '', name: '' }
       form.phoneNumber = res.data.phoneNumber || ''
       form.isActive = res.data.isActive || false
-      openModal.value = true
     }
+      openModal.value = true
   } catch (error: any) {
     message.error(error.response.data.message)
   } finally {
@@ -225,7 +222,13 @@ const rules: Record<string, Rule[]> = {
     }
   ]
 }
-
+// Theo dõi khi modal mở để reset validate
+watch(() => openModal.value, (newVal) => {
+  if (!newVal && formRef.value) {
+    // Chỉ reset form khi thêm mới, không reset khi đang xem/sửa
+      formRef.value.resetFields()
+  }
+})
 const dataCompanies = ref<ICompany[]>([])
 
 const getDataOption = async () => {
@@ -386,6 +389,7 @@ onMounted(() => {
       <a-row :gutter="16">
         <a-col :span="12">
           <a-form-item label="Tên" name="name">
+          {{form.name}}
             <a-input v-model:value="form.name" placeholder="Vui lòng nhập tên" />
           </a-form-item>
         </a-col>

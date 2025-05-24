@@ -35,7 +35,9 @@ defineProps({
 
 <style scoped lang="scss">
 .card__employer {
-  /* height: 436px; */
+  display: flex;
+  flex-direction: column;
+  /* min-height: 436px; */
   background-color: #fdfdfd;
   border-radius: 8px;
   border: 0.8px solid rgb(222, 222, 222);
@@ -51,7 +53,6 @@ defineProps({
   align-items: end;
   background-image: url('../../assets/image/icon/icon_theme_cardEmployer.svg');
   background-repeat: repeat-x;
-
   height: 192px;
 
   .first__logoBrand {
@@ -72,9 +73,8 @@ defineProps({
 
 .card__second {
   margin-top: 24px;
-
   padding: 0 16px;
-  /* min-height: 152px; */
+  flex: 1;
 
   .card__name {
     font-size: 20px;
@@ -108,6 +108,7 @@ defineProps({
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: auto;
 
   .card__address {
     font-size: 14px;

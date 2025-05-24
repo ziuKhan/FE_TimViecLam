@@ -68,7 +68,7 @@
         >
           <a-menu-item :key="menuRoutes.customerApproval.key">
             <span>
-              <GoldOutlined />
+              <ContainerOutlined />
               <span>Yêu cầu đăng ký</span>
             </span>
           </a-menu-item>
@@ -158,7 +158,8 @@ import {
   AuditOutlined,
   LogoutOutlined,
   AimOutlined,
-  MessageOutlined
+  MessageOutlined,
+  ContainerOutlined
 } from '@ant-design/icons-vue'
 import { computed, ref, watch, onMounted } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'

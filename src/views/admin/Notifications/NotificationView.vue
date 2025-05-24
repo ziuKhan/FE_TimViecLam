@@ -6,6 +6,7 @@ import UpdateSubscriber from './UpdateNotification.vue'
 import UpdateNotification from './UpdateNotification.vue'
 import useNotificationStore from '../../../stores/admin/NotificationStore'
 import { TYPES_NOTIFICATION_LIST } from '../../../until/until'
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue'
 
 const store = useNotificationStore()
 
@@ -127,18 +128,14 @@ onMounted(() => {
 
             <template v-else-if="column.dataIndex === '_id'">
               <button
-                type="button"
-                class="mr-2 bg-[#1669dcec] hover:bg-[#498ff1] rounded-[5px] px-[10px] py-1 h-8"
-                @click="store.getByID(text)"
-                v-permission="'PATCH /api/v1/notifications/:id'"
-              >
-                <img
-                  loading="lazy"
-                  class="h-5/6"
-                  src="../../../assets/image/icon/icons8_settings.svg"
-                  alt="#"
-                />
-              </button>
+                  type="button"
+                  class="mr-2 bg-[#1669dcec] hover:bg-[#498ff1] rounded-[5px] px-[10px] py-1 h-8"
+                  @click="store.getByID(text)"
+                  v-permission="'PATCH /api/v1/jobs/:id'"
+                >
+                  <EditOutlined class="text-white" />
+                </button>
+             
               <a-popconfirm
                 title="Bạn có chắc muốn xoá?"
                 ok-text="Có"
@@ -147,17 +144,12 @@ onMounted(() => {
                 @confirm="store.deleteByID(text)"
                 v-permission="'DELETE /api/v1/notifications/:id'"
               >
-                <button
-                  type="button"
-                  class="bg-red-500 hover:bg-red-400 rounded-[5px] px-[10px] ] py-1 h-8"
-                >
-                  <img
-                    loading="lazy"
-                    class="h-5/6"
-                    src="../../../assets/image/icon/icons8_remove.svg"
-                    alt="#"
-                  />
-                </button>
+              <button
+                    type="button"
+                    class="bg-red-500 hover:bg-red-400 rounded-[5px] px-[10px] ] py-1 h-8"
+                  >
+                    <DeleteOutlined class="text-white" />
+                  </button>
               </a-popconfirm>
             </template>
           </template>

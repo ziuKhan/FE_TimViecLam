@@ -108,13 +108,14 @@ const useSubscriberStore = defineStore('subscriber', () => {
 
   return {
     openModal,
-    updateAndAdd,
     form,
     loading,
     data,
     dataMeta,
-    getData,
     valueSearch,
+    updateAndAdd,
+    getData,
+    refreshInput,
     deleteByID,
     getByID,
     handleOpenModal

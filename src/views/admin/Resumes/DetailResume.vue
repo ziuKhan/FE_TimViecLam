@@ -7,6 +7,7 @@
     @close="store.openDrawer = false"
     :maskClosable="false"
   >
+  {{ store.openDrawer }}
     <div class="px-10 py-5">
       <a-row :gutter="16" class="gap-y-2 text-base pb-5">
         <a-col :span="24" class="text-base font-bold"> THÔNG TIN CÁ NHÂN </a-col>
@@ -58,7 +59,7 @@
         <a-col :span="24"> Thư giới thiệu: {{ store.form.description }} </a-col>
         <a-col :span="24" class="text-base font-bold mt-5"> THÔNG TIN CÔNG TY </a-col>
         <a-col :span="24"> Tên công ty: {{ store.form.companyId.name }} </a-col>
-        <a-col :span="24"> Địa chỉ: {{ store.form.companyId.address.join(', ') }} </a-col>
+        <a-col :span="24"> Địa chỉ: {{ store.form.companyId?.address?.join(', ') || '' }} </a-col>
         <a-col :span="24" class="text-base font-bold mt-5"> THÔNG TIN VIỆC LÀM </a-col>
         <a-col :span="24"> Tên việc làm: {{ store.form.jobId.name }} </a-col>
         <a-col :span="12">

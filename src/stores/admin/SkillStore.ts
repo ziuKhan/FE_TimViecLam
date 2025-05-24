@@ -27,11 +27,13 @@ const useSkillStore = defineStore('skill', () => {
     name: '',
     description: ''
   }
-
-  const form = reactive<ISkill>({ ...initialForm })
+  const resetDataForm: ISkill = JSON.parse(JSON.stringify(initialForm))
+  const form = reactive<ISkill>(JSON.parse(JSON.stringify(initialForm)))
 
   // Methods
-  const resetForm = () => Object.assign(form, initialForm)
+  const resetForm = () => {
+    Object.assign(form, resetDataForm)
+  }
 
   const handleOpenModal = () => {
     openModal.value = true
@@ -155,6 +157,7 @@ const useSkillStore = defineStore('skill', () => {
     // Methods
     updateAndAdd,
     getData,
+    resetForm,
     deleteByID,
     getByID,
     handleOpenModal,
