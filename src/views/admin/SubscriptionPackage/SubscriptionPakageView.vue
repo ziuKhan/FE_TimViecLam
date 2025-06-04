@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { onMounted, ref, watch, watchEffect } from 'vue'
-import type { IPaginate } from '../../../types/backend'
+import type { IPaginate, ISubscribers } from '../../../types/backend'
 import dayjs from 'dayjs'
 import UpdatePermison from './UpdateSubscriptionPakage.vue'
 import usePermissionStore from '../../../stores/admin/PermissionStore'
@@ -44,7 +44,31 @@ const columns = [
     dataIndex: '_id'
   }
 ]
-
+const columnsTransaction = [
+  {
+    title: 'STT'
+  },
+  {
+    title: 'Tên khách hàng',
+    dataIndex: 'buyerName'
+  },
+  {
+    title: 'Email',
+    dataIndex: 'buyerEmail'
+  },
+  {
+    title: 'Số tiền',
+    dataIndex: 'amount'
+  },
+  {
+    title: 'Trạng thái',
+    dataIndex: 'status'
+  },
+  {
+    title: 'Ngày tạo',
+    dataIndex: 'createdAt'
+  }
+]
 const handleTableChange = (pagination: IPaginate) => {
   store.dataMeta.current = pagination.current
   store.dataMeta.pageSize = pagination.pageSize
@@ -74,7 +98,7 @@ onMounted(() => {
     <div class="p-6 bg-white min-h-[360px] rounded-[10px]">
       <div class="flex justify-between">
         <a-input-search
-          v-permission="'GET /api/v1/skills'"
+          v-permission="'GET /api/v1/subscription-package'"
           placeholder="Vui lòng nhập thông tin cần tìm kiếm"
           enter-button="Tìm kiếm"
           v-model:value="store.keySearch"
@@ -93,7 +117,9 @@ onMounted(() => {
       <div class="mt-3 border rounded-[10px]">
         <a-table
           :columns="columns"
+          v-permission="'GET /api/v1/subscription-package'"
           :data-source="store.data"
+          :row-key="(record: ISubscribers) => record._id"
           :loading="store.loading"
           :pagination="store.dataMeta"
           @change="handleTableChange"
@@ -117,7 +143,7 @@ onMounted(() => {
                 type="button"
                 class="mr-2 bg-[#1669dcec] hover:bg-[#498ff1] rounded-[5px] px-[10px] py-1 h-8"
                 @click="store.getByID(text)"
-                v-permission="'PATCH /api/v1/skills/:id'"
+                v-permission="'PATCH /api/v1/subscription-package/:id'"
               >
                 <EditOutlined class="text-white" />
               </button>
@@ -127,7 +153,7 @@ onMounted(() => {
                 cancel-text="Không"
                 :loading="store.loading"
                 @confirm="store.deleteByID(text)"
-                v-permission="'DELETE /api/v1/skills/:id'"
+                v-permission="'DELETE /api/v1/subscription-package/:id'"
               >
                 <button
                   type="button"
@@ -137,6 +163,31 @@ onMounted(() => {
                 </button>
               </a-popconfirm>
             </template>
+          </template>
+          <template #expandedRowRender="{ record }">
+            <a-table
+              :columns="columnsTransaction"
+              :data-source="record.transactions"
+              :loading="store.loading"
+              :pagination="{
+                pageSize: 6,
+                total: record.totalTransactions
+              }"
+            >
+              <template #bodyCell="{ column, text, index }">
+                <template v-if="column.title === 'STT'">
+                  {{
+                     index + 1
+                  }}
+                </template>
+                <template v-else-if="column.dataIndex === 'createdAt'">
+                  {{ dayjs(text).format('DD/MM/YYYY [lúc] HH:mm:ss') }}
+                </template>
+                <template v-else-if="column.dataIndex === 'amount'">
+                  {{ text.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) }}
+                </template>
+              </template>
+            </a-table>
           </template>
         </a-table>
       </div>

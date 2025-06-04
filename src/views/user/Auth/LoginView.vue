@@ -147,10 +147,6 @@ onMounted(() => {
           class="mb-3"
           label="Mật khẩu"
           name="password"
-          :rules="[
-            { required: true, message: 'Vui lòng điền mật khẩu!' },
-            { type: 'string', min: 6, message: 'Mật khẩu của bạn phải là 6 kí tự!' }
-          ]"
         >
           <a-input-password
             v-model:value="formState.password"

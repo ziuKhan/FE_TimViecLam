@@ -29,6 +29,7 @@ const useCustomerApprovalStore = defineStore('customer-approval', () => {
     email: '',
     phoneNumber: '',
     logo: '',
+    taxCode: '',
     address: '',
     companyName: '',
     status: '',

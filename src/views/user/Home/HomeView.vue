@@ -15,7 +15,7 @@ const load = ref<boolean>(false)
 const getData = async () => {
   load.value = false
   const [companies, jobs] = await Promise.all([
-    apiService.get('companies/client?page=1&pageSize=9&filter=sort=-createdAt,isActive=true'),
+    apiService.get('companies/client?page=1&pageSize=6&filter=sort=-createdAt,isActive=true'),
     apiService.get(
       'jobs/client?page=1&pageSize=9&filter=sort=-createdAt,isActive=true,populate=companyId'
     )

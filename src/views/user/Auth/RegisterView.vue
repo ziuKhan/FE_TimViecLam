@@ -11,13 +11,15 @@ interface IFormState {
   password: string
   name: string
   clause: boolean
+  confirmPassword: string
 }
 
 const formState = reactive<IFormState>({
   email: '',
   password: '',
   name: '',
-  clause: false
+  clause: false,
+  confirmPassword: ''
 })
 
 const openNotificationWithIcon = () => {
@@ -26,7 +28,13 @@ const openNotificationWithIcon = () => {
     description: 'Đăng ký thành công.'
   })
 }
-
+const validateConfirmPassword = (rule: any, value: any, callback: any) => {
+  if (value !== formState.password) {
+    callback(new Error('Mật khẩu không khớp!'))
+  } else {
+    callback()
+  }
+}
 const onFinish = async (values: IFormState) => {
   try {
     const { email, password, name } = values
@@ -42,7 +50,7 @@ const onFinish = async (values: IFormState) => {
 }
 
 const disabled = computed(() => {
-  return !(formState.email && formState.password && formState.clause && formState.name)
+  return !(formState.email && formState.password && formState.clause && formState.name && formState.confirmPassword)
 })
 const router = useRouter()
 onMounted(() => {
@@ -119,7 +127,21 @@ onMounted(() => {
             </template>
           </a-input-password>
         </a-form-item>
-
+        <a-form-item
+          label="Nhập lại mật khẩu"
+          name="confirmPassword"
+          :rules="[
+            { required: true, message: 'Vui lòng điền lại mật khẩu!' },
+            { type: 'string', min: 6, message: 'Mật khẩu phải có ít nhất 6 ký tự!' },
+            { validator: validateConfirmPassword, trigger: 'blur' }
+          ]"
+        >
+          <a-input-password v-model:value="formState.confirmPassword" size="large" placeholder="Nhập lại mật khẩu">
+            <template #prefix>
+              <LockOutlined class="site-form-item-icon" />
+            </template>
+          </a-input-password>
+        </a-form-item>
         <a-form-item>
           <a-form-item name="clause" no-style>
             <a-checkbox v-model:checked="formState.clause">
@@ -154,7 +176,7 @@ onMounted(() => {
             Đăng ký
           </a-button>
           Bạn đã có tài khoản
-          <RouterLink to="/login" class="font-bold">đăng nhập ngay!</RouterLink>
+          <RouterLink to="/login" class="font-bold hover:text-red-600">đăng nhập ngay!</RouterLink>
         </a-form-item>
       </a-form>
     </div>

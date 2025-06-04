@@ -52,7 +52,8 @@ export const LEVELS_LIST = [
   { label: 'FRESHER', value: 'FRESHER' },
   { label: 'JUNIOR', value: 'JUNIOR' },
   { label: 'MIDDLE', value: 'MIDDLE' },
-  { label: 'SENIOR', value: 'NEST.JS' }
+  { label: 'SENIOR', value: 'SENIOR' },
+  { label: 'MANAGER', value: 'MANAGER' },
 ]
 
 export const TYPES_NOTIFICATION_LIST = [
@@ -67,6 +68,13 @@ export const TYPES_NOTIFICATION_LIST = [
   { label: 'Cập nhật', value: 'UPDATE' }
 ]
 
+export const TIME_UNIT = [
+  { label: 'Bỏ chọn', value: '' },
+  { label: 'Năm', value: 'year' },
+  { label: 'Tháng', value: 'month' },
+  { label: 'Tuần', value: 'week' },
+  { label: 'Ngày', value: 'day' },
+]
 import router from '@/router' // Import router để điều hướng
 
 // Hàm xử lý lỗi chung

@@ -1,6 +1,6 @@
 <template>
   <div class="form_search theme_blackred p-5 lg:py-16">
-    <div class="w-full lg:w-8/12 mx-auto">
+    <div class="w-full lg:w-9/12 mx-auto">
       <div class="form__search_title text-[20px] lg:text-[32px]">
         1,024 Việc làm IT cho Developer "Chất"
       </div>

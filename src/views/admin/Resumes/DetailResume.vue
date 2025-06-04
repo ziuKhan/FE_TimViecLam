@@ -7,7 +7,6 @@
     @close="store.openDrawer = false"
     :maskClosable="false"
   >
-  {{ store.openDrawer }}
     <div class="px-10 py-5">
       <a-row :gutter="16" class="gap-y-2 text-base pb-5">
         <a-col :span="24" class="text-base font-bold"> THÔNG TIN CÁ NHÂN </a-col>
@@ -79,7 +78,7 @@
           Ngày kêt thúc: {{ dayjs(store.form.jobId.endDate).format('DD/MM/YYYY') }}
         </a-col>
         <a-col :span="12" class="text-base font-bold text-red-500">
-          Lương: {{ formatSalary(store.form.jobId.salary) }} đ
+          Lương: {{ formatSalary(store.form.jobId.salary) }}
         </a-col>
         <a-col :span="24" class="text-base font-bold mt-5"> LỊCH SỬ CẬP NHẬT HỒ SƠ </a-col>
         <a-col :span="24">

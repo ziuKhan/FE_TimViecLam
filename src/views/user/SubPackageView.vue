@@ -80,22 +80,22 @@
           class="package-card relative overflow-hidden bg-white rounded-xl border border-gray-200 transition-all duration-300 hover:shadow-xl hover:border-blue-200 transform hover:-translate-y-1"
         >
           <div
-            v-if="pkg.price > pkg.priceDiscount"
+            v-if="pkg.price && pkg.priceDiscount && pkg.price > pkg.priceDiscount"
             class="absolute top-0 right-0 bg-red-500 text-white py-1 px-3 text-sm font-semibold"
           >
-            Giảm {{ Math.round(((pkg.price - pkg.priceDiscount) / pkg.price) * 100) }}%
+            Giảm {{ Math.round((((pkg.price || 0) - (pkg.priceDiscount || 0)) / (pkg.price || 1)) * 100) }}%
           </div>
           <div class="p-6">
             <h3 class="text-xl font-bold text-gray-800 mb-2">{{ pkg.name }}</h3>
             <div class="price-section mb-4">
               <div class="flex items-end gap-2">
                 <span class="text-3xl font-bold text-red-700">{{
-                  formatCurrency(pkg.priceDiscount)
+                  formatCurrency(pkg.priceDiscount || 0)
                 }}</span>
                 <span
-                  v-if="pkg.price > pkg.priceDiscount"
+                  v-if="pkg.price && pkg.priceDiscount && pkg.price > pkg.priceDiscount"
                   class="text-lg text-gray-400 line-through"
-                  >{{ formatCurrency(pkg.price) }}</span
+                  >{{ formatCurrency(pkg.price || 0) }}</span
                 >
               </div>
               <p class="text-gray-600 text-sm mt-1">Gói {{ pkg.duration }} tháng</p>
@@ -257,7 +257,7 @@ const getSubscriptionPackages = async () => {
 
 // Format tiền tệ
 const formatCurrency = (value: number) => {
-  if (!value) return '0 đ'
+  if (value === null || value === undefined) return '0 đ'
   return new Intl.NumberFormat('vi-VN', {
     style: 'currency',
     currency: 'VND'
@@ -276,7 +276,7 @@ const confirmUpgrade = async () => {
 
   confirmModal.value.loading = true
   try {
-    store.dataTransaction.amount = selectedPackage.value.priceDiscount
+    store.dataTransaction.amount = selectedPackage.value.priceDiscount || 0
     store.dataTransaction.packageId = selectedPackage.value._id || ''
     store.dataTransaction.description = selectedPackage.value.code
     await store.handleDonate()

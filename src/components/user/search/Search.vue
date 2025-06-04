@@ -67,6 +67,7 @@ const dataSource = ref<any[]>([])
       v-model:value="store.keyword"
       class="certain-category-search custom-select !w-full"
       popup-class-name="certain-category-search-dropdown"
+      placeholder="Nhập từ khoá theo kỹ năng, công việc, công ty..."
       :dropdown-match-select-width="500"
       :default-active-first-option="false"
       @search="handleSearch"

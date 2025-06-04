@@ -23,6 +23,7 @@ const formState = reactive<ICustomerApproval>({
   address: '',
   companyName: '',
   status: 'CD',
+  taxCode: '',
   description: '',
   clause: false
 })
@@ -37,6 +38,7 @@ const resetForm = () =>
     address: '',
     companyName: '',
     status: 'CD',
+    taxCode: '',
     description: '',
     clause: false
   })
@@ -45,12 +47,18 @@ const onFinish = async () => {
     loading.value = true
     const res = await apiService.add('customer-approval', formState)
     if (res) {
-      message.success('Gửi thông tin thành công!')
       resetForm()
       window.location.reload()
+      message.success('Gửi thông tin thành công!')
     }
-  } catch (err) {
+  } catch (err: any) {
     console.log(err)
+    if(err.response.data.message){
+      message.error(err.response.data.message)
+    }else{
+      message.error('Gửi thông tin thất bại!')
+    }
+    
   } finally {
     loading.value = false
   }
@@ -197,8 +205,9 @@ const handleUpload = async (options: UploadRequestOption) => {
                 </div>
               </div>
             </div>
-            <div class="col-span-2 row-span-2 row-start-9">
-              <a-form-item
+            <div class="col-span-2 row-span-2 row-start-9 flex gap-x-5">
+              <div class="w-1/2">
+                <a-form-item
                 name="address"
                 :rules="[{ required: true, message: 'Vui lòng nhập địa chỉ công ty!' }]"
                 class="m-0"
@@ -209,6 +218,25 @@ const handleUpload = async (options: UploadRequestOption) => {
                   placeholder="Nhập địa chỉ công ty"
                 />
               </a-form-item>
+              </div>
+              <div class="w-1/2">
+                <a-form-item
+                name="taxCode"
+                :rules="[
+                  { required: true, message: 'Vui lòng nhập mã số thuế!' },
+                  { min: 10, max: 13, message: 'Mã số thuế phải có 10 hoặc 13 số!' }
+                ]"
+                class="m-0"
+              >
+                <a-input
+                  :maxLength="13"
+                  v-model:value="formState.taxCode"
+                  class="h-[55px]"
+                  placeholder="Nhập mã số thuế"
+                />
+              </a-form-item>
+              </div>
+              
             </div>
 
             <div class="col-span-2 row-span-2 row-start-11">

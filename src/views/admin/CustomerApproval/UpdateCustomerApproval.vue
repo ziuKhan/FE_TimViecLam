@@ -82,13 +82,29 @@
             </a-upload>
           </a-form-item>
         </a-col>
-        <a-col :span="24">
+        <a-col :span="14">
           <a-form-item
             label="Địa chỉ"
             name="address"
             :rules="[{ required: true, message: 'Vui lòng nhập địa chỉ' }]"
           >
             <a-input v-model:value="store.form.address" placeholder="Vui lòng nhập địa chỉ" />
+          </a-form-item>
+        </a-col>
+        <a-col :span="10">
+          <a-form-item
+            label="Mã số thuế"
+            name="taxCode"
+            :rules="[{ required: true, message: 'Vui lòng nhập mã số thuế' },
+                  { min: 10, max: 13, message: 'Mã số thuế phải có 10 hoặc 13 số!' }
+
+            ]"
+          >
+            <a-input
+              v-model:value="store.form.taxCode"
+              placeholder="Vui lòng nhập mã số thuế"
+              :maxLength="13"
+            />
           </a-form-item>
         </a-col>
         <a-col :span="24">
@@ -168,11 +184,8 @@ watch(fileList, () => {
 watch(
   () => store.openModal,
   (newVal) => {
-    if (!newVal && formRef.value) {
-      // Reset các lỗi validation khi modal mở
-      if (!store.form._id) {
+    if (!newVal) {
         formRef.value.resetFields()
-      }
     }
   }
 )

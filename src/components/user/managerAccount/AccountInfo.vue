@@ -141,6 +141,7 @@ onMounted(async () => {
             <div>
               <label class="block text-sm font-medium text-gray-700">Địa chỉ email</label>
               <a-input
+                disabled
                 class="mt-1 text-base text-gray-900"
                 v-model:value="userInfo.email"
                 placeholder="Vui lòng nhập địa chỉ email"
@@ -149,11 +150,15 @@ onMounted(async () => {
 
             <div>
               <label class="block text-sm font-medium text-gray-700">Giới tính</label>
-              <a-input
-                class="mt-1 text-base text-gray-900"
+              <a-select
+                class="mt-1 text-base text-gray-900 w-full"
                 v-model:value="userInfo.gender"
-                placeholder="Vui lòng nhập giới tính"
-              />
+                placeholder="Vui lòng chọn giới tính"
+              >
+                <a-select-option value="Nam">Nam</a-select-option>
+                <a-select-option value="Nữ">Nữ</a-select-option>
+                <a-select-option value="Khác">Khác</a-select-option>
+              </a-select>
             </div>
             <div>
               <label class="block text-sm font-medium text-gray-700">Số điện thoại</label>

@@ -162,13 +162,13 @@ onMounted(async () => {
           <div class="flex flex-wrap px-8 py-6">
             <div class="w-2/3 pr-8">
               <div v-if="!isEditCompany">
-                <div class="mb-8">
+                <div class="mb-6">
                   <h3
                     class="text-lg font-semibold text-gray-800 mb-6 pb-2 border-b border-gray-100"
                   >
                     Thông tin cơ bản
                   </h3>
-                  <div class="grid grid-cols-2 gap-6">
+                  <div class="grid grid-cols-2 gap-4">
                     <div>
                       <label class="block text-sm font-medium text-gray-500">Tên công ty</label>
                       <p class="mt-1 text-base text-gray-900 font-medium">
@@ -206,13 +206,13 @@ onMounted(async () => {
                   </div>
                 </div>
 
-                <div class="mb-8">
+                <div class="mb-6">
                   <h3
                     class="text-lg font-semibold text-gray-800 mb-6 pb-2 border-b border-gray-100"
                   >
                     Thông tin địa chỉ
                   </h3>
-                  <div class="grid grid-cols-2 gap-6">
+                  <div class="grid grid-cols-2 gap-4">
                     <div>
                       <label class="block text-sm font-medium text-gray-500">Quốc gia</label>
                       <p class="mt-1 text-base text-gray-900">
@@ -260,13 +260,13 @@ onMounted(async () => {
                   </div>
                 </div>
 
-                <div class="mb-8">
+                <div class="mb-6">
                   <h3
                     class="text-lg font-semibold text-gray-800 mb-6 pb-2 border-b border-gray-100"
                   >
                     Chính sách làm việc
                   </h3>
-                  <div class="grid grid-cols-2 gap-6">
+                  <div class="grid grid-cols-2 gap-4">
                     <div>
                       <label class="block text-sm font-medium text-gray-500">Ngày làm việc</label>
                       <p class="mt-1 text-base text-gray-900">
@@ -515,7 +515,7 @@ onMounted(async () => {
                       class="object-cover w-full h-full"
                     />
                   </div>
-                  <a-button @click="openModalCompany = true" class="mt-3">
+                  <a-button @click="openModalCompany = true" class="mt-1">
                     <template #icon><UploadOutlined /></template>
                     Thay đổi logo
                   </a-button>

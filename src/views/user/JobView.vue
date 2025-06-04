@@ -117,7 +117,7 @@ onMounted(async () => {
     <div class="w-11/12 mx-auto flex gap-y-4 lg:gap-0 flex-wrap lg:flex-nowrap">
       <div class="w-full lg:w-8/12 lg:mr-5">
         <div
-          class="bg-white px-5 py-3 rounded-xl rounded-b-none sticky top-[65px] z-10 shadow-custom"
+          class="bg-white px-5 py-3 rounded-xl rounded-b-none  top-[65px] z-10 shadow-custom"
         >
           <h1 class="font-bold text-[20px] lg:text-[25px] mt-4">
             {{ data?.name }} - <span class="text-red-600">{{ data?.level }}</span>
@@ -144,7 +144,7 @@ onMounted(async () => {
               <RouterLink v-else to="/login"> Đăng nhập để xem </RouterLink>
             </div>
             <div class="w-1/2 flex items-center gap-x-2">
-              <div v-if="account?.role?.name != 'NORMAL_USER'">
+              <div v-if="account?.role?.name && account?.role?.name != 'NORMAL_USER'">
                 <FileDoneOutlined class="text-[#0AB305] font-bold text-2xl mr-1" />
                 <span class="text-[#0AB305] font-bold text-base"
                   ><span class="text-xl text-green-600">{{ data?.countResume || 0 }} </span> hồ sơ

@@ -164,6 +164,7 @@ const deleteByID = async (id: string) => {
 const updateAndAdd = async () => {
   loading.value = true
   try {
+    if(!form.password) delete form.password
     if (form._id) {
       const res = await apiService.update(`users/${form._id}`, form)
       if (res) message.success('Cập nhật thành công!')
@@ -389,7 +390,6 @@ onMounted(() => {
       <a-row :gutter="16">
         <a-col :span="12">
           <a-form-item label="Tên" name="name">
-          {{form.name}}
             <a-input v-model:value="form.name" placeholder="Vui lòng nhập tên" />
           </a-form-item>
         </a-col>

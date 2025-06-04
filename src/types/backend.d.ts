@@ -2,7 +2,7 @@ export interface IUser {
   _id?: string
   name?: string
   email?: string
-  password?: string
+  password?: string | null
   confirmPassword?: string
   gender?: string
   address?: string
@@ -264,6 +264,8 @@ export interface ICustomerApproval {
   email: string
 
   phoneNumber: string
+
+  taxCode: string
 
   logo: string
 

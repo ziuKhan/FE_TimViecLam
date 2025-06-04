@@ -144,7 +144,7 @@ onMounted(() => {
                 type="button"
                 class="mr-2 bg-[#17b63aec] hover:bg-[#66df80ec] rounded-[5px] px-[10px] py-1 h-8"
                 @click="store.getByID(text, true)"
-                v-permission="'PATCH /api/v1/skills/:id'"
+                v-permission="'PATCH /api/v1/customer-approval/:id'"
               >
                 <CheckCircleOutlined class="text-white" />
               </button>
@@ -152,7 +152,7 @@ onMounted(() => {
                 type="button"
                 class="mr-2 bg-[#1669dcec] hover:bg-[#498ff1] rounded-[5px] px-[10px] py-1 h-8"
                 @click="store.getByID(text)"
-                v-permission="'PATCH /api/v1/skills/:id'"
+                v-permission="'PATCH /api/v1/customer-approval/:id'"
               >
                 <EditOutlined class="text-white" />
               </button>
@@ -162,7 +162,7 @@ onMounted(() => {
                 cancel-text="Không"
                 :loading="store.loading"
                 @confirm="store.deleteByID(text)"
-                v-permission="'DELETE /api/v1/skills/:id'"
+                v-permission="'DELETE /api/v1/customer-approval/:id'"
               >
                 <button
                   type="button"

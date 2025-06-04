@@ -40,5 +40,5 @@ const store = useSearchStore()
 const formatNumber = (value: number) => {
   return value.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })
 }
-const plainOptions = ['FRESHER', 'JUNIOR', 'MIDDLE', 'SENIOR', 'MANAGER']
+const plainOptions = ['INTERN','FRESHER', 'JUNIOR', 'MIDDLE', 'SENIOR', 'MANAGER']
 </script>

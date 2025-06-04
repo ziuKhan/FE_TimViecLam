@@ -12,7 +12,7 @@ const dataResume = ref<IResume[]>([])
 
 const dataMeta = ref<IPaginate>({
   current: 1,
-  pageSize: 5,
+  pageSize: 4,
   pages: 0,
   total: 0
 })
@@ -59,6 +59,7 @@ const columns = [
     dataIndex: 'createdAt'
   },
   {
+    width: 100,
     title: 'CV',
     dataIndex: 'url'
   }
@@ -75,6 +76,18 @@ const renderColorMethod = (method: string) => {
       return 'red' // Màu đỏ thường biểu thị sự từ chối hoặc thất bại
     default:
       return 'gray' // Màu xám cho các trạng thái không xác định
+  }
+}
+const renderStatus = (status: string) => {
+  switch (status) {
+    case 'PENDING':
+      return 'ĐANG CHỜ'
+    case 'REVIEWING':
+      return 'ĐANG XEM XÉT'
+    case 'APPROVED':
+      return 'ĐÃ DUYỆT'
+    case 'REJECTED':
+      return 'ĐÃ TỪ CHỐI'
   }
 }
 </script>
@@ -100,11 +113,10 @@ const renderColorMethod = (method: string) => {
       <template v-else-if="column.dataIndex === 'status'">
         <span>
           <a-tag :color="renderColorMethod(text)" class="font-medium">
-            {{ text.toUpperCase() }}
+            {{ renderStatus(text) }}
           </a-tag>
         </span>
       </template>
     </template>
   </a-table>
 </template>
-../../../services/account.service

@@ -84,7 +84,6 @@
                   <a-input v-model:value="userInfo.address" placeholder="Vui lòng nhập địa chỉ" />
                 </a-form-item>
               </div>
-
               <div class="flex flex-col items-center gap-3">
                 <div class="border border-gray-200 rounded-lg p-1">
                   <img
@@ -417,7 +416,9 @@ import { getConscious, getCountry, getDistrict, getWard } from '../../../service
 
 const router = useRouter()
 const account: IUserbyAccount | null = accountService.getAccount().account
-const userInfo = ref<IUser>({})
+const userInfo = ref<IUser>({
+  avatar: account?.avatar
+})
 const companyInfo = ref<ICompany>({})
 
 // Biến cho phần địa chỉ
@@ -502,7 +503,7 @@ const isCompanyCreated = ref<boolean>(false)
 const loadUserData = async () => {
   try {
     const userRes = await apiService.get('users/client/' + account?._id)
-    userInfo.value = userRes
+    userInfo.value = userRes.data
   } catch (error: any) {
     message.error(error.response?.data?.message || 'Lỗi khi tải thông tin người dùng')
   }
@@ -639,7 +640,7 @@ const handleUploadLogo = async (options: UploadRequestOption) => {
 
 watch(fileList, () => {
   if (fileList.value.length === 0) {
-    userInfo.value.avatar = ''
+    userInfo.value.avatar = account?.avatar || ''
   }
 })
 

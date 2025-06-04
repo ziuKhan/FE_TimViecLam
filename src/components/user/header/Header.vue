@@ -41,13 +41,18 @@ const storeHeader = useWebSocketStore()
 const handleLogout = () => {
   storeAuth.logout()
 }
+const checkOutNotification = (item: INotification) => {
+  if (item.url) {
+    window.open(item.url, '_blank')
+  } 
+}
 
 const handleNotification = async (item: INotification) => {
   try {
     const res = await apiService.get(`notifications/markAsRead/${item._id}`)
     if (res) {
-      window.open(item.url, '_blank')
       storeHeader.getNotification()
+      checkOutNotification(item)
     }
   } catch (error) {
     console.log(error)
@@ -119,14 +124,13 @@ onUnmounted(() => {
             <RouterLink class="header__sub_list" to="ada">Việc làm IT theo thành phố</RouterLink>
           </div>
         </RouterLink>
-        <RouterLink to="" class="header__nav_link"> Nhà tuyển dụng </RouterLink>
         <RouterLink to="" class="header__nav_link"> Blog </RouterLink>
       </nav>
       <div class="header__user">
         <RouterLink
           to="/customer"
           class="header__user_link link_distance"
-          v-if="account?.role?.name === 'NORMAL_USER'"
+          v-if="!account || account?.role?.name === 'NORMAL_USER'"
           >Nhà Tuyển Dụng</RouterLink
         >
         <a-popover v-model:open="openNotification" trigger="click" placement="bottomRight">
@@ -300,7 +304,7 @@ onUnmounted(() => {
             </a-modal>
 
             <RouterLink
-              v-if="account?.role?.name !== 'NORMAL_USER'"
+              v-if="account?.role?.name !== 'NORMAL_USER' && account?.role?.name != 'VIP_USER'"
               class="header__sub_list"
               to="/admin"
               >Quản trị
