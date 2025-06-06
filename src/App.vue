@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import locale from 'ant-design-vue/es/locale/vi_VN' // Ngôn ngữ Ant Design
 import { theme } from 'ant-design-vue'
+import ChatBot from './components/ChatBot.vue'
 
 const localeRef = ref(locale)
 
@@ -21,6 +22,7 @@ const themeConfig = {
   <ConfigProvider :theme="themeConfig" :locale="locale">
     <div class="container_app">
       <RouterView />
+      <ChatBot />
     </div>
   </ConfigProvider>
 </template>

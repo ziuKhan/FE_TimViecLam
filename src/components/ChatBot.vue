@@ -1,0 +1,607 @@
+<template>
+    <div class="chatbot-container" :class="{ 'fullscreen': isFullscreen }">
+        <div v-if="!isChatOpen" class="chatbot-button" @click="toggleChat">
+            <a-button type="primary" shape="circle" size="large" class="!w-[50px] !h-[50px] !text-2xl">
+                <template #icon><message-outlined /></template>
+            </a-button>
+        </div>
+        <div v-else class="chatbot-panel">
+            <div class="chatbot-header">
+                <div class="chatbot-title">ITVee - Trợ lý thông minh</div>
+                <div class="chatbot-actions">
+                    <a-button type="text" @click="toggleFullscreen" class="fullscreen-button" :title="isFullscreen ? 'Thu nhỏ' : 'Phóng to'">
+                        <template #icon><fullscreen-outlined v-if="!isFullscreen" /><fullscreen-exit-outlined v-else /></template>
+                    </a-button>
+                    <a-button type="text" @click="resetChat" class="reset-button" title="Bắt đầu cuộc trò chuyện mới">
+                        <template #icon><reload-outlined /></template>
+                    </a-button>
+                    <a-button type="text" @click="toggleChat" class="close-button">
+                        <template #icon><close-outlined /></template>
+                    </a-button>
+                </div>
+            </div>
+            <div class="chatbot-messages" ref="messagesContainer">
+                <template v-for="(message, index) in messages" :key="index">
+                    <div v-if="message.role !== 'system'" 
+                        :class="['message', message.role === 'user' ? 'user-message' : 'bot-message']">
+                        <a-avatar v-if="message.role !== 'user'" :size="40" class="mr-2" src="/avt-chatbot.png"></a-avatar>
+                        <div class="message-content">
+                            <VueMarkdown :source="message.content" />
+                        </div>
+                        <a-avatar v-if="message.role === 'user'" :size="40" class="ml-2">
+                            <template #icon><user-outlined /></template>
+                        </a-avatar>
+                    </div>
+                </template>
+                <div class="bot-message loading-message" v-if="isLoading && !streamingText">
+                    <a-avatar :size="40" class="mr-2" src="/avt-chatbot.png"></a-avatar>
+                    <a-spin />
+                </div>
+                <div class="bot-message loading-message" v-if="streamingText">
+                    <a-avatar :size="40" class="mr-2" src="/avt-chatbot.png"></a-avatar>
+                    <div class="message-content streaming-content">
+                        <VueMarkdown :source="streamingText" />
+                    </div>
+                </div>
+            </div>
+            <div class="chatbot-input">
+                <a-input 
+                    v-model:value="userInput" 
+                    placeholder="Nhập tin nhắn..." 
+                    @pressEnter="sendMessage"
+                    :disabled="isLoading"
+                />
+                <a-button 
+                    type="primary" 
+                    @click="sendMessage" 
+                    :disabled="!userInput.trim() || isLoading"
+                >
+                    <template #icon><send-outlined /></template>
+                </a-button>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script setup lang="ts">
+import { ref, onMounted, nextTick, watch } from 'vue';
+import OpenAI from 'openai';
+import VueMarkdown from 'vue-markdown-render';
+
+import { 
+    MessageOutlined, 
+    CloseOutlined, 
+    UserOutlined, 
+    SendOutlined,
+    ReloadOutlined,
+    FullscreenOutlined,
+    FullscreenExitOutlined
+} from '@ant-design/icons-vue';
+
+// Tin nhắn hệ thống mặc định - Định nghĩa vai trò và phong cách của chatbot
+const systemMessage = { 
+    role: 'system' as const, 
+    content: 'Bạn là ITVee, trợ lý AI đồng hành cùng các chuyên gia IT trên ITViec.com – nền tảng tuyển dụng IT hàng đầu Việt Nam. Sứ mệnh của bạn là cung cấp thông tin chính xác, tư vấn hữu ích và hỗ trợ người dùng một cách thân thiện, chuyên nghiệp và tận tâm. Hãy tập trung vào việc: ' +
+    '1.  Giúp ứng viên tìm kiếm việc làm IT phù hợp, hiểu rõ về các công ty và xu hướng ngành. ' + 
+    '2.  Chia sẻ kiến thức về thị trường lao động IT Việt Nam, các kỹ năng cần thiết và lộ trình phát triển sự nghiệp. ' +
+    '3.  Hướng dẫn người dùng sử dụng các tính năng của ITViec một cách hiệu quả. ' +
+    '4.  Giải đáp thắc mắc của cả ứng viên và nhà tuyển dụng liên quan đến ITViec. ' +
+    'Khi giao tiếp, hãy luôn giữ giọng điệu tích cực, am hiểu và đáng tin cậy. Nếu không có thông tin chính xác cho một câu hỏi cụ thể, hãy hướng dẫn người dùng đến các nguồn lực phù hợp trên website ITViec.com hoặc các kênh hỗ trợ khác của ITViec. Tên của bạn là ITVee.'
+};
+
+// Tin nhắn chào mừng và gợi ý ban đầu
+const welcomeMessage = { 
+    role: 'assistant' as const, 
+    content: 'Xin chào! Tôi là ITVee, trợ lý AI của ITViec. Tôi có thể giúp gì cho bạn? Ví dụ, bạn muốn tìm hiểu về: \n\n' +
+             '- ITViec là gì? \n' +
+             '- Các tính năng chính của website? \n' +
+             '- Công nghệ sử dụng trong dự án? \n' +
+             '- Hoặc các thông tin khác về thị trường IT Việt Nam?'
+};
+
+// **Thêm các thông tin cốt lõi từ báo cáo vào đây để làm "kiến thức" cho chatbot**
+// Mỗi đối tượng trong mảng này sẽ là một tin nhắn 'system' hoặc 'assistant' cung cấp ngữ cảnh
+// Mô hình AI sẽ đọc các tin nhắn này và sử dụng chúng để trả lời các câu hỏi liên quan.
+// Đảm bảo thông tin ngắn gọn, súc tích và dễ hiểu cho AI.
+const knowledgeBaseMessages = [
+    // Thông tin về tác giả
+    {
+        role: 'system' as const,
+        content: 'Dự án ITViec được phát triển bởi Nguyễn Duy Khang, email: dkhang.dev@gmail.com, số điện thoại: 0969588280. Khi có người hỏi về tác giả, người phát triển hoặc thông tin liên hệ, hãy cung cấp thông tin này.'
+    },
+    // Thông tin chung về dự án
+    {
+        role: 'system' as const,
+        content: 'Dự án "Xây dựng website tìm việc làm ITViec" nhằm tạo một nền tảng tuyển dụng chuyên biệt cho ngành Công nghệ thông tin tại Việt Nam. Mục tiêu là giải quyết vấn đề phân tán thông tin và tăng hiệu quả kết nối giữa ứng viên và nhà tuyển dụng IT.'
+    },
+    // Công nghệ sử dụng
+    {
+        role: 'system' as const,
+        content: 'Frontend của ITViec.com dùng HTML5, CSS3, Tailwind CSS, Ant Design Vue, TypeScript, Vue.js (SPA), Pinia để quản lý trạng thái, và Axios để gọi API. Backend sử dụng Node.js với framework NestJS, hoạt động như một RESTful API Server. Cơ sở dữ liệu là MongoDB.'
+    },
+    {
+        role: 'system' as const,
+        content: 'MongoDB là cơ sở dữ liệu NoSQL, ưu điểm: linh hoạt, dễ mở rộng, tốc độ cao, tích hợp tốt với ứng dụng web, hỗ trợ replica set. Nhược điểm: thiếu chuẩn hóa dữ liệu, không mạnh về giao dịch phức tạp, quản lý tài nguyên phức tạp, tiêu tốn bộ nhớ.'
+    },
+    // Chức năng chính
+    {
+        role: 'system' as const,
+        content: 'Các chức năng chính cho Ứng viên (Người dùng): Đăng nhập/Đăng ký, quản lý hồ sơ đã ứng tuyển, tìm kiếm việc làm, cập nhật thông tin tài khoản, tìm kiếm công ty, nâng cấp tài khoản, đăng ký nhận mail công việc, xem thông báo.'
+    },
+    {
+        role: 'system' as const,
+        content: 'Các chức năng chính cho Nhà tuyển dụng (Quản trị khách hàng): Đăng nhập, quản lý thông tin công ty, quản lý công việc (đăng, sửa, xóa), quản lý đơn xin việc (xem, cập nhật trạng thái, gửi mail phỏng vấn), quản lý kỹ năng, cập nhật thông tin tài khoản, xem thông báo.'
+    },
+    {
+        role: 'system' as const,
+        content: 'Các chức năng chính cho Quản trị viên (Admin): Đăng nhập, quản lý người dùng, quản lý quyền, quản lý vai trò, quản lý gói dịch vụ, quản lý công ty, quản lý công việc, quản lý người đăng ký nhận mail, quản lý hồ sơ ứng tuyển, quản lý kỹ năng, quản lý hồ sơ đăng ký công ty, quản lý thông báo, quản lý thanh toán, thống kê.'
+    },
+    // Bảo mật và hiệu năng
+    {
+        role: 'system' as const,
+        content: 'ITViec.com đảm bảo bảo mật dữ liệu người dùng bằng cách mã hóa thông tin, sử dụng HTTPS, quản lý phiên đăng nhập an toàn với JWT, và áp dụng Cors, Helmet. Website có tốc độ tải trang nhanh, tương thích đa trình duyệt và thân thiện với thiết bị di động.'
+    },
+    // Các lớp đối tượng cơ bản (ví dụ cho một lớp)
+    {
+        role: 'system' as const,
+        content: 'Lớp Tài khoản có các thuộc tính: _id, name, email, password, googleId, phoneNumber, gender, address, isActive, google, avatar, company, role, refreshToken, isSetup, vipInfo.'
+    },
+    {
+        role: 'system' as const,
+        content: 'Lớp Việc làm có các thuộc tính: _id, name, skills, companyId, location, salaryFrom, salaryTo, isSalary, quantity, level, description, startDate, endDate, isActive, countResume, workingModel.'
+    },
+    // Thông tin bổ sung về kiến trúc và cấu trúc dự án
+    {
+        role: 'system' as const,
+        content: 'ITViec sử dụng kiến trúc SPA (Single Page Application) với Vue.js ở frontend và RESTful API với NestJS ở backend. Ứng dụng được chia thành nhiều module riêng biệt như: User (người dùng), Admin (quản trị viên), Auth (xác thực), Jobs (việc làm), Companies (công ty), và nhiều module khác.'
+    },
+    // Thông tin về hệ thống xác thực và phân quyền
+    {
+        role: 'system' as const,
+        content: 'ITViec sử dụng JWT (JSON Web Token) để xác thực người dùng. Hệ thống phân quyền chi tiết dựa trên vai trò (Role-based Access Control) và quyền cụ thể (Permission-based Access Control). Mỗi API endpoint được bảo vệ bởi middleware kiểm tra quyền truy cập.'
+    },
+    // Thông tin về quy trình ứng tuyển việc làm
+    {
+        role: 'system' as const,
+        content: 'Quy trình ứng tuyển việc làm trên ITViec: (1) Ứng viên tìm kiếm việc làm phù hợp, (2) Gửi hồ sơ ứng tuyển, (3) Nhà tuyển dụng nhận và đánh giá hồ sơ, (4) Nhà tuyển dụng cập nhật trạng thái hồ sơ (từ chối/mời phỏng vấn), (5) Hệ thống gửi thông báo và email cho ứng viên về trạng thái hồ sơ.'
+    },
+    // Thông tin về hệ thống thông báo
+    {
+        role: 'system' as const,
+        content: 'ITViec có hệ thống thông báo thời gian thực sử dụng WebSocket để cập nhật ngay lập tức các thông tin quan trọng cho người dùng như: trạng thái hồ sơ ứng tuyển, tin nhắn mới, cập nhật từ công ty, v.v. Ngoài ra, hệ thống còn gửi email thông báo cho các sự kiện quan trọng.'
+    },
+    // Thông tin về hệ thống thanh toán
+    {
+        role: 'system' as const,
+        content: 'ITViec có hệ thống thanh toán trực tuyến cho phép nhà tuyển dụng nâng cấp tài khoản lên gói VIP với nhiều quyền lợi như: đăng nhiều việc làm hơn, tiếp cận nhiều ứng viên hơn, hiển thị ưu tiên trong kết quả tìm kiếm, v.v. Hệ thống hỗ trợ nhiều phương thức thanh toán khác nhau.'
+    },
+    // Thông tin về tính năng tìm kiếm và lọc
+    {
+        role: 'system' as const,
+        content: 'ITViec cung cấp tính năng tìm kiếm và lọc việc làm mạnh mẽ với nhiều tiêu chí như: kỹ năng, vị trí, mức lương, loại công việc (full-time, part-time, remote), cấp bậc, v.v. Người dùng có thể lưu các bộ lọc tìm kiếm và đăng ký nhận thông báo khi có việc làm mới phù hợp.'
+    },
+    // Thông tin về trang quản trị
+    {
+        role: 'system' as const,
+        content: 'Trang quản trị của ITViec cung cấp giao diện quản lý toàn diện cho admin với các tính năng như: quản lý người dùng, quản lý công ty, quản lý việc làm, quản lý hồ sơ ứng tuyển, quản lý thanh toán, thống kê và báo cáo, v.v. Giao diện được thiết kế trực quan và dễ sử dụng.'
+    },
+    // Thông tin về quy trình phát triển
+    {
+        role: 'system' as const,
+        content: 'ITViec được phát triển theo quy trình Agile Scrum với các sprint 2 tuần. Dự án sử dụng Git cho quản lý mã nguồn, CI/CD pipeline để tự động hóa quy trình kiểm thử và triển khai. Mã nguồn được kiểm tra chất lượng bằng ESLint, Prettier và các unit test.'
+    },
+    // Thông tin về tương lai của dự án
+    {
+        role: 'system' as const,
+        content: 'Trong tương lai, ITViec dự định phát triển thêm các tính năng mới như: hệ thống đánh giá công ty, hệ thống gợi ý việc làm dựa trên AI, ứng dụng di động native, tích hợp với các nền tảng mạng xã hội chuyên nghiệp, và mở rộng sang các thị trường nước ngoài.'
+    },
+    // Thông tin về lợi ích của ITViec
+    {
+        role: 'system' as const,
+        content: 'Lợi ích của ITViec đối với ứng viên: tiếp cận nhiều cơ hội việc làm IT chất lượng, dễ dàng ứng tuyển, theo dõi trạng thái hồ sơ, nhận thông báo về việc làm phù hợp. Đối với nhà tuyển dụng: tiếp cận nguồn ứng viên IT chất lượng, quản lý quy trình tuyển dụng hiệu quả, xây dựng thương hiệu nhà tuyển dụng.'
+    }
+];
+
+
+// Trạng thái của chatbot
+const isChatOpen = ref(false);
+const isFullscreen = ref(false);
+const userInput = ref('');
+const messages = ref<{role: 'user' | 'assistant' | 'system', content: string}[]>([]); // Sẽ được khởi tạo sau
+
+const isLoading = ref(false);
+const streamingText = ref('');
+const messagesContainer = ref<HTMLElement | null>(null);
+
+// Khôi phục lịch sử chat từ localStorage khi component được tạo
+onMounted(() => {
+    loadChatHistory();
+    // Đảm bảo tin nhắn chào mừng và các tin nhắn kiến thức xuất hiện sau lịch sử được tải
+    if (messages.value.length <= 1) { // Nếu chỉ có systemMessage hoặc rỗng
+        messages.value = [systemMessage, ...knowledgeBaseMessages, welcomeMessage];
+    } else {
+        // Nếu có lịch sử, đảm bảo systemMessage và knowledgeBaseMessages vẫn ở đầu
+        const currentChatHistory = messages.value.filter(msg => msg.role !== 'system');
+        messages.value = [systemMessage, ...knowledgeBaseMessages, ...currentChatHistory];
+        // Đảm bảo welcome message chỉ xuất hiện một lần nếu không có lịch sử
+        if (!messages.value.some(msg => msg.content === welcomeMessage.content)) {
+             messages.value.push(welcomeMessage);
+        }
+    }
+    nextTick(() => scrollToBottom());
+});
+
+// Lưu lịch sử chat vào localStorage
+const saveChatHistory = () => {
+    // Chỉ lưu tin nhắn của người dùng và trợ lý, không lưu tin nhắn hệ thống hay kiến thức nền
+    const chatHistory = messages.value.filter(msg => msg.role === 'user' || msg.role === 'assistant');
+    localStorage.setItem('itviec_chat_history', JSON.stringify(chatHistory));
+};
+
+// Tải lịch sử chat từ localStorage
+const loadChatHistory = () => {
+    try {
+        const savedChat = localStorage.getItem('itviec_chat_history');
+        if (savedChat) {
+            const chatHistory = JSON.parse(savedChat);
+            // Khôi phục lịch sử chat với tin nhắn hệ thống và kiến thức nền ở đầu
+            messages.value = [systemMessage, ...knowledgeBaseMessages, ...chatHistory];
+        } else {
+            messages.value = [systemMessage, ...knowledgeBaseMessages, welcomeMessage];
+        }
+    } catch (error) {
+        console.error('Lỗi khi tải lịch sử chat:', error);
+        messages.value = [systemMessage, ...knowledgeBaseMessages, welcomeMessage]; // Khôi phục mặc định nếu lỗi
+    }
+};
+
+// Reset lại cuộc trò chuyện
+const resetChat = () => {
+    if (confirm('Bạn có chắc chắn muốn bắt đầu cuộc trò chuyện mới không?')) {
+        messages.value = [systemMessage, ...knowledgeBaseMessages, welcomeMessage]; // Reset về các tin nhắn ban đầu đã định nghĩa
+        saveChatHistory();
+        nextTick(() => scrollToBottom());
+    }
+};
+
+// OpenAI client
+const openai = new OpenAI({
+    baseURL: "https://openrouter.ai/api/v1",
+    apiKey: "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", // <-- Đảm bảo API Key của bạn là chính xác
+    // apiKey: "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", // <-- Đảm bảo API Key của bạn là chính xác
+    defaultHeaders: {
+        "HTTP-Referer": "http://localhost:5000", // Thay đổi nếu bạn deploy lên domain khác
+        "X-Title": "ITViec Assistant",
+    },
+    dangerouslyAllowBrowser: true, // Cẩn trọng khi sử dụng trong môi trường production, xem xét backend proxy
+});
+
+// Mở/đóng cửa sổ chat
+const toggleChat = () => {
+    if (isChatOpen.value && isFullscreen.value) {
+        // Nếu đang mở và đang ở chế độ toàn màn hình, tắt chế độ toàn màn hình trước
+        isFullscreen.value = false;
+    }
+    isChatOpen.value = !isChatOpen.value;
+    if (isChatOpen.value) {
+        nextTick(() => {
+            scrollToBottom();
+        });
+    }
+};
+
+// Chuyển đổi chế độ toàn màn hình
+const toggleFullscreen = () => {
+    isFullscreen.value = !isFullscreen.value;
+    nextTick(() => {
+        scrollToBottom();
+    });
+};
+
+// Gửi tin nhắn
+const sendMessage = async () => {
+    if (!userInput.value.trim() || isLoading.value) return;
+    
+    // Thêm tin nhắn của người dùng
+    const userMessageContent = userInput.value;
+    messages.value.push({ role: 'user', content: userMessageContent });
+    userInput.value = '';
+    
+    // Cuộn xuống dưới
+    await nextTick();
+    scrollToBottom();
+    
+    // Hiển thị trạng thái đang tải
+    isLoading.value = true;
+    streamingText.value = '';
+    
+    try {
+        // Chuẩn bị tin nhắn để gửi đi (chỉ bao gồm system, assistant, user roles)
+        // Loại bỏ các tin nhắn knowledgeBaseMessages nếu chúng có role 'system'
+        const messagesForAPI = messages.value.map(msg => ({
+            role: msg.role as 'user' | 'assistant' | 'system',
+            content: msg.content
+        }));
+
+        const stream = await openai.chat.completions.create({
+            model: "deepseek/deepseek-r1-0528:free", // Hoặc một model khác phù hợp
+            messages: messagesForAPI,
+            stream: true,
+        });
+
+        let fullText = '';
+
+        // Xử lý từng phần của stream
+        for await (const chunk of stream) {
+            const content = chunk.choices[0]?.delta?.content || '';
+            if (content) {
+                fullText += content;
+                streamingText.value = fullText;
+                await nextTick();
+                scrollToBottom();
+            }
+        }
+        
+        // Thêm phản hồi hoàn chỉnh vào messages
+        messages.value.push({ 
+            role: 'assistant', 
+            content: fullText
+        });
+        
+        // Lưu lịch sử chat vào localStorage sau khi nhận được phản hồi
+        saveChatHistory();
+    } catch (error) {
+        console.error('Error calling OpenAI:', error);
+        messages.value.push({ 
+            role: 'assistant', 
+            content: 'Xin lỗi, đã xảy ra lỗi khi xử lý tin nhắn của bạn. Vui lòng thử lại sau hoặc liên hệ bộ phận hỗ trợ của ITViec.com.'
+        });
+        
+        // Vẫn lưu lịch sử chat ngay cả khi có lỗi
+        saveChatHistory();
+    } finally {
+        isLoading.value = false;
+        streamingText.value = '';
+        await nextTick();
+        scrollToBottom();
+    }
+};
+
+// Cuộn xuống dưới cùng của khung chat
+const scrollToBottom = () => {
+    if (messagesContainer.value) {
+        messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight;
+    }
+};
+
+// Theo dõi thay đổi tin nhắn để cuộn xuống
+watch(messages, () => {
+    nextTick(() => {
+        scrollToBottom();
+    });
+}, { deep: true });
+</script>
+
+<style scoped>
+.chatbot-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    font-family: 'Roboto', 'Segoe UI', 'Arial', sans-serif;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.chatbot-container.fullscreen {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.chatbot-button {
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.chatbot-button:hover {
+    transform: scale(1.1);
+}
+
+.chatbot-panel {
+    width: 450px;
+    height: 600px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.fullscreen .chatbot-panel {
+    width: 80%;
+    height: 80%;
+    max-width: 1200px;
+    max-height: 850px;
+}
+
+.chatbot-header {
+    padding: 12px 16px;
+    background-color: #FC3535;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chatbot-title {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.chatbot-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.close-button, .reset-button, .fullscreen-button {
+    color: white;
+}
+
+.chatbot-messages {
+    flex: 1;
+    padding: 16px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.message {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 8px;
+    animation: fadeIn 0.3s ease;
+}
+
+.user-message {
+    justify-content: flex-end;
+}
+
+.bot-message {
+    justify-content: flex-start;
+}
+
+.message-content {
+    padding: 8px 12px;
+    border-radius: 18px;
+    max-width: 80%;
+    word-break: break-word;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.user-message .message-content {
+    background-color: #FC3535;
+    color: white;
+}
+
+.bot-message .message-content {
+    background-color: #f0f2f5;
+}
+
+.loading-message {
+    padding: 8px 0;
+}
+
+.streaming-content {
+    position: relative;
+}
+
+.streaming-content::after {
+    content: '|';
+    display: inline-block;
+    animation: blink 1s infinite;
+}
+
+.chatbot-input {
+    padding: 12px;
+    display: flex;
+    gap: 8px;
+    border-top: 1px solid #f0f0f0;
+}
+
+/* Tùy chỉnh kiểu dáng cho Markdown */
+:deep(.message-content) {
+    /* Giữ lại các kiểu dáng cơ bản */
+    padding: 8px 12px;
+    border-radius: 18px;
+    max-width: 80%;
+    word-break: break-word;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+:deep(.user-message .message-content) {
+    background-color: #FC3535;
+    color: white;
+}
+
+:deep(.bot-message .message-content) {
+    background-color: #f0f2f5;
+}
+
+/* Tùy chỉnh kiểu dáng cho các phần tử Markdown */
+:deep(.message-content p) {
+    margin-top: 0;
+    margin-bottom: 0.5em;
+}
+
+:deep(.message-content p:last-child) {
+    margin-bottom: 0;
+}
+
+:deep(.message-content a) {
+    color: inherit;
+    text-decoration: underline;
+}
+
+:deep(.message-content ul, .message-content ol) {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    padding-left: 1.5em;
+}
+
+:deep(.message-content li) {
+    margin-bottom: 0.25em;
+}
+
+:deep(.message-content code) {
+    font-family: monospace;
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 2px 4px;
+    border-radius: 3px;
+}
+
+:deep(.message-content pre) {
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 8px;
+    border-radius: 4px;
+    overflow-x: auto;
+    margin: 0.5em 0;
+}
+
+:deep(.message-content blockquote) {
+    border-left: 3px solid rgba(0, 0, 0, 0.2);
+    padding-left: 8px;
+    margin-left: 0;
+    margin-right: 0;
+    font-style: italic;
+}
+
+/* Đảm bảo màu chữ trắng trong tin nhắn người dùng */
+:deep(.user-message .message-content *) {
+    color: white;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+</style>

@@ -1,11 +1,5 @@
 <script lang="ts" setup>
 import {
-  ArrowUpOutlined,
-  ArrowDownOutlined,
-  SmileOutlined,
-  DownOutlined
-} from '@ant-design/icons-vue'
-import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
@@ -21,9 +15,7 @@ import {
 import { Line, PolarArea, Bar, Chart, Pie, Doughnut } from 'vue-chartjs'
 import { onMounted, ref, reactive, computed } from 'vue'
 import type { IJob } from '../../types/backend'
-import { formatDate } from 'date-fns'
 import apiService from '../../services/api.service'
-import { TIME_UNIT } from '../../until/until'
 
 // Định nghĩa enum cho đơn vị thời gian
 enum StatisticsTimeUnit {
