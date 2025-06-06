@@ -30,8 +30,7 @@
             v-model:value="store.form.status"
             class="w-[200px]"
             :disabled="
-              store.form.history[2]?.status === 'APPROVED' ||
-              store.form.history[2]?.status === 'REJECTED'
+              store.form.history.find((item: IHistory) => item.status === 'APPROVED' || item.status === 'REJECTED')
             "
           >
             <a-select-option
@@ -112,18 +111,27 @@
 
     <template #footer>
       <a-space>
-        <a-button :loading="store.loading" type="primary" @click="store.updateAndAdd()"
+        <a-button :loading="store.loading" type="primary" @click="handleUpdate"
           >Cập nhật</a-button
         >
       </a-space>
     </template>
   </a-drawer>
+  <a-modal
+    v-model:visible="rejectModalVisible"
+    title="Lời nhắn gửi tới ứng viên"
+    :confirm-loading="store.loading"
+    @ok="handleReject"
+  >
+    <p>Vui lòng nhập lời nhắn cho ứng viên:</p>
+    <a-textarea v-model:value="store.form.reason" :rows="4" placeholder="Nhập lời nhắn" />
+  </a-modal>
 </template>
 
 <script lang="ts" setup>
 import { ref, watch } from 'vue'
 import useResumeStore from '../../../stores/admin/ResumeStore'
-import type { IUser } from '../../../types/backend'
+import type { IUser, IHistory } from '../../../types/backend'
 import { linkUploads } from '../../../constant/api'
 import dayjs from 'dayjs'
 import { formatSalary } from '../../../until/until'
@@ -175,6 +183,7 @@ const renderColorMethod = (method: string) => {
 
 // Sử dụng Permission Store
 const store = useResumeStore()
+const rejectModalVisible = ref(false)
 
 const data = ref<IUser>()
 const getUser = async () => {
@@ -186,6 +195,19 @@ const getUser = async () => {
   } catch (err) {
     console.log(err)
   }
+}
+
+const handleUpdate = () => {
+  if (store.form.status === 'APPROVED' || store.form.status === 'REJECTED') {
+    rejectModalVisible.value = true
+  } else {
+    store.updateAndAdd()
+  }
+}
+
+const handleReject = () => {
+  store.updateAndAdd()
+  rejectModalVisible.value = false
 }
 
 watch(store.form, () => {

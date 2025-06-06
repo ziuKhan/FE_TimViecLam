@@ -126,18 +126,18 @@ export interface IResume {
         _id: string
         name: string
       }
-  history?: {
-    status: string
-    updatedAt: Date
-    updatedBy: { _id: string; email: string }
-  }[]
+  history?: IHistory[]
   createdBy?: string
   isDeleted?: boolean
   deletedAt?: boolean | null
   createdAt?: string
   updatedAt?: string
 }
-
+export interface IHistory {
+  status: string
+  updatedAt: Date
+  updatedBy: { _id: string; email: string }
+}
 export interface IPermission {
   _id?: string
   name?: string
