@@ -10,7 +10,7 @@ const useResumeStore = defineStore('resume', () => {
   const { account } = accountService.getAccount()
   const openModal = ref<boolean>(false)
   const openDrawer = ref<boolean>(false)
-
+  const viewResume = ref<boolean>(false)
   const dataMeta = ref<IPaginate>({
     current: 1,
     pageSize: 6,
@@ -130,6 +130,7 @@ const useResumeStore = defineStore('resume', () => {
     openDrawer,
     updateAndAdd,
     form,
+    viewResume,
     loading,
     data,
     dataMeta,

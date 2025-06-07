@@ -143,7 +143,7 @@ const resetChat = () => {
 // OpenAI client
 const openai = new OpenAI({
     baseURL: "https://openrouter.ai/api/v1",
-    apiKey: "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",
+    apiKey: import.meta.env.VITE_KEY_CHATBOT,
     defaultHeaders: {
         "HTTP-Referer": "http://localhost:5000",
         "X-Title": "ITViec Assistant",

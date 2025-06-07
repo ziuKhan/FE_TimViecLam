@@ -13,16 +13,19 @@ import {
   BarElement
 } from 'chart.js'
 import { Line, PolarArea, Bar, Chart, Pie, Doughnut } from 'vue-chartjs'
-import { onMounted, ref, reactive, computed } from 'vue'
+import { onMounted, ref, reactive, computed, h } from 'vue'
 import type { IJob } from '../../types/backend'
 import apiService from '../../services/api.service'
+import { useRouter } from 'vue-router'
+import { ReloadOutlined } from '@ant-design/icons-vue'
+import dayjs from 'dayjs'
 
 // Định nghĩa enum cho đơn vị thời gian
 enum StatisticsTimeUnit {
   YEAR = 'year',
   MONTH = 'month',
   WEEK = 'week',
-  DAY = 'day',
+  DAY = 'day'
 }
 
 ChartJS.register(
@@ -109,10 +112,7 @@ const userRegistrationTypeData = ref({
     {
       label: 'Số lượng người dùng theo loại',
       data: [],
-      backgroundColor: [
-        'rgba(54, 162, 235, 0.5)',
-        'rgba(255, 99, 132, 0.5)'
-      ]
+      backgroundColor: ['rgba(54, 162, 235, 0.5)', 'rgba(255, 99, 132, 0.5)']
     }
   ]
 })
@@ -138,10 +138,10 @@ const resumeSubmissionsStatusData = ref({
       label: 'Số lượng hồ sơ theo trạng thái',
       data: [],
       backgroundColor: [
-        'rgba(255, 206, 86, 0.5)',  // PENDING - Vàng
-        'rgba(54, 162, 235, 0.5)',  // REVIEWING - Xanh dương
-        'rgba(75, 192, 192, 0.5)',  // APPROVED - Xanh lá
-        'rgba(255, 99, 132, 0.5)'   // REJECTED - Đỏ
+        'rgba(255, 206, 86, 0.5)', // PENDING - Vàng
+        'rgba(54, 162, 235, 0.5)', // REVIEWING - Xanh dương
+        'rgba(75, 192, 192, 0.5)', // APPROVED - Xanh lá
+        'rgba(255, 99, 132, 0.5)' // REJECTED - Đỏ
       ]
     }
   ]
@@ -175,8 +175,8 @@ const revenueTypeData = ref({
       label: 'Doanh thu theo loại giao dịch',
       data: [],
       backgroundColor: [
-        'rgba(54, 162, 235, 0.5)',  // Giao dịch thường
-        'rgba(255, 159, 64, 0.5)'   // Nâng cấp VIP
+        'rgba(54, 162, 235, 0.5)', // Giao dịch thường
+        'rgba(255, 159, 64, 0.5)' // Nâng cấp VIP
       ]
     }
   ]
@@ -245,6 +245,10 @@ const columns = [
     title: 'Ngày bắt đầu',
     dataIndex: 'startDate',
     key: 'startDate'
+  },
+  {
+    title: 'Thao tác',
+    key: 'action'
   }
 ]
 
@@ -252,6 +256,9 @@ const columns = [
 const statisticsParams = reactive({
   timeUnit: StatisticsTimeUnit.MONTH
 })
+
+const router = useRouter()
+const tableLoading = ref(false)
 
 // Tải dữ liệu thống kê công việc theo danh mục
 const loadJobStatistics = async () => {
@@ -263,7 +270,7 @@ const loadJobStatistics = async () => {
     if (res && res.data) {
       // Cập nhật dữ liệu biểu đồ công việc theo thời gian
       jobsByTimeData.value = res.data.byTime
-      
+
       // Cập nhật dữ liệu biểu đồ công việc theo trình độ
       jobsByLevelData.value = res.data.byLevel
     }
@@ -319,9 +326,7 @@ const loadResumeSubmissionsStatistics = async () => {
 // Tải dữ liệu thống kê doanh thu
 const loadRevenueStatistics = async () => {
   try {
-    const res = await apiService.get(
-      `statistics/revenue?timeUnit=${statisticsParams.timeUnit}`
-    )
+    const res = await apiService.get(`statistics/revenue?timeUnit=${statisticsParams.timeUnit}`)
     if (res && res.data) {
       revenueSummary.value = res.data.summary
       revenueTimeData.value = res.data.byTime
@@ -331,8 +336,80 @@ const loadRevenueStatistics = async () => {
     console.log('Lỗi khi tải dữ liệu thống kê doanh thu:', error)
   }
 }
+interface ITax {
+  year: number
+  summary: {
+    totalRevenue: number
+    totalTax: number
+    totalAmountBeforeTax: number
+    transactionCount: number
+    taxPercentage: number
+  }
+  quarterlyStats: [
+    {
+      quarter: string
+      totalRevenue: number
+      totalTax: number
+      totalAmountBeforeTax: number
+      transactionCount: number
+    }
+  ]
+  chart: {
+    labels: [],
+    datasets: [
+      {
+        label: 'Doanh thu theo quý',
+        data: []
+      }
+    ]
+  }
+}
+const year = ref<Date>()
+const dataTax = ref<ITax>({
+  year: 2025,
+  summary: {
+    totalRevenue: 0,
+    totalTax: 0,
+    totalAmountBeforeTax: 0,
+    transactionCount: 0,
+    taxPercentage: 0
+  },
+  quarterlyStats: [
+    {
+      quarter: '',
+      totalRevenue: 0,
+      totalTax: 0,
+      totalAmountBeforeTax: 0,
+      transactionCount: 0
+    }
+  ],
+  chart: {
+    labels: [],
+    datasets: [
+      {
+        label: 'Doanh thu theo quý',
+        data: []
+      }
+    ]
+  }
+})
+const loadTaxStatistics = async () => {
+  try {
+    const selectedYear = year.value ? dayjs(year.value).year() : 2025
+    const res = await apiService.get(`statistics/tax?year=${selectedYear}`)
+    if (res && res.data) {
+      dataTax.value.summary = res.data.summary
+      dataTax.value.year = res.data.year
+      dataTax.value.quarterlyStats = res.data.quarterlyStats
+      dataTax.value.chart = res.data.chart
+    }
+  } catch (error) {
+    console.log('Lỗi khi tải dữ liệu thống kê doanh thu:', error)
+  }
+}
 
 const loadDataJobNew = async () => {
+  tableLoading.value = true
   try {
     const res = await apiService.get(
       `jobs/client?current=1&pageSize=10&sort=-createdAt&isActive=true&endDate=${new Date().toISOString()}`
@@ -340,10 +417,16 @@ const loadDataJobNew = async () => {
     dataTable.value = res.data.result
   } catch (error) {
     console.log(error)
+  } finally {
+    tableLoading.value = false
   }
 }
 
 // Thay đổi đơn vị thời gian
+const handleTimeUnitChange = async (e: any) => {
+  await changeTimeUnit(e.target.value)
+}
+
 const changeTimeUnit = async (unit: StatisticsTimeUnit) => {
   statisticsParams.timeUnit = unit
   await loadJobStatistics()
@@ -353,8 +436,60 @@ const changeTimeUnit = async (unit: StatisticsTimeUnit) => {
   await loadRevenueStatistics()
 }
 
+// Làm mới dữ liệu
+const refreshData = async () => {
+  await loadTaxStatistics()
+  await loadDataJobNew()
+  await loadJobStatistics()
+  await loadCompanyGrowthStatistics()
+  await loadUserRegistrationStatistics()
+  await loadResumeSubmissionsStatistics()
+  await loadRevenueStatistics()
+}
+
+// Xem tất cả công việc
+const viewAllJobs = () => {
+  router.push('/admin/jobs')
+}
+
+// Xem chi tiết công việc
+const viewJobDetail = (job: IJob) => {
+  router.push(`/job/${job._id}`)
+}
+
+
+
 const dataTable = ref<IJob[]>([])
+
+const columnsTax = [
+  {
+    title: 'Quý',
+    dataIndex: 'quarter',
+    key: 'quarter'
+  },
+  {
+    title: 'Doanh thu',
+    dataIndex: 'totalRevenue',
+    key: 'totalRevenue'
+  },
+  {
+    title: 'Thuế VAT',
+    dataIndex: 'totalTax',
+    key: 'totalTax'
+  },
+  {
+    title: 'Doanh thu trừ thuế',
+    dataIndex: 'totalAmountBeforeTax',
+    key: 'totalAmountBeforeTax'
+  },
+  {
+    title: 'Số lượng giao dịch',
+    dataIndex: 'transactionCount',
+    key: 'transactionCount'
+  }
+]
 onMounted(async () => {
+  await loadTaxStatistics()
   await loadDataJobNew()
   await loadJobStatistics()
   await loadCompanyGrowthStatistics()
@@ -363,147 +498,242 @@ onMounted(async () => {
   await loadRevenueStatistics()
 })
 </script>
-<template>
-  <div style="background: #ececec; padding: 30px">
-    <a-row :gutter="16">
 
-      
-      <!-- Thống kê tổng quan doanh thu -->
-      <a-col :span="8" class="mt-4">
-        <a-card>
+<template>
+  <div class="dashboard-container bg-gray-100 p-6">
+    <!-- Header với các thẻ thống kê tổng quan -->
+    <a-card class="mb-6 shadow-sm">
+      <a-row :gutter="16">
+        <a-col :xs="24" :sm="24" :md="24" class="mb-4">
+          <label>Thống kê doanh thu theo năm </label>
+          <a-date-picker v-model:value="year" picker="year" @change="loadTaxStatistics" />
+          <hr class="mt-4" />
+        </a-col>
+
+        <a-col :xs="24" :sm="12" :md="6" class="mb-4">
           <a-statistic
             title="Tổng doanh thu"
-            :value="formattedTotalRevenue"
-            :value-style="{ color: '#3f8600' }"
+            :value="dataTax.summary.totalRevenue"
+            :value-style="{ color: '#3f8600', fontSize: '24px' }"
+            class="text-center"
           >
-
+            <template #prefix>
+              <a-icon type="rise" />
+            </template>
           </a-statistic>
-        </a-card>
-      </a-col>
-      
-      <a-col :span="8" class="mt-4">
-        <a-card>
+        </a-col>
+        <a-col :xs="24" :sm="12" :md="6" class="mb-4">
           <a-statistic
-            title="Doanh thu trung bình"
-            :value="formattedAverageRevenue"
-            :value-style="{ color: '#3f8600' }"
+            title="Tổng doanh thu (Đã trừ VAT)"
+            :value="dataTax.summary.totalAmountBeforeTax"
+            :value-style="{ color: '#3f8600', fontSize: '24px' }"
+            class="text-center"
+          >
+            <template #prefix>
+              <a-icon type="rise" />
+            </template>
+          </a-statistic>
+        </a-col>
+        <a-col :xs="24" :sm="12" :md="6" class="mb-4">
+          <a-statistic
+            title="Tổng thuế VAT"
+            :value="dataTax.summary.totalTax"
+            :value-style="{ color: '#ff0000', fontSize: '24px' }"
+            class="text-center"
           >
     
           </a-statistic>
-        </a-card>
-      </a-col>
-      
-      <a-col :span="8" class="mt-4">
-        <a-card>
+        </a-col>
+
+        <a-col :xs="24" :sm="12" :md="6" class="mb-4">
           <a-statistic
-            title="Số lượng giao dịch"
-            :value="revenueSummary.transactionCount"
-            :value-style="{ color: '#1677ff' }"
+            title="Tổng số lượng giao dịch"
+            :value="dataTax.summary.transactionCount"
+            :value-style="{ color: '#1677ff', fontSize: '24px' }"
+            class="text-center"
           >
 
           </a-statistic>
+        </a-col>
+        
+      </a-row>
+    </a-card>
+    <a-row :gutter="16" class="mb-6">
+      <!-- Biểu đồ doanh thu -->
+      <a-col :xs="24" :md="12">
+        <a-card class="h-full shadow-sm" title="Doanh thu theo quý">
+          <a-table :data-source="dataTax.quarterlyStats" :columns="columnsTax">
+            <template #bodyCell="{ column, record, index }">
+              <template v-if="column.key === 'quarter'">
+                {{ record.quarter }}
+              </template>
+              <template v-else-if="column.key === 'totalRevenue'">
+                <div class="text-green-500">
+                  {{  formatCurrency(record.totalRevenue) }}
+                </div>
+                </template>
+              <template v-else-if="column.key === 'totalTax'">
+                <div class="text-red-500">
+                  <a-icon type="fund" />
+                  {{  formatCurrency(record.totalTax) }}
+                </div>
+              </template>
+              <template v-else-if="column.key === 'totalAmountBeforeTax'">
+                <div class="text-blue-500">
+                  {{  formatCurrency(record.totalAmountBeforeTax) }}
+                </div>
+              </template>
+              <template v-else-if="column.key === 'transactionCount'">
+                {{ record.transactionCount.toLocaleString('vi-VN') }}
+              </template>
+            </template>
+          </a-table>
         </a-card>
       </a-col>
-      
-      <!-- Bộ chọn đơn vị thời gian chung -->
-      <a-col :span="24" class="mt-4">
-        <div class="p-3 bg-white rounded-[8px] mb-4">
-          <div class="flex justify-center gap-4">
-            <a-button-group>
-              <a-button 
-                @click="changeTimeUnit(StatisticsTimeUnit.DAY)" 
-                :type="statisticsParams.timeUnit === StatisticsTimeUnit.DAY ? 'primary' : 'default'"
-              >
-                Ngày
-              </a-button>
-              <a-button 
-                @click="changeTimeUnit(StatisticsTimeUnit.WEEK)" 
-                :type="statisticsParams.timeUnit === StatisticsTimeUnit.WEEK ? 'primary' : 'default'"
-              >
-                Tuần
-              </a-button>
-              <a-button 
-                @click="changeTimeUnit(StatisticsTimeUnit.MONTH)" 
-                :type="statisticsParams.timeUnit === StatisticsTimeUnit.MONTH ? 'primary' : 'default'"
-              >
-                Tháng
-              </a-button>
-              <a-button 
-                @click="changeTimeUnit(StatisticsTimeUnit.YEAR)" 
-                :type="statisticsParams.timeUnit === StatisticsTimeUnit.YEAR ? 'primary' : 'default'"
-              >
-                Năm
-              </a-button>
-            </a-button-group>
-          </div>
-        </div>
+      <a-col :xs="24" :md="12">
+        <a-card class="h-full shadow-sm" title="Biểu đồ doanh thu theo quý">
+          <Bar :data="dataTax.chart" :options="options2" class="h-[300px]" />
+        </a-card>
       </a-col>
-      
-      <a-col :span="12" class="mt-4">
-        <div class="p-3 bg-white rounded-[8px]">
-          <h2 class="text-xl mb-4">Thống kê doanh thu theo thời gian</h2>
-          <Line :data="revenueTimeData" :options="options" class="max-h-[300px]" />
+    </a-row>
+    <!-- Thanh công cụ với bộ lọc và nút xuất báo cáo -->
+    <a-card class="mb-6 shadow-sm">
+      <div class="flex flex-wrap items-center justify-between">
+        <!-- Bộ chọn đơn vị thời gian -->
+        <div class="mb-4 md:mb-0">
+          <span class="mr-2 font-medium">Đơn vị thời gian:</span>
+          <a-radio-group
+            v-model:value="statisticsParams.timeUnit"
+            @change="handleTimeUnitChange"
+            button-style="solid"
+          >
+            <a-radio-button :value="StatisticsTimeUnit.DAY">Ngày</a-radio-button>
+            <a-radio-button :value="StatisticsTimeUnit.WEEK">Tuần</a-radio-button>
+            <a-radio-button :value="StatisticsTimeUnit.MONTH">Tháng</a-radio-button>
+            <a-radio-button :value="StatisticsTimeUnit.YEAR">Năm</a-radio-button>
+          </a-radio-group>
         </div>
-      </a-col>
-      
-      <a-col :span="12" class="mt-4">
-        <div class="p-3 bg-white rounded-[8px]">
-          <h2 class="text-xl mb-4">Thống kê doanh thu theo loại giao dịch</h2>
-          <Pie :data="revenueTypeData" :options="options2" class="max-h-[300px]" />
+
+        <!-- Nút xuất báo cáo và làm mới -->
+        <div class="flex gap-2">
+          <a-button @click="refreshData" :icon="h(ReloadOutlined)"> </a-button>
         </div>
+      </div>
+    </a-card>
+
+    <!-- Biểu đồ thống kê chính -->
+    <a-row :gutter="[16, 16]">
+      <!-- Biểu đồ doanh thu -->
+      <a-col :xs="24" :md="12">
+        <a-card class="h-full shadow-sm" title="Doanh thu theo thời gian">
+         
+          <Line :data="revenueTimeData" :options="options" class="h-[300px]" />
+        </a-card>
       </a-col>
-      
-      <a-col :span="12" class="mt-4">
-        <div class="p-3 bg-white rounded-[8px]">
-          <h2 class="text-xl mb-4">Thống kê công việc theo thời gian</h2>
-          <Line :data="jobsByTimeData" :options="options" class="max-h-[300px]" />
-        </div>
+
+      <a-col :xs="24" :md="12">
+        <a-card class="h-full shadow-sm" title="Doanh thu theo loại giao dịch">
+          
+          <Pie :data="revenueTypeData" :options="options2" class="h-[300px]" />
+        </a-card>
       </a-col>
-      
-      <a-col :span="12" class="mt-4">
-        <div class="p-3 bg-white rounded-[8px]">
-          <h2 class="text-xl mb-4">Thống kê tỷ lệ tăng trưởng công ty</h2>
-          <Chart type="bar" :data="companyGrowthData" :options="mixedChartOptions" class="max-h-[300px]" />
-        </div>
+
+      <!-- Biểu đồ công việc và công ty -->
+      <a-col :xs="24" :md="12">
+        <a-card class="h-full shadow-sm" title="Công việc theo thời gian">
+          <Line :data="jobsByTimeData" :options="options" class="h-[300px]" />
+        </a-card>
       </a-col>
-      
-      <a-col :span="12" class="mt-4">
-        <div class="p-3 bg-white rounded-[8px]">
-          <h2 class="text-xl mb-4">Thống kê đăng ký người dùng theo thời gian</h2>
-          <Line :data="userRegistrationTimeData" :options="options" class="max-h-[300px]" />
-        </div>
+
+      <a-col :xs="24" :md="12">
+        <a-card class="h-full shadow-sm" title="Tỷ lệ tăng trưởng công ty">
+          <Chart
+            type="bar"
+            :data="companyGrowthData"
+            :options="mixedChartOptions"
+            class="h-[300px]"
+          />
+        </a-card>
       </a-col>
-      
-      <a-col :span="12" class="mt-4">
-        <div class="p-3 bg-white rounded-[8px]">
-          <h2 class="text-xl mb-4">Thống kê người dùng theo loại</h2>
-          <Pie :data="userRegistrationTypeData" :options="options2" class="max-h-[300px]" />
-        </div>
+
+      <!-- Biểu đồ người dùng -->
+      <a-col :xs="24" :md="12">
+        <a-card class="h-full shadow-sm" title="Đăng ký người dùng theo thời gian">
+          <Line :data="userRegistrationTimeData" :options="options" class="h-[300px]" />
+        </a-card>
       </a-col>
-      
-      <a-col :span="12" class="mt-4">
-        <div class="p-3 bg-white rounded-[8px]">
-          <h2 class="text-xl mb-4">Thống kê hồ sơ ứng tuyển theo thời gian</h2>
-          <Line :data="resumeSubmissionsTimeData" :options="options" class="max-h-[300px]" />
-        </div>
+
+      <a-col :xs="24" :md="12">
+        <a-card class="h-full shadow-sm" title="Người dùng theo loại">
+          <Pie :data="userRegistrationTypeData" :options="options2" class="h-[300px]" />
+        </a-card>
       </a-col>
-      
-      <a-col :span="12" class="mt-4">
-        <div class="p-3 bg-white rounded-[8px]">
-          <h2 class="text-xl mb-4">Thống kê hồ sơ theo trạng thái</h2>
-          <Doughnut :data="resumeSubmissionsStatusData" :options="options2" class="max-h-[300px]" />
-        </div>
+
+      <!-- Biểu đồ hồ sơ ứng tuyển -->
+      <a-col :xs="24" :md="12">
+        <a-card class="h-full shadow-sm" title="Hồ sơ ứng tuyển theo thời gian">
+          <Line :data="resumeSubmissionsTimeData" :options="options" class="h-[300px]" />
+        </a-card>
       </a-col>
-      
-      <a-col :span="24" class="mt-4">
-        <div class="p-3 bg-white rounded-[8px]">
-          <h2 class="text-xl mb-4">Thống kê công việc theo trình độ</h2>
-          <Bar :data="jobsByLevelData" :options="options2" class="max-h-[300px]" />
-        </div>
+
+      <a-col :xs="24" :md="12">
+        <a-card class="h-full shadow-sm" title="Hồ sơ theo trạng thái">
+          <Doughnut :data="resumeSubmissionsStatusData" :options="options2" class="h-[300px]" />
+        </a-card>
       </a-col>
-      
-     
+
+      <!-- Biểu đồ công việc theo trình độ - toàn chiều ngang -->
+      <a-col :span="24">
+        <a-card class="shadow-sm" title="Công việc theo trình độ">
+          <Bar :data="jobsByLevelData" :options="options2" class="h-[300px]" />
+        </a-card>
+      </a-col>
+
+      <!-- Bảng công việc mới nhất -->
+      <a-col :span="24">
+        <a-card class="shadow-sm" title="Danh sách công việc mới nhất">
+          <template #extra>
+            <a-button type="link" @click="viewAllJobs">Xem tất cả</a-button>
+          </template>
+          <a-table
+            :columns="columns"
+            :data-source="dataTable"
+            :pagination="{ pageSize: 5 }"
+            :loading="tableLoading"
+          >
+            <template #bodyCell="{ column, record, index }">
+              <template v-if="column.key === 'stt'">
+                {{ index + 1 }}
+              </template>
+              <template v-else-if="column.key === 'action'">
+                <a-button
+                  type="link"
+                  class="text-red-600 hover:!text-red-400"
+                  size="small"
+                  @click="viewJobDetail(record)"
+                  >Chi tiết</a-button
+                >
+              </template>
+            </template>
+          </a-table>
+        </a-card>
+      </a-col>
     </a-row>
   </div>
 </template>
 
+<style scoped>
+.dashboard-container {
+  min-height: 100vh;
+}
+
+.ant-card {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.ant-statistic-title {
+  font-size: 16px;
+  font-weight: 500;
+}
+</style>

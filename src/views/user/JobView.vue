@@ -17,7 +17,11 @@ import {
   FileDoneOutlined,
   SketchOutlined,
   UserAddOutlined,
-  UserOutlined
+  UserOutlined,
+  EnvironmentOutlined,
+  TeamOutlined,
+  GlobalOutlined,
+  ClockCircleOutlined
 } from '@ant-design/icons-vue'
 
 const route = useRoute()
@@ -104,6 +108,26 @@ const onChangePageSize = () => {
   getJob()
 }
 
+const getWorkingDays = (workingDays: string[] | undefined) => {
+  if (!workingDays || workingDays.length === 0) return 'Không có thông tin'
+
+  const days = {
+    monday: 'Thứ 2',
+    tuesday: 'Thứ 3',
+    wednesday: 'Thứ 4',
+    thursday: 'Thứ 5',
+    friday: 'Thứ 6',
+    saturday: 'Thứ 7',
+    sunday: 'Chủ nhật'
+  }
+
+  if (workingDays.includes('monday') && workingDays.includes('friday')) {
+    return 'Thứ 2 - Thứ 6'
+  }
+
+  return workingDays.map((day: string) => days[day as keyof typeof days] || day).join(', ')
+}
+
 onMounted(async () => {
   await getData()
   getJob()
@@ -116,9 +140,7 @@ onMounted(async () => {
   <div v-else class="theme_gray_no_border relative py-10">
     <div class="w-11/12 mx-auto flex gap-y-4 lg:gap-0 flex-wrap lg:flex-nowrap">
       <div class="w-full lg:w-8/12 lg:mr-5">
-        <div
-          class="bg-white px-5 py-3 rounded-xl rounded-b-none  top-[65px] z-10 shadow-custom"
-        >
+        <div class="bg-white px-5 py-3 rounded-xl rounded-b-none top-[65px] z-10 shadow-custom">
           <h1 class="font-bold text-[20px] lg:text-[25px] mt-4">
             {{ data?.name }} - <span class="text-red-600">{{ data?.level }}</span>
           </h1>
@@ -278,22 +300,57 @@ onMounted(async () => {
         <div
           class="bg-white px-5 py-3 rounded-xl drop-shadow-lg shadow-gray-500 sticky top-[65px] z-10"
         >
-          <div class="flex gap-x-3">
-            <div class="max-w-32 h-32 p-2 rounded-md border border-solid border-gray-300">
-              <img
-                loading="lazy"
-                class="h-full object-contain"
-                :src="linkUploads('company/' + data?.companyId?.logo)"
-                alt=""
-              />
-            </div>
-            <div>
-              <h2 class="text-lg font-bold">{{ data?.companyId?.name }}</h2>
-              <RouterLink
-                :to="`/company/${data?.companyId?._id}`"
-                class="text-[#0e2eed] font-normal text-base"
-                >Xem công ty</RouterLink
-              >
+          <div>
+            <!-- Phần hiển thị cũ -->
+            <div class="flex gap-x-3">
+              <div class="max-w-32 h-32 p-2 rounded-md border border-solid border-gray-300">
+                <img
+                  loading="lazy"
+                  class="h-full object-contain"
+                  :src="linkUploads('company/' + data?.companyId?.logo)"
+                  alt=""
+                />
+              </div>
+              <div>
+                  <RouterLink
+                    :to="`/company/${data?.companyId?._id}`"
+                    class="w-full text-lg font-bold hover:text-red-500"
+                  >
+                    {{ data?.companyId?.name }}
+                  </RouterLink>
+                <!-- Thông tin bổ sung -->
+                <div class="company-info mt-4 border-t pt-3 border-gray-200">
+                  <div class="info-item">
+                    <EnvironmentOutlined class="info-icon" />
+                    <span>{{
+                      data?.companyId?.fullAddress || data?.companyId?.address?.join(', ')
+                    }}</span>
+                  </div>
+
+                  <div class="info-row">
+                    <div class="info-item">
+                      <TeamOutlined class="info-icon" />
+                      <span>{{ data?.companyId?.size }}</span>
+                    </div>
+
+                    <div class="info-item">
+                      <GlobalOutlined class="info-icon" />
+                      <span>{{ data?.companyId?.type }}</span>
+                    </div>
+                  </div>
+
+                  <div class="info-row">
+                    <div class="info-item">
+                      <ClockCircleOutlined class="info-icon" />
+                      <span>{{ getWorkingDays(data?.companyId?.workingDays) }}</span>
+                    </div>
+
+                    <div v-if="data?.companyId?.overtimePolicy" class="ot-policy">
+                      {{ data?.companyId?.overtimePolicy }}
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -320,11 +377,88 @@ onMounted(async () => {
   </div>
 </template>
 
-<style>
+<style scoped>
 .shadow-custom {
   box-shadow:
     -4px -4px 10px rgba(0, 0, 0, 0.1),
     4px -4px 10px rgba(0, 0, 0, 0.1);
 }
+
+.logo-container {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  padding: 8px;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.company-logo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.company-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 0.75rem;
+}
+
+.company-info {
+  margin-bottom: 1rem;
+}
+
+.info-row {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #4b5563;
+  font-size: 0.875rem;
+}
+
+.info-icon {
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.ot-policy {
+  display: inline-flex;
+  align-items: center;
+  background-color: #dbeafe;
+  color: #1d4ed8;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.view-company-btn {
+  display: inline-flex;
+  align-items: center;
+  color: #2563eb;
+  font-weight: 500;
+  font-size: 0.875rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.375rem;
+  background-color: #eff6ff;
+  transition: all 0.2s ease;
+}
+
+.view-company-btn:hover {
+  background-color: #dbeafe;
+  color: #1d4ed8;
+}
 </style>
-../../services/account.service

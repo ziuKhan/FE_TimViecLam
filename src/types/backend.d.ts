@@ -84,11 +84,7 @@ export interface IJob {
   _id?: string
   name: string
   skills: ISkill[]
-  companyId: {
-    _id: string
-    name?: string
-    logo?: string
-  }
+  companyId: ICompany
   location: string
   salaryFrom?: number
   salaryTo?: number

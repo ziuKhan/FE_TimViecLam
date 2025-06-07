@@ -6,7 +6,7 @@ import { linkUploads } from '../../../constant/api'
 import useCompanyStore from '../../../stores/admin/CompanyStore'
 import UpdateResume from './UpdateResume.vue'
 import useResumeStore from '../../../stores/admin/ResumeStore'
-import DetailResume from './DetailResume.vue'
+import DetailResume from '../../../components/DetailResume.vue'
 import { DeleteOutlined, EyeOutlined } from '@ant-design/icons-vue'
 
 const store = useResumeStore()

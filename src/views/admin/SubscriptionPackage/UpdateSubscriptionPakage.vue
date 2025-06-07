@@ -20,7 +20,7 @@
           </a-form-item>
         </a-col>
         <a-col :span="12">
-          <a-form-item label="Giá" name="price">
+          <a-form-item label="Giá (Giá đã bao gồm VAT)" name="price">
             <a-input-number
               v-model:value="store.form.price"
               placeholder="Vui lòng nhập giá"
@@ -30,7 +30,7 @@
           </a-form-item>
         </a-col>
         <a-col :span="12">
-          <a-form-item label="Giá sau khi giảm" name="priceDiscount">
+          <a-form-item label="Giá sau khi giảm (Giá đã bao gồm VAT)" name="priceDiscount">
             <a-input-number
               v-model:value="store.form.priceDiscount"
               placeholder="Vui lòng nhập giá sau khi giảm"

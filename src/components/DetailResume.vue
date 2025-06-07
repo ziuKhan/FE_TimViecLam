@@ -4,33 +4,40 @@
     :width="750"
     :open="store.openDrawer"
     :footer-style="{ textAlign: 'right' }"
-    @close="store.openDrawer = false"
+    @close="closeDrawer"
     :maskClosable="false"
   >
     <div class="px-10 py-5">
       <a-row :gutter="16" class="gap-y-2 text-base pb-5">
         <a-col :span="24" class="text-base font-bold"> THÔNG TIN CÁ NHÂN </a-col>
-        <a-col :span="12"> Họ và tên: {{ data?.name }} </a-col>
-        <a-col :span="12"> Giới tính: {{ data?.gender }} </a-col>
-        <a-col :span="24"> Email: {{ store.form.email }} </a-col>
-        <a-col :span="24"> Địa chỉ: {{ data?.address }} </a-col>
+        <a-col :span="12"> Họ và tên: {{ data?.name || '--' }} </a-col>
+        <a-col :span="12"> Giới tính: {{ data?.gender || '--' }} </a-col>
+        <a-col :span="24"> Email: {{ store.form?.email || '--' }} </a-col>
+        <a-col :span="24"> Địa chỉ: {{ data?.address || '--' }} </a-col>
 
         <a-col :span="24">
           Link CV:
           <a
+            v-if="store.form.url"
             class="text-blue-600 text-[16px]"
             :href="linkUploads('cv/' + store.form.url)"
             target="_blank"
-            >{{ store.form.url }}</a
+            >{{ store.form.url || '--' }}</a
           >
         </a-col>
         <a-col :span="24" class="mt-2 text-base">
           <span class="mr-2">Trạng thái:</span>
+          <span v-if="store.viewResume">
+            <a-tag :color="renderColorMethod(store.form.status)">
+              {{ renderStatus(store.form.status) }}
+            </a-tag>
+          </span>
           <a-select
+          v-else
             v-model:value="store.form.status"
             class="w-[200px]"
             :disabled="
-              store.form.history.find((item: IHistory) => item.status === 'APPROVED' || item.status === 'REJECTED')
+              store.form.history?.find((item: IHistory) => item.status === 'APPROVED' || item.status === 'REJECTED')
             "
           >
             <a-select-option
@@ -54,36 +61,36 @@
             </a-select-option>
           </a-select>
         </a-col>
-        <a-col :span="24"> Thư giới thiệu: {{ store.form.description }} </a-col>
+        <a-col :span="24"> Thư giới thiệu: {{ store.form?.description || '--' }} </a-col>
         <a-col :span="24" class="text-base font-bold mt-5"> THÔNG TIN CÔNG TY </a-col>
-        <a-col :span="24"> Tên công ty: {{ store.form.companyId.name }} </a-col>
-        <a-col :span="24"> Địa chỉ: {{ store.form.companyId?.address?.join(', ') || '' }} </a-col>
+        <a-col :span="24"> Tên công ty: {{ store.form?.companyId?.name || '--' }} </a-col>
+        <a-col :span="24"> Địa chỉ: {{ store.form?.companyId?.address?.join(', ') || '' }} </a-col>
         <a-col :span="24" class="text-base font-bold mt-5"> THÔNG TIN VIỆC LÀM </a-col>
-        <a-col :span="24"> Tên việc làm: {{ store.form.jobId.name }} </a-col>
+        <a-col :span="24"> Tên việc làm: {{ store.form?.jobId?.name || '--' }} </a-col>
         <a-col :span="12">
           Kỹ năng:
-          <template v-for="(skill, index) in store.form.jobId.skills" :key="index">
+          <template v-for="(skill, index) in store.form?.jobId?.skills" :key="index">
             <span class="mr-1"
               >{{ skill.name }}
-              <span v-if="index !== store.form.jobId.skills.length - 1">-</span></span
+              <span v-if="index !== store.form?.jobId?.skills?.length - 1">-</span></span
             >
           </template>
         </a-col>
-        <a-col :span="12"> Cấp độ: {{ store.form.jobId.level }} </a-col>
+        <a-col :span="12"> Cấp độ: {{ store.form?.jobId?.level || '--' }} </a-col>
         <a-col :span="12">
-          Ngày bắt đầu: {{ dayjs(store.form.jobId.startDate).format('DD/MM/YYYY') }}
+          Ngày bắt đầu: {{ dayjs(store.form?.jobId?.startDate || new Date()).format('DD/MM/YYYY') }}
         </a-col>
         <a-col :span="12">
-          Ngày kêt thúc: {{ dayjs(store.form.jobId.endDate).format('DD/MM/YYYY') }}
+          Ngày kêt thúc: {{ dayjs(store.form?.jobId?.endDate || new Date()).format('DD/MM/YYYY') }}
         </a-col>
         <a-col :span="12" class="text-base font-bold text-red-500">
-          Lương: {{ formatSalary(store.form.jobId.salary) }}
+          Lương: {{ formatSalary(store.form?.jobId?.salary || 0) }}
         </a-col>
         <a-col :span="24" class="text-base font-bold mt-5"> LỊCH SỬ CẬP NHẬT HỒ SƠ </a-col>
         <a-col :span="24">
           <a-table
             :columns="columns"
-            :data-source="store.form.history"
+            :data-source="store.form?.history || []"
             :loading="store.loading"
             :pagination="false"
           >
@@ -111,7 +118,9 @@
 
     <template #footer>
       <a-space>
-        <a-button :loading="store.loading" type="primary" @click="handleUpdate"
+      
+        <a-button @click="closeDrawer">Đóng</a-button>
+        <a-button v-if="!store.viewResume" :loading="store.loading" type="primary" @click="handleUpdate"
           >Cập nhật</a-button
         >
       </a-space>
@@ -130,12 +139,12 @@
 
 <script lang="ts" setup>
 import { ref, watch } from 'vue'
-import useResumeStore from '../../../stores/admin/ResumeStore'
-import type { IUser, IHistory } from '../../../types/backend'
-import { linkUploads } from '../../../constant/api'
+import useResumeStore from '../stores/admin/ResumeStore'
+import type { IUser, IHistory } from '../types/backend'
+import { linkUploads } from '../constant/api'
 import dayjs from 'dayjs'
-import { formatSalary } from '../../../until/until'
-import apiService from '../../../services/api.service'
+import { formatSalary } from '../until/until'
+import apiService from '../services/api.service'
 
 const renderStatus = (status: string) => {
   switch (status) {
@@ -209,7 +218,10 @@ const handleReject = () => {
   store.updateAndAdd()
   rejectModalVisible.value = false
 }
-
+const closeDrawer = () => {
+  store.viewResume = false
+  store.openDrawer = false
+}
 watch(store.form, () => {
   getUser()
 })

@@ -14,6 +14,8 @@ import { useWebSocketStore } from '../../../stores/WebSocket'
 import apiService from '../../../services/api.service'
 import Avatar from '../../../assets/image/icon/icons8_notification.svg'
 import { DeleteOutlined } from '@ant-design/icons-vue'
+import useResumeStore from '../../../stores/admin/ResumeStore'
+import DetailResume from '../../DetailResume.vue'
 
 const isSticky = ref<boolean>(false)
 const collapsed = ref<boolean>(false)
@@ -37,14 +39,24 @@ const handleScroll = (): void => {
 
 const storeAuth = useAuthStore()
 const storeHeader = useWebSocketStore()
-
+const storeResume = useResumeStore()
 const handleLogout = () => {
   storeAuth.logout()
 }
-const checkOutNotification = (item: INotification) => {
+const checkOutNotification = async (item: INotification) => {
   if (item.url) {
     window.open(item.url, '_blank')
-  } 
+  } else if (item.objInfo) {
+    if(item.objInfo.type === 'RESUME') {
+      if(item.objInfo._id) {
+        storeResume.viewResume = true
+        await storeResume.getByID(item.objInfo._id, true)
+        openNotification.value = false
+      }
+    } else if (item.objInfo.type === 'company') {
+      router.push(`/company/${item.objInfo._id}`)
+    }
+  }
 }
 
 const handleNotification = async (item: INotification) => {
@@ -321,6 +333,7 @@ onUnmounted(() => {
       </div>
     </div>
   </header>
+  <DetailResume />
 </template>
 <style>
 .custom-modal .ant-modal-body,

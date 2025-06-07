@@ -303,7 +303,7 @@ onMounted(() => {
         </a-col>
         <a-col :span="12">
           <a-form-item
-            label="mô hình công ty"
+            label="Mô hình công ty"
             name="type"
             :rules="[{ required: true, message: 'Vui lòng chọn mô hình công ty!' }]"
           >
