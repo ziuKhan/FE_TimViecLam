@@ -7,6 +7,7 @@ import FormSearch from '../../../components/user/search/FormSearch.vue'
 import type { ICompany, IJob } from '../../../types/backend'
 import apiService from '../../../services/api.service'
 import { formatSalary } from '../../../until/until'
+import { useRouter } from 'vue-router'
 
 const dataCompany = ref<ICompany[]>([])
 const dataJobs = ref<IJob[]>([])
@@ -24,6 +25,8 @@ const getData = async () => {
   dataJobs.value = jobs.data?.result
   load.value = true
 }
+
+const router = useRouter()
 
 onMounted(() => {
   getData()
@@ -81,6 +84,9 @@ onMounted(() => {
         >
         </CardEmployer>
       </template>
+      <div class="text-center col-span-3">
+        <a-button type="primary" @click="router.push('/company')" class="w-1/5" ghost size="large">Xem tất cả</a-button>
+      </div>
     </div>
 
     <div class="w-full bg-gray-50 border-solid border-gray-300 border-y pt-7 pb-20">
