@@ -53,16 +53,23 @@ const columnsTransaction = [
     dataIndex: 'buyerName'
   },
   {
+    title: 'Tên CK',
+    dataIndex: 'counterAccountName'
+  },
+  {
+    title: 'Số CK',
+    dataIndex: 'counterAccountNumber'
+  },  {
+    title: 'Mã ngân hàng',
+    dataIndex: 'counterAccountBankId'
+  },
+  {
     title: 'Email',
     dataIndex: 'buyerEmail'
   },
   {
     title: 'Số tiền',
     dataIndex: 'amount'
-  },
-  {
-    title: 'Trạng thái',
-    dataIndex: 'status'
   },
   {
     title: 'Ngày tạo',

@@ -40,7 +40,7 @@ const handleOk = () => {
       <div class="w-full p-2 lg:p-3">
         <div class="flex justify-between mb-4">
           <h1 class="text-xl lg:text-3xl font-bold">
-            {{ store.dataJobs.length }} việc làm
+            {{ store.paginateJobs?.total || 0 }} việc làm
             <span class="text-red-600">{{ store.paginateJobs.keyword }}</span> tại Việt Nam
           </h1>
           <div class="flex gap-2">
@@ -89,6 +89,7 @@ const handleOk = () => {
             :total="store.paginateJobs?.total"
             :page-size="store.paginateJobs?.pageSize"
             show-less-items
+             @change=" store.getSearch"
           />
         </div>
       </div>

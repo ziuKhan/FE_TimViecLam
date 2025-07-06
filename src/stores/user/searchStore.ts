@@ -118,6 +118,7 @@ export const useSearchStore = defineStore('search', () => {
     load,
     handleSearch,
     resetFilter,
+    getSearch,
     keyword,
     valueMax
   }

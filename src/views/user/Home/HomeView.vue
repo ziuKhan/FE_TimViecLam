@@ -89,12 +89,15 @@ onMounted(() => {
       </div>
     </div>
 
-    <div class="w-full bg-gray-50 border-solid border-gray-300 border-y pt-7 pb-20">
+    <div class="w-full bg-gray-50 border-solid border-gray-300 border-y pt-7 pb-12">
       <h2 class="text-3xl font-bold mb-7 text-center w-full">Việc làm tốt nhất</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-10/12 mx-auto">
         <template v-for="data in dataJobs" :key="data._id">
           <CardJob :data="data"> </CardJob>
         </template>
+      </div>
+      <div class="text-center col-span-3 mt-7">
+        <a-button type="primary" @click="router.push('/search')" class="w-1/5" ghost size="large">Xem tất cả</a-button>
       </div>
     </div>
       <!-- IT Trends Section -->

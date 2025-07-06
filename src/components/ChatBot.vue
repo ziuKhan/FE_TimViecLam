@@ -199,8 +199,8 @@ const sendMessage = async () => {
         }));
 
         const stream = await openai.chat.completions.create({
-            model: "meta-llama/llama-3.3-8b-instruct:free", // Hoặc một model khác phù hợp
-            // model: "deepseek/deepseek-r1-0528:free", // Hoặc một model khác phù hợp
+            // model: "meta-llama/llama-3.3-8b-instruct:free", // Hoặc một model khác phù hợp
+            model: "deepseek/deepseek-r1-0528:free", // Hoặc một model khác phù hợp
             messages: messagesForAPI,
             stream: true,
         });
